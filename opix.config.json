@@ -1,0 +1,13 @@
+{
+    "coverageArgs": [],
+    "testArgs": [],
+    "buildArgs": [],
+    "opixTestDir": "test",
+    "testContracts": [
+        {
+            "subjectContractName": "SpaceCoin",
+            "testContractPath": "test/SpaceCoin.t.sol",
+            "subjectContractPath": "contracts/SpaceCoin.sol"
+        }
+    ]
+}

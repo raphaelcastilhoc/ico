@@ -1,0 +1,1227 @@
+strict digraph {
+subgraph cluster_10371_stdStorage {
+label = "stdStorage"
+"10371_sigs" [label="sigs"]
+"10371_sig" [label="sig"]
+"10371_bytesToBytes32" [label="bytesToBytes32"]
+"10371_checked_write_int" [label="checked_write_int"]
+"10371_flatten" [label="flatten"]
+"10371_target" [label="target"]
+"10371_read_uint" [label="read_uint"]
+"10371_read_int" [label="read_int"]
+"10371_depth" [label="depth"]
+"10371_read_address" [label="read_address"]
+"10371_find" [label="find"]
+"10371_read_bool" [label="read_bool"]
+"10371_checked_write" [label="checked_write"]
+"10371_read_bytes32" [label="read_bytes32"]
+"10371_with_key" [label="with_key"]
+"10371_checked_write" -> "10371_bytesToBytes32"
+"10371_checked_write_int" -> "10371_checked_write"
+"10371_checked_write" -> "10371_checked_write"
+"10371_checked_write" -> "10371_flatten"
+"10371_checked_write" -> "10371_find"
+}subgraph cluster_22021_console {
+label = "console"
+"22021_logBytes25" [label="logBytes25"]
+"22021_log" [label="log"]
+"22021_logBytes2" [label="logBytes2"]
+"22021_logInt" [label="logInt"]
+"22021_logBytes5" [label="logBytes5"]
+"22021__sendLogPayload" [label="_sendLogPayload"]
+"22021_logString" [label="logString"]
+"22021_logBytes11" [label="logBytes11"]
+"22021_logBytes22" [label="logBytes22"]
+"22021_logBytes8" [label="logBytes8"]
+"22021_logBool" [label="logBool"]
+"22021_logBytes1" [label="logBytes1"]
+"22021_logBytes7" [label="logBytes7"]
+"22021_logBytes30" [label="logBytes30"]
+"22021_logBytes15" [label="logBytes15"]
+"22021_logBytes18" [label="logBytes18"]
+"22021_logBytes26" [label="logBytes26"]
+"22021_logBytes28" [label="logBytes28"]
+"22021_logBytes21" [label="logBytes21"]
+"22021_logUint" [label="logUint"]
+"22021_logBytes24" [label="logBytes24"]
+"22021_logBytes20" [label="logBytes20"]
+"22021_logAddress" [label="logAddress"]
+"22021_logBytes16" [label="logBytes16"]
+"22021_logBytes10" [label="logBytes10"]
+"22021_logBytes29" [label="logBytes29"]
+"22021_logBytes3" [label="logBytes3"]
+"22021_logBytes" [label="logBytes"]
+"22021_logBytes9" [label="logBytes9"]
+"22021_logBytes12" [label="logBytes12"]
+"22021_logBytes32" [label="logBytes32"]
+"22021_logBytes4" [label="logBytes4"]
+"22021_logBytes14" [label="logBytes14"]
+"22021_logBytes27" [label="logBytes27"]
+"22021_logBytes31" [label="logBytes31"]
+"22021_logBytes19" [label="logBytes19"]
+"22021_logBytes17" [label="logBytes17"]
+"22021_logBytes23" [label="logBytes23"]
+"22021_logBytes13" [label="logBytes13"]
+"22021_logBytes6" [label="logBytes6"]
+"22021_logBytes28" -> "22021__sendLogPayload"
+"22021_logBool" -> "22021__sendLogPayload"
+"22021_logUint" -> "22021__sendLogPayload"
+"22021_log" -> "22021__sendLogPayload"
+"22021_logBytes18" -> "22021__sendLogPayload"
+"22021_logBytes3" -> "22021__sendLogPayload"
+"22021_logBytes25" -> "22021__sendLogPayload"
+"22021_logAddress" -> "22021__sendLogPayload"
+"22021_logBytes13" -> "22021__sendLogPayload"
+"22021_logBytes4" -> "22021__sendLogPayload"
+"22021_logBytes11" -> "22021__sendLogPayload"
+"22021_logBytes17" -> "22021__sendLogPayload"
+"22021_logBytes6" -> "22021__sendLogPayload"
+"22021_logBytes23" -> "22021__sendLogPayload"
+"22021_logInt" -> "22021__sendLogPayload"
+"22021_logBytes1" -> "22021__sendLogPayload"
+"22021_logBytes12" -> "22021__sendLogPayload"
+"22021_logBytes21" -> "22021__sendLogPayload"
+"22021_logBytes27" -> "22021__sendLogPayload"
+"22021_logBytes2" -> "22021__sendLogPayload"
+"22021_logBytes24" -> "22021__sendLogPayload"
+"22021_logBytes30" -> "22021__sendLogPayload"
+"22021_logBytes15" -> "22021__sendLogPayload"
+"22021_logString" -> "22021__sendLogPayload"
+"22021_logBytes10" -> "22021__sendLogPayload"
+"22021_logBytes29" -> "22021__sendLogPayload"
+"22021_logBytes5" -> "22021__sendLogPayload"
+"22021_logBytes9" -> "22021__sendLogPayload"
+"22021_logBytes26" -> "22021__sendLogPayload"
+"22021_logBytes7" -> "22021__sendLogPayload"
+"22021_logBytes16" -> "22021__sendLogPayload"
+"22021_logBytes8" -> "22021__sendLogPayload"
+"22021_logBytes19" -> "22021__sendLogPayload"
+"22021_logBytes" -> "22021__sendLogPayload"
+"22021_logBytes32" -> "22021__sendLogPayload"
+"22021_logBytes22" -> "22021__sendLogPayload"
+"22021_logBytes20" -> "22021__sendLogPayload"
+"22021_logBytes14" -> "22021__sendLogPayload"
+"22021_logBytes31" -> "22021__sendLogPayload"
+}subgraph cluster_13957_Vm {
+label = "Vm"
+"13957_mockCall" [label="mockCall"]
+"13957_expectEmit" [label="expectEmit"]
+"13957_selectFork" [label="selectFork"]
+"13957_difficulty" [label="difficulty"]
+"13957_mockCallRevert" [label="mockCallRevert"]
+"13957_makePersistent" [label="makePersistent"]
+"13957_transact" [label="transact"]
+"13957_snapshot" [label="snapshot"]
+"13957_revokePersistent" [label="revokePersistent"]
+"13957_store" [label="store"]
+"13957_setNonce" [label="setNonce"]
+"13957_roll" [label="roll"]
+"13957_revertTo" [label="revertTo"]
+"13957_expectSafeMemoryCall" [label="expectSafeMemoryCall"]
+"13957_warp" [label="warp"]
+"13957_allowCheatcodes" [label="allowCheatcodes"]
+"13957_prank" [label="prank"]
+"13957_expectSafeMemory" [label="expectSafeMemory"]
+"13957_expectRevert" [label="expectRevert"]
+"13957_coinbase" [label="coinbase"]
+"13957_isPersistent" [label="isPersistent"]
+"13957_etch" [label="etch"]
+"13957_rollFork" [label="rollFork"]
+"13957_chainId" [label="chainId"]
+"13957_startPrank" [label="startPrank"]
+"13957_setNonceUnsafe" [label="setNonceUnsafe"]
+"13957_txGasPrice" [label="txGasPrice"]
+"13957_activeFork" [label="activeFork"]
+"13957_stopPrank" [label="stopPrank"]
+"13957_readCallers" [label="readCallers"]
+"13957_expectCall" [label="expectCall"]
+"13957_resetNonce" [label="resetNonce"]
+"13957_createSelectFork" [label="createSelectFork"]
+"13957_prevrandao" [label="prevrandao"]
+"13957_clearMockedCalls" [label="clearMockedCalls"]
+"13957_skip" [label="skip"]
+"13957_expectCallMinGas" [label="expectCallMinGas"]
+"13957_deal" [label="deal"]
+"13957_createFork" [label="createFork"]
+"13957_fee" [label="fee"]
+}subgraph cluster_12430_StdUtils {
+label = "StdUtils"
+"12430_bytesToUint" [label="bytesToUint"]
+"12430_bound" [label="bound"]
+"12430_computeCreateAddress" [label="computeCreateAddress"]
+"12430_console2_log" [label="console2_log"]
+"12430_addressFromLast20Bytes" [label="addressFromLast20Bytes"]
+"12430_hashInitCode" [label="hashInitCode"]
+"12430_getTokenBalances" [label="getTokenBalances"]
+"12430_computeCreate2Address" [label="computeCreate2Address"]
+"12430__bound" [label="_bound"]
+"12430_boundPrivateKey" [label="boundPrivateKey"]
+"12430_computeCreate2Address" -> "12430_computeCreate2Address"
+"12430_bound" -> "12430__bound"
+"12430_computeCreateAddress" -> "12430_addressFromLast20Bytes"
+"12430_hashInitCode" -> "12430_hashInitCode"
+"12430_boundPrivateKey" -> "12430__bound"
+"12430__bound" -> "12430__bound"
+"12430_bound" -> "12430_console2_log"
+"12430_computeCreate2Address" -> "12430_addressFromLast20Bytes"
+}subgraph cluster_4367_StdAssertions {
+label = "StdAssertions"
+"4367_assertEq" [label="assertEq"]
+"4367_fail" [label="fail"]
+"4367_assertApproxEqAbsDecimal" [label="assertApproxEqAbsDecimal"]
+"4367_assertEqUint" [label="assertEqUint"]
+"4367_assertFalse" [label="assertFalse"]
+"4367_assertEqCall" [label="assertEqCall"]
+"4367_assertApproxEqRel" [label="assertApproxEqRel"]
+"4367_assertApproxEqRelDecimal" [label="assertApproxEqRelDecimal"]
+"4367_assertApproxEqAbs" [label="assertApproxEqAbs"]
+"4367_assertEq" -> "4367_fail"
+"4367_assertFalse" -> "4367_assertTrue"
+"4367_assertApproxEqAbsDecimal" -> "4367_fail"
+"4367_assertApproxEqRelDecimal" -> "4367_assertEq"
+"4367_assertEqCall" -> "4367_fail"
+"4367_assertEqCall" -> "4367_assertEq"
+"4367_assertEqUint" -> "4367_assertEq"
+"4367_assertApproxEqRelDecimal" -> "4367_assertApproxEqRelDecimal"
+"4367_assertEqCall" -> "4367_assertEqCall"
+"4367_assertApproxEqRel" -> "4367_assertApproxEqRel"
+"4367_assertApproxEqAbsDecimal" -> "4367_assertApproxEqAbsDecimal"
+"4367_assertEq" -> "4367_assertEq0"
+"4367_assertApproxEqRel" -> "4367_assertEq"
+"4367_fail" -> "4367_fail"
+"4367_assertApproxEqAbs" -> "4367_assertApproxEqAbs"
+"4367_assertApproxEqRelDecimal" -> "4367_fail"
+"4367_assertEq" -> "4367_assertEq"
+"4367_assertApproxEqRel" -> "4367_fail"
+"4367_assertApproxEqAbs" -> "4367_fail"
+}subgraph cluster_8744_stdJson {
+label = "stdJson"
+"8744_readIntArray" [label="readIntArray"]
+"8744_readString" [label="readString"]
+"8744_readUintArray" [label="readUintArray"]
+"8744_readBytesArray" [label="readBytesArray"]
+"8744_readBytes" [label="readBytes"]
+"8744_readBoolArray" [label="readBoolArray"]
+"8744_readBytes32" [label="readBytes32"]
+"8744_readBytes32Array" [label="readBytes32Array"]
+"8744_serialize" [label="serialize"]
+"8744_readAddressArray" [label="readAddressArray"]
+"8744_parseRaw" [label="parseRaw"]
+"8744_readBool" [label="readBool"]
+"8744_readAddress" [label="readAddress"]
+"8744_write" [label="write"]
+"8744_readStringArray" [label="readStringArray"]
+"8744_readInt" [label="readInt"]
+"8744_readUint" [label="readUint"]
+}subgraph cluster_13485_VmSafe {
+label = "VmSafe"
+"13485_parseJsonAddress" [label="parseJsonAddress"]
+"13485_serializeString" [label="serializeString"]
+"13485_parseInt" [label="parseInt"]
+"13485_deriveKey" [label="deriveKey"]
+"13485_parseJsonBytes32Array" [label="parseJsonBytes32Array"]
+"13485_parseJsonBool" [label="parseJsonBool"]
+"13485_envOr" [label="envOr"]
+"13485_getNonce" [label="getNonce"]
+"13485_parseJsonUintArray" [label="parseJsonUintArray"]
+"13485_parseJsonBytesArray" [label="parseJsonBytesArray"]
+"13485_projectRoot" [label="projectRoot"]
+"13485_toString" [label="toString"]
+"13485_record" [label="record"]
+"13485_parseJsonInt" [label="parseJsonInt"]
+"13485_setEnv" [label="setEnv"]
+"13485_serializeBytes32" [label="serializeBytes32"]
+"13485_parseBytes32" [label="parseBytes32"]
+"13485_pauseGasMetering" [label="pauseGasMetering"]
+"13485_closeFile" [label="closeFile"]
+"13485_parseJsonBytes" [label="parseJsonBytes"]
+"13485_parseBool" [label="parseBool"]
+"13485_ffi" [label="ffi"]
+"13485_parseBytes" [label="parseBytes"]
+"13485_parseJsonAddressArray" [label="parseJsonAddressArray"]
+"13485_startBroadcast" [label="startBroadcast"]
+"13485_readDir" [label="readDir"]
+"13485_serializeAddress" [label="serializeAddress"]
+"13485_sign" [label="sign"]
+"13485_envInt" [label="envInt"]
+"13485_parseJsonIntArray" [label="parseJsonIntArray"]
+"13485_readLink" [label="readLink"]
+"13485_serializeInt" [label="serializeInt"]
+"13485_envBytes" [label="envBytes"]
+"13485_writeFile" [label="writeFile"]
+"13485_getDeployedCode" [label="getDeployedCode"]
+"13485_envUint" [label="envUint"]
+"13485_accesses" [label="accesses"]
+"13485_envBool" [label="envBool"]
+"13485_readLine" [label="readLine"]
+"13485_load" [label="load"]
+"13485_removeDir" [label="removeDir"]
+"13485_rpcUrl" [label="rpcUrl"]
+"13485_rpcUrls" [label="rpcUrls"]
+"13485_envString" [label="envString"]
+"13485_serializeBytes" [label="serializeBytes"]
+"13485_writeLine" [label="writeLine"]
+"13485_recordLogs" [label="recordLogs"]
+"13485_getLabel" [label="getLabel"]
+"13485_label" [label="label"]
+"13485_serializeBool" [label="serializeBool"]
+"13485_readFileBinary" [label="readFileBinary"]
+"13485_getCode" [label="getCode"]
+"13485_parseJsonBytes32" [label="parseJsonBytes32"]
+"13485_fsMetadata" [label="fsMetadata"]
+"13485_readFile" [label="readFile"]
+"13485_parseJsonUint" [label="parseJsonUint"]
+"13485_addr" [label="addr"]
+"13485_parseJsonBoolArray" [label="parseJsonBoolArray"]
+"13485_parseUint" [label="parseUint"]
+"13485_getRecordedLogs" [label="getRecordedLogs"]
+"13485_broadcast" [label="broadcast"]
+"13485_resumeGasMetering" [label="resumeGasMetering"]
+"13485_writeJson" [label="writeJson"]
+"13485_envAddress" [label="envAddress"]
+"13485_breakpoint" [label="breakpoint"]
+"13485_stopBroadcast" [label="stopBroadcast"]
+"13485_parseAddress" [label="parseAddress"]
+"13485_assume" [label="assume"]
+"13485_createDir" [label="createDir"]
+"13485_removeFile" [label="removeFile"]
+"13485_parseJson" [label="parseJson"]
+"13485_rpcUrlStructs" [label="rpcUrlStructs"]
+"13485_serializeUint" [label="serializeUint"]
+"13485_parseJsonString" [label="parseJsonString"]
+"13485_envBytes32" [label="envBytes32"]
+"13485_rememberKey" [label="rememberKey"]
+"13485_parseJsonStringArray" [label="parseJsonStringArray"]
+"13485_writeFileBinary" [label="writeFileBinary"]
+}subgraph cluster_8886_stdMath {
+label = "stdMath"
+"8886_abs" [label="abs"]
+"8886_delta" [label="delta"]
+"8886_percentDelta" [label="percentDelta"]
+"8886_delta" -> "8886_abs"
+"8886_delta" -> "8886_delta"
+"8886_percentDelta" -> "8886_abs"
+"8886_percentDelta" -> "8886_delta"
+}subgraph cluster_439_Ico {
+label = "Ico"
+"439_contributions" [label="contributions"]
+"439_token" [label="token"]
+"439_fundingPhase" [label="fundingPhase"]
+"439_constructor" [label="constructor"]
+"439_totalContributions" [label="totalContributions"]
+"439_contributeOpen" [label="contributeOpen"]
+"439_toggleAcceptingRedemptions" [label="toggleAcceptingRedemptions"]
+"439_toggleAcceptingContributions" [label="toggleAcceptingContributions"]
+"439_contributeSeed" [label="contributeSeed"]
+"439_contributeGeneral" [label="contributeGeneral"]
+"439_addressAllowed" [label="addressAllowed"]
+"439_redeem" [label="redeem"]
+"439_advancePhase" [label="advancePhase"]
+"439_contribute" [label="contribute"]
+"439_contribute" -> "439_contributeSeed"
+"439_advancePhase" -> "439_onlyOwner"
+"439_toggleAcceptingRedemptions" -> "439_onlyOwner"
+"439_toggleAcceptingContributions" -> "439_onlyOwner"
+"439_contributeSeed" -> "439_addressAllowed"
+"439_contribute" -> "439_contributeGeneral"
+"439_contribute" -> "439_contributeOpen"
+}subgraph cluster_2874_DSTest {
+label = "DSTest"
+"2874_assertEq32" [label="assertEq32"]
+"2874_assertNotEq32" [label="assertNotEq32"]
+"2874_failed" [label="failed"]
+"2874_assertLe" [label="assertLe"]
+"2874_assertGe" [label="assertGe"]
+"2874_assertGeDecimal" [label="assertGeDecimal"]
+"2874_assertLtDecimal" [label="assertLtDecimal"]
+"2874_assertGt" [label="assertGt"]
+"2874_assertLt" [label="assertLt"]
+"2874_assertEq" [label="assertEq"]
+"2874_hasHEVMContext" [label="hasHEVMContext"]
+"2874_assertNotEq" [label="assertNotEq"]
+"2874_assertTrue" [label="assertTrue"]
+"2874_assertGtDecimal" [label="assertGtDecimal"]
+"2874_assertNotEqDecimal" [label="assertNotEqDecimal"]
+"2874_fail" [label="fail"]
+"2874_assertEq0" [label="assertEq0"]
+"2874_assertLeDecimal" [label="assertLeDecimal"]
+"2874_checkEq0" [label="checkEq0"]
+"2874_assertEqDecimal" [label="assertEqDecimal"]
+"2874_assertNotEq0" [label="assertNotEq0"]
+"2874_assertGe" -> "2874_fail"
+"2874_assertGe" -> "2874_assertGe"
+"2874_assertNotEqDecimal" -> "2874_fail"
+"2874_assertEq0" -> "2874_assertEq0"
+"2874_assertEq0" -> "2874_checkEq0"
+"2874_assertGtDecimal" -> "2874_assertGtDecimal"
+"2874_assertNotEq" -> "2874_assertNotEq"
+"2874_assertGt" -> "2874_fail"
+"2874_failed" -> "2874_hasHEVMContext"
+"2874_assertEqDecimal" -> "2874_assertEqDecimal"
+"2874_assertTrue" -> "2874_fail"
+"2874_assertGt" -> "2874_assertGt"
+"2874_assertNotEq0" -> "2874_checkEq0"
+"2874_assertNotEq" -> "2874_fail"
+"2874_assertGeDecimal" -> "2874_fail"
+"2874_assertEq32" -> "2874_assertEq"
+"2874_assertEq" -> "2874_assertEq"
+"2874_assertNotEq0" -> "2874_assertNotEq0"
+"2874_assertGtDecimal" -> "2874_fail"
+"2874_fail" -> "2874_hasHEVMContext"
+"2874_assertEq" -> "2874_fail"
+"2874_assertLtDecimal" -> "2874_fail"
+"2874_assertLe" -> "2874_fail"
+"2874_assertNotEq32" -> "2874_assertNotEq"
+"2874_assertLe" -> "2874_assertLe"
+"2874_assertEqDecimal" -> "2874_fail"
+"2874_assertTrue" -> "2874_assertTrue"
+"2874_assertNotEqDecimal" -> "2874_assertNotEqDecimal"
+"2874_assertLeDecimal" -> "2874_fail"
+"2874_assertLt" -> "2874_fail"
+"2874_assertLeDecimal" -> "2874_assertLeDecimal"
+"2874_assertGeDecimal" -> "2874_assertGeDecimal"
+"2874_assertLtDecimal" -> "2874_assertLtDecimal"
+"2874_assertLt" -> "2874_assertLt"
+"2874_assertNotEq0" -> "2874_fail"
+"2874_assertEq0" -> "2874_fail"
+}subgraph cluster_11582_StdStyle {
+label = "StdStyle"
+"11582_cyanBytes32" [label="cyanBytes32"]
+"11582_boldBytes" [label="boldBytes"]
+"11582_dimBytes" [label="dimBytes"]
+"11582_blue" [label="blue"]
+"11582_greenBytes" [label="greenBytes"]
+"11582_cyan" [label="cyan"]
+"11582_blueBytes" [label="blueBytes"]
+"11582_magenta" [label="magenta"]
+"11582_inverseBytes32" [label="inverseBytes32"]
+"11582_magentaBytes" [label="magentaBytes"]
+"11582_redBytes32" [label="redBytes32"]
+"11582_bold" [label="bold"]
+"11582_yellow" [label="yellow"]
+"11582_underlineBytes" [label="underlineBytes"]
+"11582_redBytes" [label="redBytes"]
+"11582_dim" [label="dim"]
+"11582_red" [label="red"]
+"11582_boldBytes32" [label="boldBytes32"]
+"11582_styleConcat" [label="styleConcat"]
+"11582_italicBytes" [label="italicBytes"]
+"11582_italic" [label="italic"]
+"11582_magentaBytes32" [label="magentaBytes32"]
+"11582_yellowBytes32" [label="yellowBytes32"]
+"11582_cyanBytes" [label="cyanBytes"]
+"11582_dimBytes32" [label="dimBytes32"]
+"11582_underlineBytes32" [label="underlineBytes32"]
+"11582_italicBytes32" [label="italicBytes32"]
+"11582_inverse" [label="inverse"]
+"11582_yellowBytes" [label="yellowBytes"]
+"11582_underline" [label="underline"]
+"11582_inverseBytes" [label="inverseBytes"]
+"11582_green" [label="green"]
+"11582_greenBytes32" [label="greenBytes32"]
+"11582_blueBytes32" [label="blueBytes32"]
+"11582_greenBytes32" -> "11582_green"
+"11582_yellowBytes" -> "11582_yellow"
+"11582_cyanBytes" -> "11582_cyan"
+"11582_italicBytes" -> "11582_italic"
+"11582_green" -> "11582_styleConcat"
+"11582_redBytes" -> "11582_red"
+"11582_boldBytes" -> "11582_bold"
+"11582_italicBytes32" -> "11582_italic"
+"11582_inverseBytes" -> "11582_inverse"
+"11582_blueBytes" -> "11582_blue"
+"11582_italic" -> "11582_italic"
+"11582_cyanBytes32" -> "11582_cyan"
+"11582_underline" -> "11582_underline"
+"11582_underlineBytes32" -> "11582_underline"
+"11582_dimBytes" -> "11582_dim"
+"11582_cyan" -> "11582_styleConcat"
+"11582_inverse" -> "11582_inverse"
+"11582_magenta" -> "11582_styleConcat"
+"11582_red" -> "11582_styleConcat"
+"11582_cyan" -> "11582_cyan"
+"11582_blueBytes32" -> "11582_blue"
+"11582_bold" -> "11582_bold"
+"11582_redBytes32" -> "11582_red"
+"11582_inverse" -> "11582_styleConcat"
+"11582_dim" -> "11582_styleConcat"
+"11582_yellowBytes32" -> "11582_yellow"
+"11582_magentaBytes32" -> "11582_magenta"
+"11582_inverseBytes32" -> "11582_inverse"
+"11582_boldBytes32" -> "11582_bold"
+"11582_bold" -> "11582_styleConcat"
+"11582_blue" -> "11582_blue"
+"11582_italic" -> "11582_styleConcat"
+"11582_yellow" -> "11582_yellow"
+"11582_yellow" -> "11582_styleConcat"
+"11582_dim" -> "11582_dim"
+"11582_red" -> "11582_red"
+"11582_magenta" -> "11582_magenta"
+"11582_green" -> "11582_green"
+"11582_underline" -> "11582_styleConcat"
+"11582_greenBytes" -> "11582_green"
+"11582_magentaBytes" -> "11582_magenta"
+"11582_underlineBytes" -> "11582_underline"
+"11582_dimBytes32" -> "11582_dim"
+"11582_blue" -> "11582_styleConcat"
+}subgraph cluster_30146_console2 {
+label = "console2"
+"30146__sendLogPayloadView" [label="_sendLogPayloadView"]
+"30146_logBytes31" [label="logBytes31"]
+"30146_logUint" [label="logUint"]
+"30146_logBytes23" [label="logBytes23"]
+"30146_logInt" [label="logInt"]
+"30146_logBytes25" [label="logBytes25"]
+"30146_logBytes14" [label="logBytes14"]
+"30146_logBytes30" [label="logBytes30"]
+"30146_logBytes29" [label="logBytes29"]
+"30146_logAddress" [label="logAddress"]
+"30146_logBytes10" [label="logBytes10"]
+"30146_logBool" [label="logBool"]
+"30146_logBytes22" [label="logBytes22"]
+"30146_logBytes13" [label="logBytes13"]
+"30146_logString" [label="logString"]
+"30146_logBytes2" [label="logBytes2"]
+"30146_logBytes12" [label="logBytes12"]
+"30146_logBytes18" [label="logBytes18"]
+"30146_logBytes21" [label="logBytes21"]
+"30146_logBytes15" [label="logBytes15"]
+"30146_logBytes3" [label="logBytes3"]
+"30146_logBytes27" [label="logBytes27"]
+"30146_logBytes20" [label="logBytes20"]
+"30146__sendLogPayload" [label="_sendLogPayload"]
+"30146_logBytes16" [label="logBytes16"]
+"30146_logBytes" [label="logBytes"]
+"30146_logBytes5" [label="logBytes5"]
+"30146_logBytes6" [label="logBytes6"]
+"30146_logBytes9" [label="logBytes9"]
+"30146_logBytes7" [label="logBytes7"]
+"30146_logBytes11" [label="logBytes11"]
+"30146_logBytes8" [label="logBytes8"]
+"30146_log" [label="log"]
+"30146_logBytes1" [label="logBytes1"]
+"30146_logBytes28" [label="logBytes28"]
+"30146_logBytes4" [label="logBytes4"]
+"30146_logBytes26" [label="logBytes26"]
+"30146__castLogPayloadViewToPure" [label="_castLogPayloadViewToPure"]
+"30146_logBytes19" [label="logBytes19"]
+"30146_logBytes32" [label="logBytes32"]
+"30146_logBytes24" [label="logBytes24"]
+"30146_logBytes17" [label="logBytes17"]
+"30146_logBytes32" -> "30146__sendLogPayload"
+"30146_logBytes29" -> "30146__sendLogPayload"
+"30146_logAddress" -> "30146__sendLogPayload"
+"30146_logBytes14" -> "30146__sendLogPayload"
+"30146_logBytes24" -> "30146__sendLogPayload"
+"30146_logBytes27" -> "30146__sendLogPayload"
+"30146_logBytes22" -> "30146__sendLogPayload"
+"30146_logBytes8" -> "30146__sendLogPayload"
+"30146_logBytes31" -> "30146__sendLogPayload"
+"30146_logBytes18" -> "30146__sendLogPayload"
+"30146_logInt" -> "30146__sendLogPayload"
+"30146__sendLogPayload" -> "30146__castLogPayloadViewToPure"
+"30146_logBytes9" -> "30146__sendLogPayload"
+"30146_logBytes10" -> "30146__sendLogPayload"
+"30146_logBytes15" -> "30146__sendLogPayload"
+"30146_logBytes21" -> "30146__sendLogPayload"
+"30146_logBytes12" -> "30146__sendLogPayload"
+"30146_logBytes1" -> "30146__sendLogPayload"
+"30146_logBytes23" -> "30146__sendLogPayload"
+"30146_logBytes17" -> "30146__sendLogPayload"
+"30146_logBytes5" -> "30146__sendLogPayload"
+"30146_logBytes16" -> "30146__sendLogPayload"
+"30146_logBytes28" -> "30146__sendLogPayload"
+"30146_log" -> "30146__sendLogPayload"
+"30146_logBytes" -> "30146__sendLogPayload"
+"30146_logBytes3" -> "30146__sendLogPayload"
+"30146_logBytes26" -> "30146__sendLogPayload"
+"30146_logBytes11" -> "30146__sendLogPayload"
+"30146_logBytes7" -> "30146__sendLogPayload"
+"30146_logBytes25" -> "30146__sendLogPayload"
+"30146_logBytes13" -> "30146__sendLogPayload"
+"30146_logBytes30" -> "30146__sendLogPayload"
+"30146_logBytes20" -> "30146__sendLogPayload"
+"30146_logString" -> "30146__sendLogPayload"
+"30146_logBytes2" -> "30146__sendLogPayload"
+"30146_logBytes19" -> "30146__sendLogPayload"
+"30146_logBool" -> "30146__sendLogPayload"
+"30146_logUint" -> "30146__sendLogPayload"
+"30146_logBytes4" -> "30146__sendLogPayload"
+"30146_logBytes6" -> "30146__sendLogPayload"
+}subgraph cluster_44100_IERC20 {
+label = "IERC20"
+"44100_balanceOf" [label="balanceOf"]
+"44100_approve" [label="approve"]
+"44100_totalSupply" [label="totalSupply"]
+"44100_transfer" [label="transfer"]
+"44100_transferFrom" [label="transferFrom"]
+"44100_allowance" [label="allowance"]
+}subgraph cluster_5060_StdChains {
+label = "StdChains"
+"5060_setChainWithDefaultRpcUrl" [label="setChainWithDefaultRpcUrl"]
+"5060__toUpper" [label="_toUpper"]
+"5060_setChain" [label="setChain"]
+"5060_getChainWithUpdatedRpcUrl" [label="getChainWithUpdatedRpcUrl"]
+"5060_getChain" [label="getChain"]
+"5060_initializeStdChains" [label="initializeStdChains"]
+"5060_setFallbackToDefaultRpcUrls" [label="setFallbackToDefaultRpcUrls"]
+"5060_initializeStdChains" -> "5060_setChainWithDefaultRpcUrl"
+"5060_setChain" -> "5060_setChain"
+"5060_getChain" -> "5060_getChainWithUpdatedRpcUrl"
+"5060_getChain" -> "5060_initializeStdChains"
+"5060_setChain" -> "5060_initializeStdChains"
+"5060_setChainWithDefaultRpcUrl" -> "5060_setChain"
+"5060_getChainWithUpdatedRpcUrl" -> "5060__toUpper"
+}subgraph cluster_582_SpaceCoin {
+label = "SpaceCoin"
+"582_taxEnabled" [label="taxEnabled"]
+"582_constructor" [label="constructor"]
+"582_toggleTax" [label="toggleTax"]
+"582_transfer" [label="transfer"]
+"582_constructor" -> "582__mint"
+"582_toggleTax" -> "582_onlyOwner"
+"582_transfer" -> "582__transfer"
+"582_constructor" -> "582_constructor"
+}subgraph cluster_7878_StdCheats {
+label = "StdCheats"
+"7878_dealERC721" [label="dealERC721"]
+"7878_startHoax" [label="startHoax"]
+"7878_skip" [label="skip"]
+"7878_rewind" [label="rewind"]
+"7878_deal" [label="deal"]
+"7878_dealERC1155" [label="dealERC1155"]
+"7878_changePrank" [label="changePrank"]
+"7878_deployCodeTo" [label="deployCodeTo"]
+"7878_hoax" [label="hoax"]
+"7878_dealERC1155" -> "7878_dealERC1155"
+"7878_deployCodeTo" -> "7878_deployCodeTo"
+"7878_deal" -> "7878_deal"
+}subgraph cluster_44998_IcoTest {
+label = "IcoTest"
+"44998_testAdvancePhasesFailOpen" [label="testAdvancePhasesFailOpen"]
+"44998_testTransferToggleTax" [label="testTransferToggleTax"]
+"44998_testNotAcceptingContributions" [label="testNotAcceptingContributions"]
+"44998_testAdvancePhases" [label="testAdvancePhases"]
+"44998_setUp" [label="setUp"]
+"44998_testContributeGeneral" [label="testContributeGeneral"]
+"44998_testAdvancePhaseFailNotOwner" [label="testAdvancePhaseFailNotOwner"]
+"44998_testAddressAllowed" [label="testAddressAllowed"]
+"44998_test_contributeSeed" [label="test_contributeSeed"]
+"44998_testContributeOpen" [label="testContributeOpen"]
+"44998_testAdvancePhasesFailGeneral" [label="testAdvancePhasesFailGeneral"]
+"44998_testContributeOpen" -> "44998_assertEq"
+"44998_testTransferToggleTax" -> "44998_assertEq"
+"44998_testAddressAllowed" -> "44998_assertEq"
+"44998_testAdvancePhasesFailGeneral" -> "44998_assertEq"
+"44998_test_contributeSeed" -> "44998_assertEq"
+"44998_testAdvancePhasesFailOpen" -> "44998_assertEq"
+"44998_testAdvancePhaseFailNotOwner" -> "44998_assertEq"
+"44998_testContributeGeneral" -> "44998_assertEq"
+"44998_testAdvancePhases" -> "44998_assertEq"
+}subgraph cluster_7114_StdCheatsSafe {
+label = "StdCheatsSafe"
+"7114_assumeNotZeroAddress" [label="assumeNotZeroAddress"]
+"7114_assumeNotPrecompile" [label="assumeNotPrecompile"]
+"7114_assumeAddressIsNot" [label="assumeAddressIsNot"]
+"7114_makeAddr" [label="makeAddr"]
+"7114_assumeNotBlacklisted" [label="assumeNotBlacklisted"]
+"7114_readReceipt" [label="readReceipt"]
+"7114_assumeNoBlacklisted" [label="assumeNoBlacklisted"]
+"7114_assumeNotPayable" [label="assumeNotPayable"]
+"7114_isFork" [label="isFork"]
+"7114_deriveRememberKey" [label="deriveRememberKey"]
+"7114_assumeNotForgeAddress" [label="assumeNotForgeAddress"]
+"7114_rawToConvertedReceipts" [label="rawToConvertedReceipts"]
+"7114_rawToConvertedReceipt" [label="rawToConvertedReceipt"]
+"7114__isPayable" [label="_isPayable"]
+"7114_makeAddrAndKey" [label="makeAddrAndKey"]
+"7114_rawToConvertedEIPTx1559s" [label="rawToConvertedEIPTx1559s"]
+"7114_assumePayable" [label="assumePayable"]
+"7114_readTx1559" [label="readTx1559"]
+"7114_readTx1559s" [label="readTx1559s"]
+"7114_makeAccount" [label="makeAccount"]
+"7114_destroyAccount" [label="destroyAccount"]
+"7114_rawToConvertedEIP1559Detail" [label="rawToConvertedEIP1559Detail"]
+"7114_rawToConvertedReceiptLogs" [label="rawToConvertedReceiptLogs"]
+"7114__viewChainId" [label="_viewChainId"]
+"7114_readReceipts" [label="readReceipts"]
+"7114_rawToConvertedEIPTx1559" [label="rawToConvertedEIPTx1559"]
+"7114_readEIP1559ScriptArtifact" [label="readEIP1559ScriptArtifact"]
+"7114_deployCode" [label="deployCode"]
+"7114__bytesToUint" [label="_bytesToUint"]
+"7114__pureChainId" [label="_pureChainId"]
+"7114_assumeNotPayable" -> "7114__isPayable"
+"7114_assumePayable" -> "7114__isPayable"
+"7114_readTx1559s" -> "7114_rawToConvertedEIPTx1559s"
+"7114_makeAddr" -> "7114_makeAddrAndKey"
+"7114_rawToConvertedReceipt" -> "7114_rawToConvertedReceiptLogs"
+"7114_assumeAddressIsNot" -> "7114_assumeNotPayable"
+"7114_rawToConvertedReceiptLogs" -> "7114__bytesToUint"
+"7114_assumeAddressIsNot" -> "7114_assumeNotZeroAddress"
+"7114_assumeAddressIsNot" -> "7114_assumeAddressIsNot"
+"7114_assumeAddressIsNot" -> "7114_assumeNotForgeAddress"
+"7114_assumeNotPrecompile" -> "7114_assumeNotPrecompile"
+"7114_readEIP1559ScriptArtifact" -> "7114_rawToConvertedReceipts"
+"7114_readReceipts" -> "7114_rawToConvertedReceipts"
+"7114_assumeNotPrecompile" -> "7114__pureChainId"
+"7114_rawToConvertedEIP1559Detail" -> "7114__bytesToUint"
+"7114_rawToConvertedEIPTx1559" -> "7114_rawToConvertedEIP1559Detail"
+"7114_assumeAddressIsNot" -> "7114_assumeNotPrecompile"
+"7114_assumeAddressIsNot" -> "7114_assumePayable"
+"7114_readReceipt" -> "7114_rawToConvertedReceipt"
+"7114_rawToConvertedReceipts" -> "7114_rawToConvertedReceipt"
+"7114_rawToConvertedReceipt" -> "7114__bytesToUint"
+"7114_readTx1559" -> "7114_rawToConvertedEIPTx1559"
+"7114_makeAccount" -> "7114_makeAddrAndKey"
+"7114_assumeNoBlacklisted" -> "7114_assumeNotBlacklisted"
+"7114_rawToConvertedEIPTx1559s" -> "7114_rawToConvertedEIPTx1559"
+"7114_readEIP1559ScriptArtifact" -> "7114_rawToConvertedEIPTx1559s"
+}subgraph cluster_9810_stdStorageSafe {
+label = "stdStorageSafe"
+"9810_depth" [label="depth"]
+"9810_bytesToBytes32" [label="bytesToBytes32"]
+"9810_read_bytes32" [label="read_bytes32"]
+"9810_read_bool" [label="read_bool"]
+"9810_sig" [label="sig"]
+"9810_with_key" [label="with_key"]
+"9810_read_int" [label="read_int"]
+"9810_read_uint" [label="read_uint"]
+"9810_read_address" [label="read_address"]
+"9810_sigs" [label="sigs"]
+"9810_flatten" [label="flatten"]
+"9810_target" [label="target"]
+"9810_read" [label="read"]
+"9810_find" [label="find"]
+"9810_sig" -> "9810_sigs"
+"9810_read_bytes32" -> "9810_read"
+"9810_read" -> "9810_find"
+"9810_find" -> "9810_bytesToBytes32"
+"9810_read_bool" -> "9810_read_int"
+"9810_read_int" -> "9810_read"
+"9810_read_uint" -> "9810_read"
+"9810_read_address" -> "9810_read"
+"9810_find" -> "9810_flatten"
+}subgraph cluster_44125_IERC20Metadata {
+label = "IERC20Metadata"
+"44125_name" [label="name"]
+"44125_symbol" [label="symbol"]
+"44125_decimals" [label="decimals"]
+}subgraph cluster_45150_SpaceCoinTest {
+label = "SpaceCoinTest"
+"45150_setUp" [label="setUp"]
+"45150_testInitialSupply" [label="testInitialSupply"]
+"45150_testTransfer" [label="testTransfer"]
+"45150_testInitialSupply" -> "45150_assertEq"
+"45150_testTransfer" -> "45150_assertEq"
+}subgraph cluster_30309_IMulticall3 {
+label = "IMulticall3"
+"30309_getBlockNumber" [label="getBlockNumber"]
+"30309_getEthBalance" [label="getEthBalance"]
+"30309_tryAggregate" [label="tryAggregate"]
+"30309_getCurrentBlockTimestamp" [label="getCurrentBlockTimestamp"]
+"30309_blockAndAggregate" [label="blockAndAggregate"]
+"30309_getCurrentBlockDifficulty" [label="getCurrentBlockDifficulty"]
+"30309_getChainId" [label="getChainId"]
+"30309_getCurrentBlockGasLimit" [label="getCurrentBlockGasLimit"]
+"30309_aggregate" [label="aggregate"]
+"30309_getBlockHash" [label="getBlockHash"]
+"30309_getBasefee" [label="getBasefee"]
+"30309_aggregate3" [label="aggregate3"]
+"30309_getCurrentBlockCoinbase" [label="getCurrentBlockCoinbase"]
+"30309_getLastBlockHash" [label="getLastBlockHash"]
+"30309_aggregate3Value" [label="aggregate3Value"]
+"30309_tryBlockAndAggregate" [label="tryBlockAndAggregate"]
+}subgraph cluster_8168_StdInvariant {
+label = "StdInvariant"
+"8168_targetContract" [label="targetContract"]
+"8168_targetArtifacts" [label="targetArtifacts"]
+"8168_excludeSender" [label="excludeSender"]
+"8168_excludeSenders" [label="excludeSenders"]
+"8168_targetContracts" [label="targetContracts"]
+"8168_targetArtifact" [label="targetArtifact"]
+"8168_targetArtifactSelector" [label="targetArtifactSelector"]
+"8168_targetSelector" [label="targetSelector"]
+"8168_excludeArtifact" [label="excludeArtifact"]
+"8168_targetSelectors" [label="targetSelectors"]
+"8168_targetSenders" [label="targetSenders"]
+"8168_excludeContract" [label="excludeContract"]
+"8168_targetArtifactSelectors" [label="targetArtifactSelectors"]
+"8168_excludeContracts" [label="excludeContracts"]
+"8168_targetSender" [label="targetSender"]
+"8168_excludeArtifacts" [label="excludeArtifacts"]
+}subgraph cluster_44147_Context {
+label = "Context"
+"44147__msgSender" [label="_msgSender"]
+"44147__msgData" [label="_msgData"]
+}subgraph cluster_44022_ERC20 {
+label = "ERC20"
+"44022__approve" [label="_approve"]
+"44022_allowance" [label="allowance"]
+"44022_transferFrom" [label="transferFrom"]
+"44022__afterTokenTransfer" [label="_afterTokenTransfer"]
+"44022__burn" [label="_burn"]
+"44022__transfer" [label="_transfer"]
+"44022_totalSupply" [label="totalSupply"]
+"44022_decimals" [label="decimals"]
+"44022__mint" [label="_mint"]
+"44022_decreaseAllowance" [label="decreaseAllowance"]
+"44022_symbol" [label="symbol"]
+"44022_constructor" [label="constructor"]
+"44022__spendAllowance" [label="_spendAllowance"]
+"44022_increaseAllowance" [label="increaseAllowance"]
+"44022_balanceOf" [label="balanceOf"]
+"44022_name" [label="name"]
+"44022_approve" [label="approve"]
+"44022__beforeTokenTransfer" [label="_beforeTokenTransfer"]
+"44022_transfer" [label="transfer"]
+"44022__burn" -> "44022__afterTokenTransfer"
+"44022_transfer" -> "44022__transfer"
+"44022__mint" -> "44022__beforeTokenTransfer"
+"44022_approve" -> "44022__approve"
+"44022_increaseAllowance" -> "44022__approve"
+"44022_transferFrom" -> "44022__msgSender"
+"44022__spendAllowance" -> "44022__approve"
+"44022_transferFrom" -> "44022__spendAllowance"
+"44022_increaseAllowance" -> "44022_allowance"
+"44022__transfer" -> "44022__beforeTokenTransfer"
+"44022_decreaseAllowance" -> "44022_allowance"
+"44022__burn" -> "44022__beforeTokenTransfer"
+"44022_approve" -> "44022__msgSender"
+"44022_decreaseAllowance" -> "44022__msgSender"
+"44022_increaseAllowance" -> "44022__msgSender"
+"44022_transferFrom" -> "44022__transfer"
+"44022__transfer" -> "44022__afterTokenTransfer"
+"44022_transfer" -> "44022__msgSender"
+"44022__mint" -> "44022__afterTokenTransfer"
+"44022_decreaseAllowance" -> "44022__approve"
+"44022__spendAllowance" -> "44022_allowance"
+}subgraph cluster_43384_safeconsole {
+label = "safeconsole"
+"43384_logMemory" [label="logMemory"]
+"43384_writeString" [label="writeString"]
+"43384_log" [label="log"]
+"43384__sendLogPayloadView" [label="_sendLogPayloadView"]
+"43384__memcopy" [label="_memcopy"]
+"43384__sendLogPayload" [label="_sendLogPayload"]
+"43384__memcopyView" [label="_memcopyView"]
+"43384_log" -> "43384_writeString"
+"43384_logMemory" -> "43384__sendLogPayload"
+"43384_log" -> "43384__sendLogPayload"
+"43384_logMemory" -> "43384__memcopy"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"revert(string)" 
+"abi.encodePacked()" 
+"require(bool,string)" 
+"gas()" 
+"abi.encode()" 
+"chainid()" 
+"abi.decode()" 
+"mload(uint256)" 
+"mstore(uint256,uint256)" 
+"keccak256(bytes)" 
+"balance(address)" 
+"staticcall(uint256,uint256,uint256,uint256,uint256,uint256)" 
+"abi.encodeWithSignature()" 
+"create(uint256,uint256,uint256)" 
+"revert(uint256,uint256)" 
+"abi.encodeWithSelector()" 
+"pop(uint256)" 
+"43384__sendLogPayloadView" -> "gas()"
+"30146_logBytes3" -> "abi.encodeWithSignature()"
+"9810_read_int" -> "abi.decode()"
+"22021__sendLogPayload" -> "gas()"
+"7114_deployCode" -> "create(uint256,uint256,uint256)"
+"7114__viewChainId" -> "chainid()"
+"2874_assertNotEq" -> "keccak256(bytes)"
+"44022__spendAllowance" -> "require(bool,string)"
+"439_advancePhase" -> "require(bool,string)"
+"7114__isPayable" -> "balance(address)"
+"22021_logBytes23" -> "abi.encodeWithSignature()"
+"43384_log" -> "mstore(uint256,uint256)"
+"2874_failed" -> "keccak256(bytes)"
+"12430__bound" -> "require(bool,string)"
+"22021_logBytes8" -> "abi.encodeWithSignature()"
+"12430_bytesToUint" -> "abi.encodePacked()"
+"10371_checked_write" -> "abi.encodePacked()"
+"22021_log" -> "abi.encodeWithSignature()"
+"30146_logBytes9" -> "abi.encodeWithSignature()"
+"30146_logBytes29" -> "abi.encodeWithSignature()"
+"22021_logBytes20" -> "abi.encodeWithSignature()"
+"12430_getTokenBalances" -> "require(bool,string)"
+"7114_readTx1559" -> "abi.decode()"
+"7114_assumeNotBlacklisted" -> "abi.decode()"
+"22021_logBytes1" -> "abi.encodeWithSignature()"
+"22021_logString" -> "abi.encodeWithSignature()"
+"22021_logBytes24" -> "abi.encodeWithSignature()"
+"43384__memcopyView" -> "gas()"
+"12430_computeCreateAddress" -> "abi.encodePacked()"
+"9810_find" -> "require(bool,string)"
+"12430_bytesToUint" -> "abi.decode()"
+"5060_getChainWithUpdatedRpcUrl" -> "revert(uint256,uint256)"
+"44022__transfer" -> "require(bool,string)"
+"22021_logBytes28" -> "abi.encodeWithSignature()"
+"439_contribute" -> "require(bool,string)"
+"22021_logBytes7" -> "abi.encodeWithSignature()"
+"12430_computeCreate2Address" -> "keccak256(bytes)"
+"43384__memcopyView" -> "staticcall(uint256,uint256,uint256,uint256,uint256,uint256)"
+"7878_dealERC1155" -> "abi.decode()"
+"30146_logBytes28" -> "abi.encodeWithSignature()"
+"22021_logBytes29" -> "abi.encodeWithSignature()"
+"22021_logUint" -> "abi.encodeWithSignature()"
+"9810_read_bytes32" -> "abi.decode()"
+"2874_assertEq" -> "keccak256(bytes)"
+"30146_logBytes30" -> "abi.encodeWithSignature()"
+"22021_logBytes3" -> "abi.encodeWithSignature()"
+"22021_logBytes9" -> "abi.encodeWithSignature()"
+"5060_setChain" -> "abi.encodePacked()"
+"2874_failed" -> "abi.encodePacked()"
+"12430_console2_log" -> "abi.encodeWithSignature()"
+"22021_logBytes4" -> "abi.encodeWithSignature()"
+"22021_logBytes30" -> "abi.encodeWithSignature()"
+"4367_assertEq" -> "abi.encode()"
+"10371_checked_write" -> "keccak256(bytes)"
+"30146_logBytes6" -> "abi.encodeWithSignature()"
+"7114_readEIP1559ScriptArtifact" -> "abi.decode()"
+"22021__sendLogPayload" -> "staticcall(uint256,uint256,uint256,uint256,uint256,uint256)"
+"30146_logBytes10" -> "abi.encodeWithSignature()"
+"12430_getTokenBalances" -> "abi.encodeWithSelector()"
+"22021_logBytes32" -> "abi.encodeWithSignature()"
+"2874_fail" -> "abi.encodePacked()"
+"30146__sendLogPayloadView" -> "gas()"
+"30146_logBytes12" -> "abi.encodeWithSignature()"
+"30146_logAddress" -> "abi.encodeWithSignature()"
+"7114__bytesToUint" -> "abi.encodePacked()"
+"30146_logBytes4" -> "abi.encodeWithSignature()"
+"22021_logBytes21" -> "abi.encodeWithSignature()"
+"30146_log" -> "abi.encodeWithSignature()"
+"30146_logBytes7" -> "abi.encodeWithSignature()"
+"12430_computeCreate2Address" -> "abi.encodePacked()"
+"30146_logBytes25" -> "abi.encodeWithSignature()"
+"22021_logBytes15" -> "abi.encodeWithSignature()"
+"2874_fail" -> "abi.encode()"
+"22021_logBytes17" -> "abi.encodeWithSignature()"
+"30146_logBytes27" -> "abi.encodeWithSignature()"
+"30146_logBytes20" -> "abi.encodeWithSignature()"
+"7114_makeAddrAndKey" -> "keccak256(bytes)"
+"22021_logBytes22" -> "abi.encodeWithSignature()"
+"44022__approve" -> "require(bool,string)"
+"44022_decreaseAllowance" -> "require(bool,string)"
+"9810_find" -> "keccak256(bytes)"
+"9810_flatten" -> "mstore(uint256,uint256)"
+"12430_getTokenBalances" -> "abi.decode()"
+"30146_logInt" -> "abi.encodeWithSignature()"
+"30146_logBytes8" -> "abi.encodeWithSignature()"
+"30146_logString" -> "abi.encodeWithSignature()"
+"439_advancePhase" -> "revert(string)"
+"7114_readTx1559s" -> "abi.decode()"
+"43384__memcopyView" -> "pop(uint256)"
+"22021_logBytes11" -> "abi.encodeWithSignature()"
+"7878_dealERC1155" -> "require(bool,string)"
+"30146_logBytes22" -> "abi.encodeWithSignature()"
+"12430_bytesToUint" -> "require(bool,string)"
+"5060_getChainWithUpdatedRpcUrl" -> "mload(uint256)"
+"30146_logBytes11" -> "abi.encodeWithSignature()"
+"22021_logInt" -> "abi.encodeWithSignature()"
+"22021_logBytes13" -> "abi.encodeWithSignature()"
+"7114_makeAddrAndKey" -> "abi.encodePacked()"
+"30146_logBytes14" -> "abi.encodeWithSignature()"
+"10371_flatten" -> "mstore(uint256,uint256)"
+"30146_logBytes16" -> "abi.encodeWithSignature()"
+"7878_deployCodeTo" -> "require(bool,string)"
+"7114_deployCode" -> "mload(uint256)"
+"30146_logBytes5" -> "abi.encodeWithSignature()"
+"30146_logBytes17" -> "abi.encodeWithSignature()"
+"7878_deal" -> "abi.decode()"
+"439_advancePhase" -> "keccak256(bytes)"
+"5060_getChain" -> "abi.encodePacked()"
+"9810_sigs" -> "keccak256(bytes)"
+"7114__bytesToUint" -> "require(bool,string)"
+"22021_logBytes2" -> "abi.encodeWithSignature()"
+"12430_hashInitCode" -> "abi.encodePacked()"
+"2874_assertEq" -> "abi.encodePacked()"
+"7878_deployCodeTo" -> "abi.encodePacked()"
+"22021_logBytes6" -> "abi.encodeWithSignature()"
+"22021_logBytes14" -> "abi.encodeWithSignature()"
+"9810_find" -> "abi.encodePacked()"
+"43384_log" -> "mload(uint256)"
+"5060_getChainWithUpdatedRpcUrl" -> "abi.encodePacked()"
+"9810_read_uint" -> "abi.decode()"
+"7114_readReceipt" -> "abi.decode()"
+"22021_logBytes27" -> "abi.encodeWithSignature()"
+"22021_logAddress" -> "abi.encodeWithSignature()"
+"30146_logBytes19" -> "abi.encodeWithSignature()"
+"22021_logBool" -> "abi.encodeWithSignature()"
+"30146_logBytes32" -> "abi.encodeWithSignature()"
+"7878_dealERC1155" -> "abi.encodeWithSelector()"
+"7114__isPayable" -> "require(bool,string)"
+"439_contributeOpen" -> "require(bool,string)"
+"22021_logBytes" -> "abi.encodeWithSignature()"
+"7114_readTx1559" -> "abi.encodePacked()"
+"22021_logBytes12" -> "abi.encodeWithSignature()"
+"22021_logBytes31" -> "abi.encodeWithSignature()"
+"30146_logBool" -> "abi.encodeWithSignature()"
+"7114_assumeNotBlacklisted" -> "require(bool,string)"
+"7114_destroyAccount" -> "abi.encode()"
+"30146_logBytes18" -> "abi.encodeWithSignature()"
+"7114_assumeNotBlacklisted" -> "abi.encodeWithSelector()"
+"5060_getChainWithUpdatedRpcUrl" -> "abi.encodeWithSignature()"
+"30146_logBytes31" -> "abi.encodeWithSignature()"
+"30146_logBytes15" -> "abi.encodeWithSignature()"
+"30146__sendLogPayloadView" -> "staticcall(uint256,uint256,uint256,uint256,uint256,uint256)"
+"43384_logMemory" -> "mload(uint256)"
+"30146_logBytes13" -> "abi.encodeWithSignature()"
+"7114__bytesToUint" -> "abi.decode()"
+"44022__mint" -> "require(bool,string)"
+"439_redeem" -> "require(bool,string)"
+"11582_styleConcat" -> "abi.encodePacked()"
+"5060_getChainWithUpdatedRpcUrl" -> "keccak256(bytes)"
+"7114_destroyAccount" -> "balance(address)"
+"12430_computeCreateAddress" -> "keccak256(bytes)"
+"7114_deployCode" -> "require(bool,string)"
+"30146_logBytes23" -> "abi.encodeWithSignature()"
+"43384__sendLogPayloadView" -> "pop(uint256)"
+"7114_readReceipts" -> "abi.decode()"
+"439_advancePhase" -> "abi.encodePacked()"
+"9810_read_address" -> "abi.decode()"
+"439_contributeGeneral" -> "require(bool,string)"
+"43384_logMemory" -> "mstore(uint256,uint256)"
+"2874_assertNotEq" -> "abi.encodePacked()"
+"30146_logBytes26" -> "abi.encodeWithSignature()"
+"30146_logBytes24" -> "abi.encodeWithSignature()"
+"5060_setChain" -> "require(bool,string)"
+"22021_logBytes16" -> "abi.encodeWithSignature()"
+"22021_logBytes25" -> "abi.encodeWithSignature()"
+"9810_read_bool" -> "revert(string)"
+"7114_readReceipt" -> "abi.encodePacked()"
+"22021_logBytes5" -> "abi.encodeWithSignature()"
+"22021_logBytes19" -> "abi.encodeWithSignature()"
+"9810_read" -> "abi.encode()"
+"4367_assertEq" -> "keccak256(bytes)"
+"2874_fail" -> "keccak256(bytes)"
+"7878_dealERC721" -> "abi.decode()"
+"5060_setChain" -> "keccak256(bytes)"
+"2874_failed" -> "abi.encode()"
+"30146_logBytes1" -> "abi.encodeWithSignature()"
+"5060_getChain" -> "require(bool,string)"
+"22021_logBytes10" -> "abi.encodeWithSignature()"
+"9810_find" -> "revert(string)"
+"22021_logBytes18" -> "abi.encodeWithSignature()"
+"10371_checked_write" -> "require(bool,string)"
+"12430_hashInitCode" -> "keccak256(bytes)"
+"439_contributeSeed" -> "require(bool,string)"
+"30146_logBytes" -> "abi.encodeWithSignature()"
+"44022__burn" -> "require(bool,string)"
+"30146_logBytes2" -> "abi.encodeWithSignature()"
+"7878_deal" -> "abi.encodeWithSelector()"
+"7878_dealERC721" -> "abi.encodeWithSelector()"
+"30146_logBytes21" -> "abi.encodeWithSignature()"
+"7114_deployCode" -> "abi.encodePacked()"
+"2874_failed" -> "abi.decode()"
+"43384__sendLogPayloadView" -> "staticcall(uint256,uint256,uint256,uint256,uint256,uint256)"
+"22021_logBytes26" -> "abi.encodeWithSignature()"
+"30146_logUint" -> "abi.encodeWithSignature()"
+"7878_dealERC721" -> "require(bool,string)"
+}"7878_deployCodeTo" -> "13957_getCode"
+"44998_testTransferToggleTax" -> "13957_stopPrank"
+"45150_setUp" -> "13957_stopPrank"
+"8744_write" -> "13485_writeJson"
+"44998_testContributeOpen" -> "13957_stopPrank"
+"44998_testNotAcceptingContributions" -> "13957_stopPrank"
+"9810_find" -> "13957_load"
+"11582_greenBytes" -> "13485_toString"
+"11582_yellow" -> "13485_toString"
+"4367_assertApproxEqRel" -> "8886_percentDelta"
+"44998_testAdvancePhasesFailGeneral" -> "439_fundingPhase"
+"44998_test_contributeSeed" -> "439_totalContributions"
+"11582_dimBytes" -> "13485_toString"
+"7114_readReceipts" -> "13957_readFile"
+"11582_red" -> "13485_toString"
+"11582_blue" -> "13485_toString"
+"45150_testTransfer" -> "13957_startPrank"
+"7878_changePrank" -> "13957_stopPrank"
+"7878_deal" -> "13957_deal"
+"7878_dealERC721" -> "10371_target"
+"11582_magenta" -> "13485_toString"
+"7114_readTx1559" -> "13957_parseJson"
+"44998_testContributeGeneral" -> "13957_startPrank"
+"45150_setUp" -> "13957_startPrank"
+"8744_readInt" -> "13485_parseJsonInt"
+"439_redeem" -> "582_transfer"
+"44998_testTransferToggleTax" -> "439_contribute"
+"7878_deal" -> "10371_target"
+"11582_underlineBytes32" -> "13485_toString"
+"7114__isPayable" -> "13957_deal"
+"7114_isFork" -> "13957_activeFork"
+"8744_readAddressArray" -> "13485_parseJsonAddressArray"
+"11582_yellowBytes" -> "13485_toString"
+"12430_bound" -> "13485_toString"
+"11582_magentaBytes32" -> "13485_toString"
+"7878_dealERC1155" -> "10371_sig"
+"44998_testAdvancePhasesFailOpen" -> "13957_expectRevert"
+"7878_deal" -> "10371_checked_write"
+"7878_dealERC1155" -> "10371_with_key"
+"7878_deal" -> "10371_with_key"
+"44998_testTransferToggleTax" -> "582_toggleTax"
+"44998_test_contributeSeed" -> "439_contribute"
+"7114_readTx1559" -> "13957_toString"
+"10371_with_key" -> "9810_with_key"
+"44998_testAdvancePhasesFailGeneral" -> "13957_stopPrank"
+"45150_testTransfer" -> "582_balanceOf"
+"8744_serialize" -> "13485_serializeBytes32"
+"44998_testTransferToggleTax" -> "13957_deal"
+"7878_skip" -> "13957_warp"
+"44998_testAdvancePhasesFailOpen" -> "13957_stopPrank"
+"44998_testContributeGeneral" -> "439_contribute"
+"9810_find" -> "13957_record"
+"8744_serialize" -> "13485_serializeBytes"
+"7114_assumeNotForgeAddress" -> "13957_assume"
+"11582_dimBytes32" -> "13485_toString"
+"44998_testAdvancePhasesFailOpen" -> "13957_startPrank"
+"8744_readBytesArray" -> "13485_parseJsonBytesArray"
+"10371_sigs" -> "9810_sigs"
+"11582_cyanBytes32" -> "13485_toString"
+"8744_readString" -> "13485_parseJsonString"
+"9810_find" -> "13957_store"
+"10371_read_int" -> "9810_read_int"
+"44998_test_contributeSeed" -> "13957_deal"
+"7114_assumeNotPrecompile" -> "13957_assume"
+"11582_green" -> "13485_toString"
+"11582_blueBytes" -> "13485_toString"
+"44998_setUp" -> "439_token"
+"44998_testContributeOpen" -> "439_contribute"
+"44998_testAdvancePhasesFailOpen" -> "439_fundingPhase"
+"7878_startHoax" -> "13957_startPrank"
+"11582_underline" -> "13485_toString"
+"8744_serialize" -> "13485_serializeString"
+"10371_read_uint" -> "9810_read_uint"
+"44998_testContributeGeneral" -> "439_totalContributions"
+"11582_italic" -> "13485_toString"
+"7114_deriveRememberKey" -> "13957_deriveKey"
+"8744_parseRaw" -> "13485_parseJson"
+"8744_readBytes32Array" -> "13485_parseJsonBytes32Array"
+"11582_italicBytes32" -> "13485_toString"
+"44998_setUp" -> "13957_startPrank"
+"11582_italicBytes" -> "13485_toString"
+"7114_readTx1559" -> "13957_readFile"
+"11582_underlineBytes" -> "13485_toString"
+"8744_readIntArray" -> "13485_parseJsonIntArray"
+"11582_greenBytes32" -> "13485_toString"
+"11582_cyanBytes" -> "13485_toString"
+"11582_redBytes32" -> "13485_toString"
+"7878_dealERC721" -> "10371_sig"
+"44998_testContributeOpen" -> "13957_startPrank"
+"44998_testAdvancePhasesFailGeneral" -> "439_advancePhase"
+"44998_testNotAcceptingContributions" -> "13957_expectRevert"
+"10371_read_bytes32" -> "9810_read_bytes32"
+"8744_serialize" -> "13485_serializeInt"
+"7878_hoax" -> "13957_deal"
+"4367_assertApproxEqAbsDecimal" -> "8886_delta"
+"44998_testAddressAllowed" -> "439_addressAllowed"
+"7114_readReceipts" -> "13957_parseJson"
+"7114_destroyAccount" -> "13957_deal"
+"7878_changePrank" -> "13957_startPrank"
+"8744_readBoolArray" -> "13485_parseJsonBoolArray"
+"7878_deployCodeTo" -> "13957_etch"
+"44998_testContributeOpen" -> "439_advancePhase"
+"7114_deployCode" -> "13957_getCode"
+"11582_boldBytes" -> "13485_toString"
+"44998_testNotAcceptingContributions" -> "439_contribute"
+"10371_read_address" -> "9810_read_address"
+"7114_readEIP1559ScriptArtifact" -> "13957_readFile"
+"44998_testAdvancePhaseFailNotOwner" -> "13957_startPrank"
+"5060_setChain" -> "13485_toString"
+"5060_getChain" -> "13485_toString"
+"4367_assertApproxEqAbs" -> "8886_delta"
+"44998_test_contributeSeed" -> "13957_stopPrank"
+"44998_testContributeGeneral" -> "13957_expectRevert"
+"8744_readUintArray" -> "13485_parseJsonUintArray"
+"12430_getTokenBalances" -> "30309_aggregate"
+"7114_destroyAccount" -> "13957_resetNonce"
+"44998_testTransferToggleTax" -> "582_balanceOf"
+"44998_testAdvancePhases" -> "439_fundingPhase"
+"44998_test_contributeSeed" -> "13957_expectRevert"
+"7114_readReceipt" -> "13957_parseJson"
+"10371_sig" -> "9810_sig"
+"8744_readStringArray" -> "13485_parseJsonStringArray"
+"7114_makeAddrAndKey" -> "13957_addr"
+"7114_deriveRememberKey" -> "13957_rememberKey"
+"9810_find" -> "13957_accesses"
+"7114_assumeNotZeroAddress" -> "13957_assume"
+"7114_readTx1559s" -> "13957_readFile"
+"10371_depth" -> "9810_depth"
+"44998_testContributeGeneral" -> "13957_stopPrank"
+"44998_testAdvancePhases" -> "13957_stopPrank"
+"11582_yellowBytes32" -> "13485_toString"
+"44998_testAdvancePhaseFailNotOwner" -> "13957_stopPrank"
+"7114_assumeNotBlacklisted" -> "13957_assume"
+"44998_test_contributeSeed" -> "13957_startPrank"
+"7114_assumeNotPayable" -> "13957_assume"
+"7878_hoax" -> "13957_prank"
+"44998_testContributeGeneral" -> "439_advancePhase"
+"8744_readAddress" -> "13485_parseJsonAddress"
+"7878_deal" -> "10371_sig"
+"7114_readTx1559s" -> "13957_parseJson"
+"7878_dealERC721" -> "10371_checked_write"
+"44998_testTransferToggleTax" -> "13957_startPrank"
+"7114_readEIP1559ScriptArtifact" -> "13957_parseJson"
+"44998_testAdvancePhases" -> "13957_startPrank"
+"10371_checked_write" -> "13957_store"
+"45150_testTransfer" -> "582_transfer"
+"4367_assertApproxEqRelDecimal" -> "8886_percentDelta"
+"8744_serialize" -> "13485_serializeBool"
+"5060_getChainWithUpdatedRpcUrl" -> "13485_rpcUrl"
+"7878_startHoax" -> "13957_deal"
+"7878_rewind" -> "13957_warp"
+"8744_readBytes" -> "13485_parseJsonBytes"
+"44998_testNotAcceptingContributions" -> "13957_deal"
+"44998_testTransferToggleTax" -> "582_taxEnabled"
+"7878_dealERC1155" -> "10371_target"
+"11582_redBytes" -> "13485_toString"
+"44998_testContributeOpen" -> "439_totalContributions"
+"8744_serialize" -> "13485_serializeAddress"
+"44998_testAdvancePhaseFailNotOwner" -> "13957_expectRevert"
+"8744_serialize" -> "13485_serializeUint"
+"44998_testAdvancePhaseFailNotOwner" -> "439_advancePhase"
+"44998_testAdvancePhases" -> "439_advancePhase"
+"7114_destroyAccount" -> "13957_etch"
+"5060_getChainWithUpdatedRpcUrl" -> "13485_envString"
+"7114_readReceipt" -> "13957_toString"
+"44998_testAdvancePhasesFailGeneral" -> "13957_startPrank"
+"11582_inverse" -> "13485_toString"
+"11582_magentaBytes" -> "13485_toString"
+"44998_testAdvancePhasesFailGeneral" -> "13957_expectRevert"
+"11582_inverseBytes" -> "13485_toString"
+"10371_find" -> "9810_find"
+"5060_getChainWithUpdatedRpcUrl" -> "13485_envOr"
+"44998_testContributeOpen" -> "439_contributions"
+"44998_test_contributeSeed" -> "439_contributions"
+"44998_testContributeGeneral" -> "439_contributions"
+"10371_checked_write" -> "13957_load"
+"44998_testAdvancePhaseFailNotOwner" -> "439_fundingPhase"
+"45150_testInitialSupply" -> "582_balanceOf"
+"11582_blueBytes32" -> "13485_toString"
+"7878_dealERC721" -> "10371_with_key"
+"11582_boldBytes32" -> "13485_toString"
+"7114_makeAddrAndKey" -> "13957_label"
+"44998_setUp" -> "13957_stopPrank"
+"44998_testContributeGeneral" -> "13957_deal"
+"10371_target" -> "9810_target"
+"8744_readUint" -> "13485_parseJsonUint"
+"11582_inverseBytes32" -> "13485_toString"
+"44998_testNotAcceptingContributions" -> "13957_startPrank"
+"8744_readBytes32" -> "13485_parseJsonBytes32"
+"7878_dealERC1155" -> "10371_checked_write"
+"9810_read" -> "13957_load"
+"8744_readBool" -> "13485_parseJsonBool"
+"11582_cyan" -> "13485_toString"
+"44998_testNotAcceptingContributions" -> "439_toggleAcceptingContributions"
+"44998_testAdvancePhasesFailOpen" -> "439_advancePhase"
+"44998_testTransferToggleTax" -> "582_transfer"
+"7114_assumePayable" -> "13957_assume"
+"10371_read_bool" -> "9810_read_bool"
+"11582_bold" -> "13485_toString"
+"7114_readReceipt" -> "13957_readFile"
+"44998_setUp" -> "13957_deal"
+"11582_dim" -> "13485_toString"
+}

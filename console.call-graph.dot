@@ -1,0 +1,131 @@
+strict digraph {
+subgraph cluster_22021_console {
+label = "console"
+"22021_logBytes25" [label="logBytes25"]
+"22021_log" [label="log"]
+"22021_logBytes2" [label="logBytes2"]
+"22021_logInt" [label="logInt"]
+"22021_logBytes5" [label="logBytes5"]
+"22021__sendLogPayload" [label="_sendLogPayload"]
+"22021_logString" [label="logString"]
+"22021_logBytes11" [label="logBytes11"]
+"22021_logBytes22" [label="logBytes22"]
+"22021_logBytes8" [label="logBytes8"]
+"22021_logBool" [label="logBool"]
+"22021_logBytes1" [label="logBytes1"]
+"22021_logBytes7" [label="logBytes7"]
+"22021_logBytes30" [label="logBytes30"]
+"22021_slitherConstructorConstantVariables" [label="slitherConstructorConstantVariables"]
+"22021_logBytes15" [label="logBytes15"]
+"22021_logBytes18" [label="logBytes18"]
+"22021_logBytes26" [label="logBytes26"]
+"22021_logBytes28" [label="logBytes28"]
+"22021_logBytes21" [label="logBytes21"]
+"22021_logUint" [label="logUint"]
+"22021_logBytes24" [label="logBytes24"]
+"22021_logBytes20" [label="logBytes20"]
+"22021_logAddress" [label="logAddress"]
+"22021_logBytes16" [label="logBytes16"]
+"22021_logBytes10" [label="logBytes10"]
+"22021_logBytes9" [label="logBytes9"]
+"22021_logBytes3" [label="logBytes3"]
+"22021_logBytes" [label="logBytes"]
+"22021_logBytes12" [label="logBytes12"]
+"22021_logBytes29" [label="logBytes29"]
+"22021_logBytes32" [label="logBytes32"]
+"22021_logBytes4" [label="logBytes4"]
+"22021_logBytes14" [label="logBytes14"]
+"22021_logBytes19" [label="logBytes19"]
+"22021_logBytes27" [label="logBytes27"]
+"22021_logBytes31" [label="logBytes31"]
+"22021_logBytes17" [label="logBytes17"]
+"22021_logBytes13" [label="logBytes13"]
+"22021_logBytes23" [label="logBytes23"]
+"22021_logBytes6" [label="logBytes6"]
+"22021_logBytes28" -> "22021__sendLogPayload"
+"22021_logBool" -> "22021__sendLogPayload"
+"22021_logUint" -> "22021__sendLogPayload"
+"22021_log" -> "22021__sendLogPayload"
+"22021_logBytes18" -> "22021__sendLogPayload"
+"22021_logBytes3" -> "22021__sendLogPayload"
+"22021_logAddress" -> "22021__sendLogPayload"
+"22021_logBytes13" -> "22021__sendLogPayload"
+"22021_logBytes25" -> "22021__sendLogPayload"
+"22021_logBytes4" -> "22021__sendLogPayload"
+"22021_logBytes11" -> "22021__sendLogPayload"
+"22021_logBytes17" -> "22021__sendLogPayload"
+"22021_logBytes6" -> "22021__sendLogPayload"
+"22021_logBytes12" -> "22021__sendLogPayload"
+"22021_logInt" -> "22021__sendLogPayload"
+"22021_logBytes1" -> "22021__sendLogPayload"
+"22021_logBytes21" -> "22021__sendLogPayload"
+"22021_logBytes23" -> "22021__sendLogPayload"
+"22021_logBytes27" -> "22021__sendLogPayload"
+"22021_logBytes2" -> "22021__sendLogPayload"
+"22021_logBytes24" -> "22021__sendLogPayload"
+"22021_logBytes30" -> "22021__sendLogPayload"
+"22021_logBytes15" -> "22021__sendLogPayload"
+"22021_logString" -> "22021__sendLogPayload"
+"22021_logBytes10" -> "22021__sendLogPayload"
+"22021_logBytes29" -> "22021__sendLogPayload"
+"22021_logBytes5" -> "22021__sendLogPayload"
+"22021_logBytes9" -> "22021__sendLogPayload"
+"22021_logBytes7" -> "22021__sendLogPayload"
+"22021_logBytes26" -> "22021__sendLogPayload"
+"22021_logBytes16" -> "22021__sendLogPayload"
+"22021_logBytes8" -> "22021__sendLogPayload"
+"22021_logBytes19" -> "22021__sendLogPayload"
+"22021_logBytes" -> "22021__sendLogPayload"
+"22021_logBytes32" -> "22021__sendLogPayload"
+"22021_logBytes22" -> "22021__sendLogPayload"
+"22021_logBytes20" -> "22021__sendLogPayload"
+"22021_logBytes14" -> "22021__sendLogPayload"
+"22021_logBytes31" -> "22021__sendLogPayload"
+}subgraph cluster_solidity {
+label = "[Solidity]"
+"abi.encodeWithSignature()" 
+"gas()" 
+"staticcall(uint256,uint256,uint256,uint256,uint256,uint256)" 
+"22021__sendLogPayload" -> "staticcall(uint256,uint256,uint256,uint256,uint256,uint256)"
+"22021__sendLogPayload" -> "gas()"
+"22021_logBytes32" -> "abi.encodeWithSignature()"
+"22021_logBytes2" -> "abi.encodeWithSignature()"
+"22021_logBytes23" -> "abi.encodeWithSignature()"
+"22021_logBytes21" -> "abi.encodeWithSignature()"
+"22021_logBytes8" -> "abi.encodeWithSignature()"
+"22021_logBytes6" -> "abi.encodeWithSignature()"
+"22021_logBytes14" -> "abi.encodeWithSignature()"
+"22021_log" -> "abi.encodeWithSignature()"
+"22021_logBytes16" -> "abi.encodeWithSignature()"
+"22021_logBytes20" -> "abi.encodeWithSignature()"
+"22021_logBytes25" -> "abi.encodeWithSignature()"
+"22021_logBytes15" -> "abi.encodeWithSignature()"
+"22021_logBytes17" -> "abi.encodeWithSignature()"
+"22021_logBytes27" -> "abi.encodeWithSignature()"
+"22021_logAddress" -> "abi.encodeWithSignature()"
+"22021_logBytes5" -> "abi.encodeWithSignature()"
+"22021_logBytes1" -> "abi.encodeWithSignature()"
+"22021_logBool" -> "abi.encodeWithSignature()"
+"22021_logString" -> "abi.encodeWithSignature()"
+"22021_logBytes19" -> "abi.encodeWithSignature()"
+"22021_logBytes24" -> "abi.encodeWithSignature()"
+"22021_logBytes22" -> "abi.encodeWithSignature()"
+"22021_logBytes28" -> "abi.encodeWithSignature()"
+"22021_logBytes" -> "abi.encodeWithSignature()"
+"22021_logBytes12" -> "abi.encodeWithSignature()"
+"22021_logBytes10" -> "abi.encodeWithSignature()"
+"22021_logBytes31" -> "abi.encodeWithSignature()"
+"22021_logBytes7" -> "abi.encodeWithSignature()"
+"22021_logBytes11" -> "abi.encodeWithSignature()"
+"22021_logBytes18" -> "abi.encodeWithSignature()"
+"22021_logUint" -> "abi.encodeWithSignature()"
+"22021_logBytes29" -> "abi.encodeWithSignature()"
+"22021_logInt" -> "abi.encodeWithSignature()"
+"22021_logBytes3" -> "abi.encodeWithSignature()"
+"22021_logBytes9" -> "abi.encodeWithSignature()"
+"22021_logBytes13" -> "abi.encodeWithSignature()"
+"22021_logBytes4" -> "abi.encodeWithSignature()"
+"22021_logBytes30" -> "abi.encodeWithSignature()"
+"22021_logBytes26" -> "abi.encodeWithSignature()"
+}
+}

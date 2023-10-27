@@ -1,0 +1,21 @@
+{
+  "abi": [],
+  "bytecode": {
+    "object": "0x",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x",
+    "linkReferences": {}
+  },
+  "ast": {
+    "absolutePath": "test/Ico.opix.t.sol",
+    "id": 44193,
+    "exportedSymbols": {},
+    "nodeType": "SourceUnit",
+    "src": "17784:0:24",
+    "nodes": [],
+    "license": "Unlicense"
+  },
+  "id": 24
+}
