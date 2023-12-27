@@ -8,8 +8,6 @@ enum FundingPhase { SEED, GENERAL, OPEN }
 contract Ico {
 
     bool public acceptingRedemptions;
-
-
     FundingPhase public fundingPhase;
     address public owner;
     uint public totalContributions;
@@ -43,7 +41,6 @@ contract Ico {
         totalContributions = 0;
         mostRecentAdvancePhaseBlock = block.number;
     }
-
 
     function advancePhase(string memory _confirmation) onlyOwner public {
         require(block.number > mostRecentAdvancePhaseBlock, "Cannot advance phase more than once per block");

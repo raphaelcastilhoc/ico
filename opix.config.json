@@ -1,13 +1,15 @@
 {
+	"recipientEmail": "raphael@olympix.ai",
     "coverageArgs": [],
     "testArgs": [],
     "buildArgs": [],
     "opixTestDir": "test",
     "testContracts": [
-        {
+		{
             "subjectContractName": "SpaceCoin",
+			"subjectContractPath": "contracts/SpaceCoin.sol",
             "testContractPath": "test/SpaceCoin.t.sol",
-            "subjectContractPath": "contracts/SpaceCoin.sol"
+            "testContractName": "SpaceCoinTest"
         }
     ]
 }

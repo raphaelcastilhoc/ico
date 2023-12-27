@@ -28,23 +28,25 @@ contract SpaceCoin is ERC20 {
     }
 
     function transfer(address recipient, uint256 amount) public virtual override returns (bool) {
-        // 2 percent tax
-        if(taxEnabled) {
-            // the tax will round down, I'm ok with that.
-            uint256 tax = amount / 50;
+        if(taxEnabled) { 
+            uint256 tax = 2;
+            
+            if(amount < 100) {
+                tax = 1;
+            }
+
             uint256 amountAfterTax = amount - tax;
 
             _transfer(_msgSender(), treasury, tax);
             _transfer(_msgSender(), recipient, amountAfterTax);
-        } else {
-            _transfer(_msgSender(), recipient, amount); 
+        } 
+        else {
+            _transfer(_msgSender(), recipient, amount);
         }
-
-        
-        return true;
     }
 
-    function toggleTax() public onlyOwner {
+    function toggleTax() public onlyOwner 
+    {
         taxEnabled = !taxEnabled;
     }
 }
