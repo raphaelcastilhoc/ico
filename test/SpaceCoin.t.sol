@@ -22,4 +22,21 @@ contract SpaceCoinTest is Test {
         coin = new SpaceCoin(treasury, coinCreator);
         vm.stopPrank();
     }
+
+    function test_SpaceCoin_transfer_TaxEnabled() public {
+        vm.startPrank(coinCreator);
+        coin.transfer(bob, 1000);
+        vm.stopPrank();
+        assertTrue(coin.balanceOf(bob) == 998, "bob should have 9800 coins");
+        assertTrue(coin.balanceOf(treasury) == 350002, "treasury should have 350200 coins");
+    }
+
+    function test_SpaceCoin_transfer_TaxDisabled() public {
+        vm.startPrank(coinCreator);
+        coin.toggleTax();
+        coin.transfer(bob, 10000);
+        vm.stopPrank();
+        assertTrue(coin.balanceOf(bob) == 10000, "bob should have 10000 coins");
+        assertTrue(coin.balanceOf(treasury) == 350000, "treasury should have 350000 coins");
+    }
 }
