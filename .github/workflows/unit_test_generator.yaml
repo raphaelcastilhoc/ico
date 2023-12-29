@@ -21,4 +21,4 @@ jobs:
           OLYMPIX_API_TOKEN: ${{ secrets.OLYMPIX_API_TOKEN }}
           GITHUB_REPOSITORY: ico
           GITHUB_REPOSITORY_OWNER: raphaelcastilhoc
-          GITHUB_TOKEN: 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
+          GITHUB_TOKEN: ${{ secrets.OLYMPIX_GITHUB_TOKEN }}
