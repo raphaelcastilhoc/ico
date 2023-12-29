@@ -1,7 +1,7 @@
 name: Unit Test Generation Workflow
 on: push
 jobs:
-  security:
+  unit-test-generation:
     runs-on: ubuntu-latest
     
     steps:
@@ -10,6 +10,7 @@ jobs:
       - name: Unit Test Generator
         uses: olympix/unit-test-generator@main
         env:
+          OLYMPIX_API_TOKEN: ${{ secrets.OLYMPIX_API_TOKEN }}
           GITHUB_REPOSITORY: ico
           GITHUB_REPOSITORY_OWNER: raphaelcastilhoc
           GITHUB_TOKEN: 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
