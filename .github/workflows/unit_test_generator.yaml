@@ -8,4 +8,8 @@ jobs:
       - uses: actions/checkout@v3
       
       - name: Show repository
-        run: echo "Repository owner $GITHUB_REPOSITORY_OWNER and name ${{ github.event.repository.name }}"
+        env:
+          OLYMPIX_API_TOKEN: ${{ secrets.OLYMPIX_API_TOKEN }}
+          GITHUB_REPOSITORY: ico
+          GITHUB_TOKEN: ${{ secrets.OLYMPIX_GITHUB_TOKEN }}
+        run: echo "Repository owner $GITHUB_REPOSITORY_OWNER and name $GITHUB_REPOSITORY"
