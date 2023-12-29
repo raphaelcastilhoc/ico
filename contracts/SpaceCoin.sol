@@ -28,9 +28,9 @@ contract SpaceCoin is ERC20 {
     }
 
     function transfer(address recipient, uint256 amount) public virtual override returns (bool) {
-        if(taxEnabled) { 
+        if(taxEnabled) {
             uint256 tax = 2;
-            
+
             if(amount < 100) {
                 tax = 1;
             }
@@ -39,14 +39,15 @@ contract SpaceCoin is ERC20 {
 
             _transfer(_msgSender(), treasury, tax);
             _transfer(_msgSender(), recipient, amountAfterTax);
-        } 
+        }
         else {
             _transfer(_msgSender(), recipient, amount);
         }
+
+        return true;
     }
 
-    function toggleTax() public onlyOwner 
-    {
+    function toggleTax() public onlyOwner {
         taxEnabled = !taxEnabled;
     }
 }

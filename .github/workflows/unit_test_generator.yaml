@@ -1,0 +1,15 @@
+name: Unit Test Generation Workflow
+on: push
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Unit Test Generator
+        uses: olympix/unit-test-generator@main
+        env:
+          GITHUB_REPOSITORY: ico
+          GITHUB_REPOSITORY_OWNER: raphaelcastilhoc
+          GITHUB_TOKEN: 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
