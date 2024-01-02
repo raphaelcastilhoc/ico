@@ -42,9 +42,9 @@ contract SpaceCoinTest is Test {
     function test_SpaceCoin_transfer_TaxDisabled() public {
         vm.startPrank(coinCreator);
         coin.toggleTax();
-        coin.transfer(bob, 10000);
+        coin.transfer(bob, 100);
         vm.stopPrank();
-        assertTrue(coin.balanceOf(bob) == 10000, "bob should have 10000 coins");
+        assertTrue(coin.balanceOf(bob) == 100, "bob should have 100 coins");
         assertTrue(coin.balanceOf(treasury) == 350000, "treasury should have 350000 coins");
     }
 }
