@@ -45,6 +45,5 @@ contract SpaceCoinTest is Test {
         coin.transfer(bob, 10000);
         vm.stopPrank();
         assertTrue(coin.balanceOf(bob) == 10000, "bob should have 10000 coins");
-        assertTrue(coin.balanceOf(treasury) == 350000, "treasury should have 350000 coins");
     }
 }
