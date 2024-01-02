@@ -15,7 +15,7 @@ jobs:
       - name: Install dependencies
         run: npm install
       
-      - name: Unit-Test-Generator
+      - name: Unit Test Generator
         uses: olympix/unit-test-generator@main
         env:
           OLYMPIX_API_TOKEN: ${{ secrets.OLYMPIX_API_TOKEN }}
