@@ -1,5 +1,9 @@
 name: Unit Test Generation Workflow
-on: push
+on:
+  push:
+    branches:
+      - main
+      
 jobs:
   unit-test-generation:
     runs-on: ubuntu-latest
