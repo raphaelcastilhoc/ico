@@ -22,4 +22,5 @@ contract SpaceCoinTest is Test {
         coin = new SpaceCoin(treasury, coinCreator);
         vm.stopPrank();
     }
+    
 }
