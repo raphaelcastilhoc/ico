@@ -25,10 +25,10 @@ contract SpaceCoinTest is Test {
 
     function test_transfer_SuccessfulTransferWithTax() public {
     vm.prank(coinCreator);
-    coin.transfer(bob, 200);
+    coin.transfer(bob, 10);
     
-    assertEq(coin.balanceOf(bob), 198);
+    assertEq(coin.balanceOf(bob), 8);
     assertEq(coin.balanceOf(treasury), 350002);
-    assertEq(coin.balanceOf(coinCreator), 149800);
+    assertEq(coin.balanceOf(coinCreator), 149990);
 }
 }
