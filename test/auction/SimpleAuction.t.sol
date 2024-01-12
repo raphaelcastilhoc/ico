@@ -5,7 +5,6 @@ import "forge-std/Test.sol";
 import "src/auction/SimpleAuction.sol";
 
 contract SimpleAuctionTest is Test {
-
     address payable creator = payable(address(0x123));
     address jill = address(0x456);
     address chris = address(0x789);
@@ -13,7 +12,6 @@ contract SimpleAuctionTest is Test {
     SimpleAuction simpleAuction;
 
     function setUp() public {
-
         vm.deal(creator, 10 ether);
         vm.deal(jill, 10 ether);
         vm.deal(chris, 10 ether);
@@ -24,78 +22,124 @@ contract SimpleAuctionTest is Test {
     }
 
     function test_bid_FailWhenAuctionAlreadyEnded() public {
-    vm.startPrank(jill);
+        vm.startPrank(jill);
 
-    uint256 futureTimestamp = uint48(block.timestamp) + 8 days;
-    vm.warp(futureTimestamp);
+        uint256 futureTimestamp = uint48(block.timestamp) + 8 days;
+        vm.warp(futureTimestamp);
 
-    vm.expectRevert(abi.encodeWithSelector(SimpleAuction.AuctionAlreadyEnded.selector));
-    simpleAuction.bid{value: 1 ether}();
-    
-    vm.stopPrank();
-}
+        vm.expectRevert(
+            abi.encodeWithSelector(SimpleAuction.AuctionAlreadyEnded.selector)
+        );
+        simpleAuction.bid{value: 1 ether}();
+
+        vm.stopPrank();
+    }
 
     function test_bid_FailWhenBidIsNotHighEnough() public {
-    vm.startPrank(jill);
+        vm.startPrank(jill);
 
-    simpleAuction.bid{value: 2 ether}();
+        simpleAuction.bid{value: 2 ether}();
 
-    vm.expectRevert(abi.encodeWithSelector(SimpleAuction.BidNotHighEnough.selector, 2 ether));
-    simpleAuction.bid{value: 1 ether}();
-    
-    vm.stopPrank();
-}
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                SimpleAuction.BidNotHighEnough.selector,
+                2 ether
+            )
+        );
+        simpleAuction.bid{value: 1 ether}();
+
+        vm.stopPrank();
+    }
 
     function test_withdraw_FailWhenSenderHasPendingReturns() public {
-    vm.startPrank(jill);
+        vm.startPrank(jill);
 
-    simpleAuction.bid{value: 2 ether}();
+        simpleAuction.bid{value: 2 ether}();
 
-    vm.startPrank(chris);
+        vm.startPrank(chris);
 
-    simpleAuction.bid{value: 3 ether}();
+        simpleAuction.bid{value: 3 ether}();
 
-    vm.startPrank(jill);
+        vm.startPrank(jill);
 
-    bool result = simpleAuction.withdraw();
-    
-    vm.stopPrank();
+        bool result = simpleAuction.withdraw();
 
-    assertTrue(result);
-    assertEq(jill.balance, 10 ether);
-}
+        vm.stopPrank();
+
+        assertTrue(result);
+        assertEq(jill.balance, 10 ether);
+    }
 
     function test_withdraw_SuccessfulWithdraw() public {
-    vm.startPrank(jill);
+        vm.startPrank(jill);
 
-    simpleAuction.bid{value: 2 ether}();
+        simpleAuction.bid{value: 2 ether}();
 
-    vm.startPrank(chris);
+        vm.startPrank(chris);
 
-    simpleAuction.bid{value: 3 ether}();
+        simpleAuction.bid{value: 3 ether}();
 
-    vm.startPrank(jill);
+        vm.startPrank(jill);
 
-    bool result = simpleAuction.withdraw();
-    
-    vm.stopPrank();
+        bool result = simpleAuction.withdraw();
 
-    assertTrue(result);
-    assertEq(jill.balance, 10 ether);
-}
+        vm.stopPrank();
+
+        assertTrue(result);
+        assertEq(jill.balance, 10 ether);
+    }
 
     function test_withdraw_FailWhenAmountIsZero() public {
-    vm.startPrank(jill);
+        vm.startPrank(jill);
 
-    bool result = simpleAuction.withdraw();
-    
-    vm.stopPrank();
+        bool result = simpleAuction.withdraw();
 
-    assertTrue(result);
-}
+        vm.stopPrank();
+
+        assertTrue(result);
+    }
 
     function test_auctionEnd_FailWhenAuctionNotYetEnded() public {
-    vm.expectRevert(SimpleAuction.AuctionNotYetEnded.selector);
-    simpleAuction.auctionEnd();
+        vm.expectRevert(SimpleAuction.AuctionNotYetEnded.selector);
+        simpleAuction.auctionEnd();
+    }
+
+    function test_bid_FailWhenAuctionAlreadyEndedV2() public {
+        vm.startPrank(chris);
+
+        uint256 futureTimestamp = uint48(block.timestamp) + 8 days;
+        vm.warp(futureTimestamp);
+
+        vm.expectRevert(
+            abi.encodeWithSelector(SimpleAuction.AuctionAlreadyEnded.selector)
+        );
+        simpleAuction.bid{value: 1 ether}();
+
+        vm.stopPrank();
+    }
+
+    function test_bid_SuccessfulBidWhenHighestBidIsZero() public {
+    vm.startPrank(jill);
+
+    simpleAuction.bid{value: 1 ether}();
+
+    vm.stopPrank();
+
+    assertEq(simpleAuction.highestBid(), 1 ether);
+    assertEq(simpleAuction.highestBidder(), jill);
 }
+
+    function test_auctionEnd_FailWhenAuctionEndAlreadyCalled() public {
+        vm.startPrank(creator);
+
+        uint256 futureTimestamp = uint48(block.timestamp) + 8 days;
+        vm.warp(futureTimestamp);
+
+        simpleAuction.auctionEnd();
+
+        vm.expectRevert(SimpleAuction.AuctionEndAlreadyCalled.selector);
+        simpleAuction.auctionEnd();
+
+        vm.stopPrank();
+    }
 }
