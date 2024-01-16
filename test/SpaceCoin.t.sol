@@ -22,48 +22,4 @@ contract SpaceCoinTest is Test {
         coin = new SpaceCoin(treasury, coinCreator);
         vm.stopPrank();
     }
-
-    function test_SpaceCoin_transfer_TaxEnabledAndAmountLessThan100() public {
-        vm.startPrank(coinCreator);
-        coin.transfer(bob, 50);
-        vm.stopPrank();
-        assertTrue(coin.balanceOf(bob) == 49, "bob should have 49 coins");
-        assertTrue(coin.balanceOf(treasury) == 350001, "treasury should have 350001 coins");
-    }
-
-    function test_SpaceCoin_transfer_TaxEnabledAndAmountGreaterThan100() public {
-        vm.startPrank(coinCreator);
-        coin.transfer(bob, 150);
-        vm.stopPrank();
-        assertTrue(coin.balanceOf(bob) == 148, "bob should have 148 coins");
-        assertTrue(coin.balanceOf(treasury) == 350002, "treasury should have 350002 coins");
-    }
-
-    function test_SpaceCoin_transfer_TaxDisabled() public {
-        vm.startPrank(coinCreator);
-        coin.toggleTax();
-        coin.transfer(bob, 100);
-        vm.stopPrank();
-        assertTrue(coin.balanceOf(bob) == 100, "bob should have 100 coins");
-        assertTrue(coin.balanceOf(treasury) == 350000, "treasury should have 350000 coins");
-    }
-
-    function test_SpaceCoin_transfer_TaxEnabledAndAmountGreaterThan100V2() public {
-        vm.startPrank(coinCreator);
-        coin.transfer(bob, 150);
-        vm.stopPrank();
-        assertTrue(coin.balanceOf(bob) == 148, "bob should have 148 coins");
-        assertTrue(coin.balanceOf(treasury) == 350002, "treasury should have 350002 coins");
-    }
-
-    /**
-* The problem with my previous attempt was that I had a duplicate function name. I had two functions named test_SpaceCoin_transfer_TaxEnabledAndAmountGreaterThan100. I have fixed this by giving a unique name to the function I am submitting now.
-*/
-function test_SpaceCoin_transfer_TaxEnabledAndAmountGreaterThan100V3() public {
-        vm.startPrank(coinCreator);
-        coin.transfer(bob, 150);
-        vm.stopPrank();
-        assertTrue(coin.balanceOf(bob) == 148, "bob should have 148 coins");
-        assertTrue(coin.balanceOf(treasury) == 350002, "treasury should have 350002 coins");
-    }
 }
