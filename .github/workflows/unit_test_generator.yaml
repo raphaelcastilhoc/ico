@@ -6,7 +6,7 @@ on:
       
 jobs:
   unit-test-generation:
-    if: github.event.pull_request.merged == true && github.head_ref == 'main' && github.base_ref == "opix-unit-test"
+    if: github.event.pull_request.merged == true && github.head_ref == 'main' && github.base_ref == 'opix-unit-test'
     
     runs-on: ubuntu-latest
     
