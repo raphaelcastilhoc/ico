@@ -5,7 +5,7 @@ on:
       - closed
       
 jobs:
-  unit-test-generation:
+  test-generation:
     if: github.event.pull_request.merged == true && github.head_ref == 'main' && github.base_ref == 'opix-unit-test'
     
     runs-on: ubuntu-latest
@@ -22,7 +22,7 @@ jobs:
         run: npm install
       
       - name: Unit Test Generator
-        uses: olympix/unit-test-generator@main
+        uses: olympix/test-generator@main
         env:
           OLYMPIX_API_TOKEN: ${{ secrets.OLYMPIX_API_TOKEN }}
           OLYMPIX_GITHUB_ACCESS_TOKEN: ${{ secrets.OLYMPIX_GITHUB_TOKEN }}
