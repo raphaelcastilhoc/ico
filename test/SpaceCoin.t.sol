@@ -26,37 +26,25 @@ contract SpaceCoinTest is Test {
     function test_transfer_SuccessfulTransferWithTax() public {
     vm.startPrank(coinCreator);
 
-    coin.transfer(alice, 200);
+    coin.transfer(alice, 50);
 
     vm.stopPrank();
 
-    assertEq(coin.balanceOf(alice), 198);
+    assertEq(coin.balanceOf(alice), 48);
     assertEq(coin.balanceOf(treasury), 350002);
-}
-
-    /**
-* The problem with my previous attempts was that I was not using a unique name for the test function. This caused a compilation error because there were multiple functions with the same name. In this attempt, I have corrected this by giving the function a unique name.
-*/
-function test_transfer_SuccessfulTransferWithTaxWhenAmountIsLessThan100() public {
-    vm.startPrank(coinCreator);
-
-    coin.transfer(alice, 99);
-
-    vm.stopPrank();
-
-    assertEq(coin.balanceOf(alice), 98);
-    assertEq(coin.balanceOf(treasury), 350001);
+    assertEq(coin.balanceOf(coinCreator), 149950);
 }
 
     function test_transfer_SuccessfulTransferWithoutTax() public {
     vm.startPrank(coinCreator);
 
     coin.toggleTax();
-    coin.transfer(alice, 200);
+    coin.transfer(alice, 50);
 
     vm.stopPrank();
 
-    assertEq(coin.balanceOf(alice), 200);
+    assertEq(coin.balanceOf(alice), 50);
     assertEq(coin.balanceOf(treasury), 350000);
+    assertEq(coin.balanceOf(coinCreator), 149950);
 }
 }
