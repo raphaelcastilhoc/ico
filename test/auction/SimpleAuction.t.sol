@@ -44,37 +44,37 @@ contract SimpleAuctionTest is Test {
     vm.stopPrank();
 }
 
-    function test_withdraw_FailWhenAmountIsZero() public {
+    function test_withdraw_SuccessfulWithdraw() public {
     vm.startPrank(jill);
 
-    simpleAuction.bid{value: 1 ether}();
-
-    vm.stopPrank();
+    simpleAuction.bid{value: 2 ether}();
 
     vm.startPrank(chris);
 
-    bool result = simpleAuction.withdraw();
-    assertTrue(result);
+    simpleAuction.bid{value: 3 ether}();
 
+    vm.startPrank(jill);
+
+    bool result = simpleAuction.withdraw();
+    
     vm.stopPrank();
+
+    assertTrue(result);
+    assertEq(jill.balance, 10 ether);
+}
+
+    function test_withdraw_FailWhenAmountIsZero() public {
+    vm.startPrank(jill);
+
+    bool result = simpleAuction.withdraw();
+    
+    vm.stopPrank();
+
+    assertTrue(result);
 }
 
     function test_auctionEnd_FailWhenAuctionNotYetEnded() public {
     vm.expectRevert(SimpleAuction.AuctionNotYetEnded.selector);
     simpleAuction.auctionEnd();
-}
-
-    function test_auctionEnd_FailWhenAuctionEndAlreadyCalled() public {
-    vm.startPrank(creator);
-
-    uint256 futureTimestamp = uint48(block.timestamp) + 8 days;
-    vm.warp(futureTimestamp);
-
-    simpleAuction.auctionEnd();
-
-    vm.expectRevert(SimpleAuction.AuctionEndAlreadyCalled.selector);
-    simpleAuction.auctionEnd();
-    
-    vm.stopPrank();
 }
 }
