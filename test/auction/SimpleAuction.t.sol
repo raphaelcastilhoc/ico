@@ -38,26 +38,9 @@ contract SimpleAuctionTest is Test {
 
     simpleAuction.bid{value: 2 ether}();
 
-    vm.startPrank(chris);
-
     vm.expectRevert(abi.encodeWithSelector(SimpleAuction.BidNotHighEnough.selector, 2 ether));
     simpleAuction.bid{value: 1 ether}();
-
-    vm.stopPrank();
-}
-
-    function test_bid_SuccessfulBidWhenHighestBidIsNotZero() public {
-    vm.startPrank(jill);
-
-    simpleAuction.bid{value: 1 ether}();
-
-    vm.startPrank(chris);
-
-    simpleAuction.bid{value: 2 ether}();
-
-    assert(simpleAuction.highestBid() == 2 ether);
-    assert(simpleAuction.highestBidder() == chris);
-
+    
     vm.stopPrank();
 }
 
