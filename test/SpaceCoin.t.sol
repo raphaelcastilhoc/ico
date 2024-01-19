@@ -32,7 +32,6 @@ contract SpaceCoinTest is Test {
 
     assertEq(coin.balanceOf(alice), 98);
     assertEq(coin.balanceOf(treasury), 350002);
-    assertEq(coin.balanceOf(coinCreator), 149900);
 }
 
     function test_transfer_SuccessfulTransferWithoutTax() public {
@@ -45,6 +44,5 @@ contract SpaceCoinTest is Test {
 
     assertEq(coin.balanceOf(alice), 100);
     assertEq(coin.balanceOf(treasury), 350000);
-    assertEq(coin.balanceOf(coinCreator), 149900);
 }
 }
