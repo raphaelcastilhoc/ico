@@ -33,4 +33,16 @@ contract SpaceCoinTest is Test {
     assertEq(coin.balanceOf(alice), 98);
     assertEq(coin.balanceOf(treasury), 350002);
 }
+
+    function test_transfer_SuccessfulTransferWithoutTax() public {
+    vm.startPrank(coinCreator);
+
+    coin.toggleTax();
+    coin.transfer(alice, 100);
+
+    vm.stopPrank();
+
+    assertEq(coin.balanceOf(alice), 100);
+    assertEq(coin.balanceOf(treasury), 350000);
+}
 }
