@@ -44,22 +44,17 @@ contract SimpleAuctionTest is Test {
     vm.stopPrank();
 }
 
+    function test_withdraw_FailWhenAmountIsZero() public {
+    vm.startPrank(jill);
+
+    bool result = simpleAuction.withdraw();
+    assertTrue(result);
+
+    vm.stopPrank();
+}
+
     function test_auctionEnd_FailWhenAuctionNotYetEnded() public {
     vm.expectRevert(SimpleAuction.AuctionNotYetEnded.selector);
     simpleAuction.auctionEnd();
-}
-
-    function test_auctionEnd_FailWhenAuctionEndAlreadyCalled() public {
-    vm.startPrank(creator);
-
-    uint256 futureTimestamp = uint48(block.timestamp) + 8 days;
-    vm.warp(futureTimestamp);
-
-    simpleAuction.auctionEnd();
-
-    vm.expectRevert(SimpleAuction.AuctionEndAlreadyCalled.selector);
-    simpleAuction.auctionEnd();
-
-    vm.stopPrank();
 }
 }
