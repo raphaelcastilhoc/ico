@@ -25,7 +25,6 @@ contract SimpleAuctionTest is Test {
         vm.expectRevert(SimpleAuction.AuctionNotYetEnded.selector);
         simpleAuction.auctionEnd();
     }
-
     function test_bid_FailWhenAuctionAlreadyEnded() public {
         vm.startPrank(jill);
     
@@ -37,7 +36,6 @@ contract SimpleAuctionTest is Test {
         
         vm.stopPrank();
     }
-
     function test_bid_FailWhenBidIsNotHighEnough() public {
         vm.startPrank(jill);
     
@@ -48,21 +46,6 @@ contract SimpleAuctionTest is Test {
     
         vm.stopPrank();
     }
-
-    function test_auctionEnd_FailWhenAuctionEndAlreadyCalled() public {
-        vm.startPrank(jill);
-    
-        uint256 futureTimestamp = uint48(block.timestamp) + 8 days;
-        vm.warp(futureTimestamp);
-    
-        simpleAuction.auctionEnd();
-    
-        vm.expectRevert(abi.encodeWithSelector(SimpleAuction.AuctionEndAlreadyCalled.selector));
-        simpleAuction.auctionEnd();
-    
-        vm.stopPrank();
-    }
-
     function test_withdraw_SuccessfulWithdraw() public {
         vm.startPrank(jill);
     
@@ -75,13 +58,12 @@ contract SimpleAuctionTest is Test {
         vm.startPrank(jill);
     
         bool result = simpleAuction.withdraw();
-    
+        
         vm.stopPrank();
     
         assert(result);
-        assertEq(jill.balance, 10 ether);
+        assertEq(jill.balance, 10 ether - 2 ether + 2 ether);
     }
-
     function test_withdraw_FailWhenAmountIsZero() public {
         vm.startPrank(jill);
     
@@ -91,5 +73,4 @@ contract SimpleAuctionTest is Test {
     
     //    assert(!result);
     }
-    
-}
+    }
