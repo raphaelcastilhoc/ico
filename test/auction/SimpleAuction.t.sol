@@ -44,13 +44,33 @@ contract SimpleAuctionTest is Test {
     vm.stopPrank();
 }
 
+    function test_withdraw_SuccessfulWithdraw() public {
+    vm.startPrank(jill);
+
+    simpleAuction.bid{value: 2 ether}();
+
+    vm.startPrank(chris);
+
+    simpleAuction.bid{value: 3 ether}();
+
+    vm.startPrank(jill);
+
+    bool result = simpleAuction.withdraw();
+    
+    vm.stopPrank();
+
+    assertTrue(result);
+    assertEq(jill.balance, 10 ether);
+}
+
     function test_withdraw_FailWhenAmountIsZero() public {
     vm.startPrank(jill);
 
     bool result = simpleAuction.withdraw();
-    assertTrue(result);
-
+    
     vm.stopPrank();
+
+    assertTrue(result);
 }
 
     function test_auctionEnd_FailWhenAuctionNotYetEnded() public {
