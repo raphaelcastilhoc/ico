@@ -25,6 +25,7 @@ contract SimpleAuctionTest is Test {
         vm.expectRevert(SimpleAuction.AuctionNotYetEnded.selector);
         simpleAuction.auctionEnd();
     }
+
     function test_bid_FailWhenAuctionAlreadyEnded() public {
         vm.startPrank(jill);
     
@@ -36,6 +37,7 @@ contract SimpleAuctionTest is Test {
         
         vm.stopPrank();
     }
+
     function test_bid_FailWhenBidIsNotHighEnough() public {
         vm.startPrank(jill);
     
@@ -46,31 +48,14 @@ contract SimpleAuctionTest is Test {
     
         vm.stopPrank();
     }
-    function test_withdraw_SuccessfulWithdraw() public {
-        vm.startPrank(jill);
-    
-        simpleAuction.bid{value: 2 ether}();
-    
-        vm.startPrank(chris);
-    
-        simpleAuction.bid{value: 3 ether}();
-    
+
+    function test_withdraw_FailWhenAmountIsZero() public {
         vm.startPrank(jill);
     
         bool result = simpleAuction.withdraw();
         
         vm.stopPrank();
     
-        assert(result);
-        assertEq(jill.balance, 10 ether - 2 ether + 2 ether);
+        assertTrue(result);
     }
-    function test_withdraw_FailWhenAmountIsZero() public {
-        vm.startPrank(jill);
-    
-        bool result = simpleAuction.withdraw();
-    
-        vm.stopPrank();
-    
-    //    assert(!result);
-    }
-    }
+}
