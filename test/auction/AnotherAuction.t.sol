@@ -42,4 +42,19 @@ contract AnotherAuctionTest is Test {
 
     vm.stopPrank();
 }
+
+    function test_anotherBid_SuccessfulBidWhenHighestBidIsNotZero() public {
+    vm.startPrank(jill);
+
+    anotherAuction.anotherBid{value: 1 ether}();
+
+    vm.startPrank(chris);
+
+    anotherAuction.anotherBid{value: 2 ether}();
+
+    assert(anotherAuction.highestBid() == 2 ether);
+    assert(anotherAuction.highestBidder() == chris);
+
+    vm.stopPrank();
+}
 }

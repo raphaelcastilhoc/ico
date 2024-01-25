@@ -20,8 +20,43 @@ contract SimpleAuctionTest is Test {
         vm.stopPrank();
     }
 
-    function test_auctionEnd_FailWhenAuctionNotYetEnded() public {
-    vm.expectRevert(SimpleAuction.AuctionNotYetEnded.selector);
-    simpleAuction.auctionEnd();
+    function test_bid_FailWhenAuctionAlreadyEnded() public {
+    vm.startPrank(creator);
+
+    uint256 futureTimestamp = uint48(block.timestamp) + 8 days;
+    vm.warp(futureTimestamp);
+
+    vm.expectRevert(abi.encodeWithSelector(SimpleAuction.AuctionAlreadyEnded.selector));
+    simpleAuction.bid{value: 1 ether}();
+
+    vm.stopPrank();
+}
+
+    function test_bid_FailWhenBidIsNotHighEnough() public {
+    vm.startPrank(jill);
+
+    simpleAuction.bid{value: 2 ether}();
+
+    vm.expectRevert(abi.encodeWithSelector(SimpleAuction.BidNotHighEnough.selector, 2 ether));
+    simpleAuction.bid{value: 1 ether}();
+
+    vm.stopPrank();
+}
+
+    function test_bid_SuccessfulBidWhenHighestBidIsNotZero() public {
+    vm.startPrank(jill);
+
+    simpleAuction.bid{value: 1 ether}();
+
+    vm.stopPrank();
+
+    vm.startPrank(chris);
+
+    simpleAuction.bid{value: 2 ether}();
+
+    vm.stopPrank();
+
+    assert(simpleAuction.highestBid() == 2 ether);
+    assert(simpleAuction.highestBidder() == chris);
 }
 }
