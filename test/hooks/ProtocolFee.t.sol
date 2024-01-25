@@ -88,7 +88,9 @@ contract ProtocolFeeTest is Test {
 
     function test_collectProtocolFees_SuccessfulWhenCalledByAnyAddress() public {
     fees.postDispatch{value: FEE}(abi.encodePacked(""), testMessage);
+    assertEq(address(fees).balance, FEE);
     fees.collectProtocolFees();
+    assertEq(address(fees).balance, 0);
     assertEq(bob.balance, FEE);
 }
 
