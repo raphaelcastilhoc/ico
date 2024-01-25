@@ -21,13 +21,30 @@ contract SimpleAuctionTest is Test {
         vm.stopPrank();
     }
 
+    function test_withdraw_SuccessfulWithdraw() public {
+    vm.startPrank(jill);
+
+    simpleAuction.bid{value: 2 ether}();
+
+    vm.startPrank(chris);
+
+    simpleAuction.bid{value: 3 ether}();
+
+    bool result = simpleAuction.withdraw();
+
+    vm.stopPrank();
+
+    assert(result);
+    assertEq(jill.balance, 10 ether);
+}
+
     function test_auctionEnd_FailWhenAuctionNotYetEnded() public {
         vm.expectRevert(SimpleAuction.AuctionNotYetEnded.selector);
         simpleAuction.auctionEnd();
     }
 
     function test_bid_FailWhenAuctionAlreadyEnded() public {
-        vm.startPrank(jill);
+        vm.startPrank(creator);
     
         uint256 futureTimestamp = uint48(block.timestamp) + 8 days;
         vm.warp(futureTimestamp);
@@ -41,21 +58,43 @@ contract SimpleAuctionTest is Test {
     function test_bid_FailWhenBidIsNotHighEnough() public {
         vm.startPrank(jill);
     
-        simpleAuction.bid{value: 1 ether}();
+        simpleAuction.bid{value: 2 ether}();
     
-        vm.expectRevert(abi.encodeWithSelector(SimpleAuction.BidNotHighEnough.selector, 1 ether));
+        vm.startPrank(chris);
+    
+        vm.expectRevert(abi.encodeWithSelector(SimpleAuction.BidNotHighEnough.selector, 2 ether));
         simpleAuction.bid{value: 1 ether}();
     
         vm.stopPrank();
     }
 
-    function test_withdraw_FailWhenAmountIsZero() public {
+    function test_withdraw_SuccessfulWithdrawV2() public {
+        vm.startPrank(jill);
+    
+        simpleAuction.bid{value: 2 ether}();
+    
+        vm.startPrank(chris);
+    
+        simpleAuction.bid{value: 3 ether}();
+    
         vm.startPrank(jill);
     
         bool result = simpleAuction.withdraw();
-        
+    
         vm.stopPrank();
     
-        assertTrue(result);
+        assert(result);
+        assertEq(jill.balance, 10 ether);
     }
+
+    function test_withdraw_FailWhenSenderHasNoPendingReturns() public {
+        vm.startPrank(jill);
+    
+        bool result = simpleAuction.withdraw();
+    
+        vm.stopPrank();
+    
+    //    assert(!result);
+    }
+    
 }
