@@ -51,7 +51,7 @@ contract FallbackDomainRoutingHookTest is Test {
     }
 
     function test_hookType_Successful() public {
-    uint8 result = hook.hookType();
-    assertEq(result, uint8(IPostDispatchHook.Types.FALLBACK_ROUTING));
+    uint8 hookType = uint8(IPostDispatchHook.Types.FALLBACK_ROUTING);
+    assertEq(hook.hookType(), hookType);
 }
 }
