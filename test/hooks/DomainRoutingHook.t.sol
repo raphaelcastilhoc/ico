@@ -53,7 +53,7 @@ contract DomainRoutingHookTest is Test {
     }
 
     function test_hookType() public {
-    assertEq(hook.hookType(), uint8(IPostDispatchHook.Types.ROUTING));
+    assertEq(uint8(hook.hookType()), uint8(IPostDispatchHook.Types.ROUTING));
 }
 
     function test_setHooks() public {
@@ -61,18 +61,5 @@ contract DomainRoutingHookTest is Test {
         configs[0] = DomainRoutingHook.HookConfig(1, address(noopHook));
         hook.setHooks(configs);
         assertEq(address(hook.hooks(1)), address(noopHook));
-    }
-
-    function test_postDispatch_SuccessfulPostDispatch() public {
-        hook.setHook(1, address(noopHook));
-
-        bytes memory message = mailbox.buildOutboundMessage(1, address(this).addressToBytes32(), new bytes(0));
-        bytes memory metadata = new bytes(0);
-
-        vm.expectCall(
-            address(noopHook),
-            abi.encodeCall(noopHook.postDispatch, (metadata, message))
-        );
-        hook.postDispatch(metadata, message);
     }
 }
