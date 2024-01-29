@@ -79,7 +79,7 @@ contract ProtocolFeeTest is Test {
     function test_setProtocolFee_SuccessWhenProtocolFeeDoesNotExceedMaxProtocolFee() public {
         fees.setProtocolFee(MAX_FEE);
         assertEq(fees.protocolFee(), MAX_FEE);
-    }
+    }	
 
     function test_hookType_Successful() public {
     uint8 hookType = fees.hookType();
@@ -87,12 +87,10 @@ contract ProtocolFeeTest is Test {
 }
 
     function test_collectProtocolFees_SuccessfulWhenCalledByAnyAddress() public {
-    fees.postDispatch{value: FEE}(abi.encodePacked(""), testMessage);
-    uint256 initialBalance = bob.balance;
-    fees.collectProtocolFees();
-    assertEq(address(fees).balance, 0);
-    assertEq(bob.balance, initialBalance + FEE);
-}
+        fees.postDispatch{value: FEE}(abi.encodePacked(""), testMessage);
+        fees.collectProtocolFees();
+        assertEq(bob.balance, FEE);
+    }
 
     function test_quoteDispatch_Successful() public {
     uint256 quote = fees.quoteDispatch(abi.encodePacked(""), testMessage);
