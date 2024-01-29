@@ -53,8 +53,8 @@ contract DomainRoutingHookTest is Test {
     }
 
     function test_hookType() public {
-        assertEq(hook.hookType(), uint8(IPostDispatchHook.Types.ROUTING));
-    }
+    assertEq(hook.hookType(), uint8(IPostDispatchHook.Types.ROUTING));
+}
 
     function test_setHooks() public {
         DomainRoutingHook.HookConfig[] memory configs = new DomainRoutingHook.HookConfig[](1);
