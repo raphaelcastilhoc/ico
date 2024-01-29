@@ -56,4 +56,11 @@ contract AggregationHookTest is Test {
     uint8 hookType = hook.hookType();
     assertEq(hookType, uint8(IPostDispatchHook.Types.AGGREGATION));
 }
+
+    function test_quoteDispatch() public {
+        uint256 fee = PER_HOOK_GAS_AMOUNT;
+        bytes memory message = abi.encodePacked("hello world");
+        uint256 quote = hook.quoteDispatch("", message);
+        assertEq(quote, hooksDeployed.length * fee);
+    }
 }
