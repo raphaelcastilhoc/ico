@@ -62,4 +62,20 @@ contract DomainRoutingHookTest is Test {
         hook.setHooks(configs);
         assertEq(address(hook.hooks(1)), address(noopHook));
     }
+
+    function test_postDispatch_SuccessfulPostDispatch() public {
+        hook.setHook(1, address(noopHook));
+
+        bytes memory message = mailbox.buildOutboundMessage(
+            1,
+            address(this).addressToBytes32(),
+            bytes("")
+        );
+
+        vm.expectCall(
+            address(noopHook),
+            abi.encodeCall(noopHook.postDispatch, (bytes(""), message))
+        );
+        hook.postDispatch(bytes(""), message);
+    }
 }
