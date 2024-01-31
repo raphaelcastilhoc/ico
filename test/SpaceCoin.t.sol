@@ -3,7 +3,12 @@ pragma solidity 0.8.19;
 import "forge-std/Test.sol";
 import "contracts/Ico.sol";
 
-contract SpaceCoinTest is Test {
+abstract contract OpixForgeUnitTarget {
+   constructor(string memory targetName) {
+   }
+}
+
+contract SpaceCoinTest is Test, OpixForgeUnitTarget("SpaceCoin") {
     address alice = address(0x456);
     address bob = address(0x789);
     address treasury = address(0xabc);
@@ -27,5 +32,12 @@ contract SpaceCoinTest is Test {
     assertEq(coin.balanceOf(bob), 98);
     assertEq(coin.balanceOf(treasury), 350002);
     assertEq(coin.balanceOf(coinCreator), 149900);
+}
+
+    function test_toggleTax_SuccessfulToggleTax() public {
+    vm.prank(coinCreator);
+    coin.toggleTax();
+    
+    assert(!coin.taxEnabled());
 }
 }
