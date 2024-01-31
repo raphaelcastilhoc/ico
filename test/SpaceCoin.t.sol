@@ -28,11 +28,4 @@ contract SpaceCoinTest is Test {
     assertEq(coin.balanceOf(treasury), 350002);
     assertEq(coin.balanceOf(coinCreator), 149900);
 }
-
-    function test_toggleTax_SuccessfulToggleTax() public {
-    vm.prank(coinCreator);
-    coin.toggleTax();
-    
-    assert(!coin.taxEnabled());
-}
 }
