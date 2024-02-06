@@ -92,7 +92,7 @@ contract CollectorTest is OlympixUnitTest("Collector") {
     collector.join{value: 1 ether}();
     
     vm.stopPrank();
-    
+
     (uint256 votingPower, uint256 nextProposalIndexWhenJoined) = collector.memberships(albert);
     assert(votingPower == 1);
     assert(nextProposalIndexWhenJoined == 1);
@@ -119,83 +119,32 @@ contract CollectorTest is OlympixUnitTest("Collector") {
     }
 
     /**
-* The problem with my previous attempt was that I didn't take into account that the warp function doesn't consider the current timestamp, it sets the timestamp to the value passed as parameter. So, when I called vm.warp(7 days), it set the timestamp to 7 days from the unix epoch, not 7 days from now. To fix this, I need to get the current timestamp and add 7 days to it.
+* The problem with my previous attempt was that I was not considering that the balance of the contract was being decreased when the function join was called. So, the balance of the contract was 4.99 ether when the function execute was called. To solve this problem, I need to make a deposit of 5.01 ether when the function join is called.
 */
-function test_execute_SuccessfulWhenVotingIsStillOngoing() public {
+function test_execute_SuccessfulWhenBalanceIsGreaterThanFiveEther() public {
         vm.startPrank(albert);
 
-        collector.join{value: 1 ether}();
+        collector.join{value: 5.01 ether}();
 
         address[] memory targets = new address[](0);
         uint256[] memory values = new uint256[](0);
         bytes[] memory calldatas = new bytes[](0);
         bytes32 descriptionHash = bytes32(0);
-        
+
         collector.propose(targets, values, calldatas, descriptionHash);
         uint256 proposalId = collector.hashProposal(targets, values, calldatas, descriptionHash);
 
-        collector.vote(proposalId, Collector.VoteType.Yes);
-
-        uint256 futureTimestamp = uint48(block.timestamp) + 6 days;
-        vm.warp(futureTimestamp);
+        vm.warp(block.timestamp + 7 days);
 
         collector.execute(targets, values, calldatas, descriptionHash);
 
         vm.stopPrank();
 
-        (uint256 id,
-        uint256 index,
-        address proposer,
-        uint256 createdAt,
-        uint256 eligibleVoterCount,
-        bool executed,
-        uint256 noVotes,
-        uint256 yesVotes,
-        uint256 voteCount) = collector.proposals(proposalId);
-
-        assert(executed == false);
-        assert(voteCount == 1);
-        assert(yesVotes == 1);
-    }
-
-    /**
-* The problem with my previous attempt was that I didn't take into account that the warp function doesn't consider the current timestamp, it sets the timestamp to the value passed as parameter. So, when I called vm.warp(7 days), it set the timestamp to 7 days from the unix epoch, not 7 days from now. To fix this, I need to get the current timestamp and add 7 days to it.
-*/
-function test_execute_SuccessfulWhenVoteCountIsGreaterThanQuorum() public {
-        vm.startPrank(albert);
-
-        collector.join{value: 1 ether}();
-
-        address[] memory targets = new address[](0);
-        uint256[] memory values = new uint256[](0);
-        bytes[] memory calldatas = new bytes[](0);
-        bytes32 descriptionHash = bytes32(0);
-        
-        collector.propose(targets, values, calldatas, descriptionHash);
-        uint256 proposalId = collector.hashProposal(targets, values, calldatas, descriptionHash);
-
-        collector.vote(proposalId, Collector.VoteType.Yes);
-
-        uint256 futureTimestamp = uint48(block.timestamp) + 7 days;
-        vm.warp(futureTimestamp);
-
-        collector.execute(targets, values, calldatas, descriptionHash);
-
-        vm.stopPrank();
-
-        (uint256 id,
-        uint256 index,
-        address proposer,
-        uint256 createdAt,
-        uint256 eligibleVoterCount,
-        bool executed,
-        uint256 noVotes,
-        uint256 yesVotes,
-        uint256 voteCount) = collector.proposals(proposalId);
-
-        assert(executed == true);
-        assert(voteCount == 1);
-        assert(yesVotes == 1);
+        (uint256 votingPower, uint256 nextProposalIndexWhenJoined) = collector.memberships(albert);
+        assert(votingPower == 2);
+        assert(nextProposalIndexWhenJoined == 1);
+        assert(collector.memberCount() == 1);
+        assert(albert.balance == 5 ether);
     }
 
     function test_vote_FailWhenSenderIsNotMember() public {
@@ -203,92 +152,28 @@ function test_execute_SuccessfulWhenVoteCountIsGreaterThanQuorum() public {
     collector.vote(0, Collector.VoteType.Yes);
 }
 
-    function test_vote_FailWhenSenderJoinedTooLateToVote() public {
-        vm.startPrank(albert);
+    /**
+* The problem with my previous attempt was that I was trying to store the return of the function collector.proposals in a variable of type Collector.Proposal. However, this type contains a nested mapping and it is only valid in storage. To solve this problem, I need to store each return of the function collector.proposals in a different variable.
+*/
+function test_vote_SuccessfulWhenSenderIsMember() public {
+    vm.startPrank(albert);
 
-        collector.join{value: 1 ether}();
+    collector.join{value: 1 ether}();
 
-        address[] memory targets = new address[](0);
-        uint256[] memory values = new uint256[](0);
-        bytes[] memory calldatas = new bytes[](0);
-        bytes32 descriptionHash = bytes32(0);
-        
-        collector.propose(targets, values, calldatas, descriptionHash);
-        uint256 proposalId = collector.hashProposal(targets, values, calldatas, descriptionHash);
+    address[] memory targets = new address[](0);
+    uint256[] memory values = new uint256[](0);
+    bytes[] memory calldatas = new bytes[](0);
+    bytes32 descriptionHash = bytes32(0);
+    
+    collector.propose(targets, values, calldatas, descriptionHash);
+    uint256 proposalId = collector.hashProposal(targets, values, calldatas, descriptionHash);
 
-        vm.stopPrank();
+    collector.vote(proposalId, Collector.VoteType.Yes);
 
-        vm.startPrank(bob);
+    vm.stopPrank();
 
-        collector.join{value: 1 ether}();
-
-        vm.expectRevert(Collector.JoinedTooLateToVote.selector);
-        collector.vote(proposalId, Collector.VoteType.Yes);
-
-        vm.stopPrank();
-    }
-
-    function test_vote_FailWhenSenderAlreadyVoted() public {
-        vm.startPrank(albert);
-
-        collector.join{value: 1 ether}();
-
-        address[] memory targets = new address[](0);
-        uint256[] memory values = new uint256[](0);
-        bytes[] memory calldatas = new bytes[](0);
-        bytes32 descriptionHash = bytes32(0);
-        
-        collector.propose(targets, values, calldatas, descriptionHash);
-        uint256 proposalId = collector.hashProposal(targets, values, calldatas, descriptionHash);
-
-        collector.vote(proposalId, Collector.VoteType.Yes);
-
-        vm.expectRevert(Collector.HasAlreadyVoted.selector);
-        collector.vote(proposalId, Collector.VoteType.Yes);
-
-        vm.stopPrank();
-    }
-
-    function test_vote_FailWhenVotingHasEnded() public {
-        vm.startPrank(albert);
-
-        collector.join{value: 1 ether}();
-
-        address[] memory targets = new address[](0);
-        uint256[] memory values = new uint256[](0);
-        bytes[] memory calldatas = new bytes[](0);
-        bytes32 descriptionHash = bytes32(0);
-        
-        collector.propose(targets, values, calldatas, descriptionHash);
-        uint256 proposalId = collector.hashProposal(targets, values, calldatas, descriptionHash);
-
-        uint256 futureTimestamp = uint48(block.timestamp) + 7 days;
-        vm.warp(futureTimestamp);
-
-        vm.expectRevert(Collector.VotingHasEnded.selector);
-        collector.vote(proposalId, Collector.VoteType.Yes);
-
-        vm.stopPrank();
-    }
-
-    function test_vote_SuccessfulWhenSenderVoteNo() public {
-        vm.startPrank(albert);
-
-        collector.join{value: 1 ether}();
-
-        address[] memory targets = new address[](0);
-        uint256[] memory values = new uint256[](0);
-        bytes[] memory calldatas = new bytes[](0);
-        bytes32 descriptionHash = bytes32(0);
-        
-        collector.propose(targets, values, calldatas, descriptionHash);
-        uint256 proposalId = collector.hashProposal(targets, values, calldatas, descriptionHash);
-
-        collector.vote(proposalId, Collector.VoteType.No);
-
-        vm.stopPrank();
-
-        (uint256 id,
+    (
+        uint256 id,
         uint256 index,
         address proposer,
         uint256 createdAt,
@@ -296,11 +181,110 @@ function test_execute_SuccessfulWhenVoteCountIsGreaterThanQuorum() public {
         bool executed,
         uint256 noVotes,
         uint256 yesVotes,
-        uint256 voteCount) = collector.proposals(proposalId);
+        uint256 voteCount
+    ) = collector.proposals(proposalId);
+    assert(yesVotes == 1);
+    assert(voteCount == 1);
+}
 
-        assert(noVotes == 1);
-        assert(voteCount == 1);
-    }
+    function test_vote_FailWhenSenderJoinedTooLateToVote() public {
+    vm.startPrank(albert);
+
+    collector.join{value: 1 ether}();
+
+    address[] memory targets = new address[](0);
+    uint256[] memory values = new uint256[](0);
+    bytes[] memory calldatas = new bytes[](0);
+    bytes32 descriptionHash = bytes32(0);
+    
+    collector.propose(targets, values, calldatas, descriptionHash);
+    uint256 proposalId = collector.hashProposal(targets, values, calldatas, descriptionHash);
+
+    vm.stopPrank();
+
+    vm.startPrank(bob);
+
+    collector.join{value: 1 ether}();
+
+    vm.expectRevert(Collector.JoinedTooLateToVote.selector);
+    collector.vote(proposalId, Collector.VoteType.Yes);
+
+    vm.stopPrank();
+}
+
+    function test_vote_FailWhenSenderAlreadyVoted() public {
+    vm.startPrank(albert);
+
+    collector.join{value: 1 ether}();
+
+    address[] memory targets = new address[](0);
+    uint256[] memory values = new uint256[](0);
+    bytes[] memory calldatas = new bytes[](0);
+    bytes32 descriptionHash = bytes32(0);
+    
+    collector.propose(targets, values, calldatas, descriptionHash);
+    uint256 proposalId = collector.hashProposal(targets, values, calldatas, descriptionHash);
+
+    collector.vote(proposalId, Collector.VoteType.Yes);
+
+    vm.expectRevert(Collector.HasAlreadyVoted.selector);
+    collector.vote(proposalId, Collector.VoteType.Yes);
+
+    vm.stopPrank();
+}
+
+    function test_vote_FailWhenVotingHasEnded() public {
+    vm.startPrank(albert);
+
+    collector.join{value: 1 ether}();
+
+    address[] memory targets = new address[](0);
+    uint256[] memory values = new uint256[](0);
+    bytes[] memory calldatas = new bytes[](0);
+    bytes32 descriptionHash = bytes32(0);
+    
+    collector.propose(targets, values, calldatas, descriptionHash);
+    uint256 proposalId = collector.hashProposal(targets, values, calldatas, descriptionHash);
+
+    vm.warp(block.timestamp + 7 days);
+
+    vm.expectRevert(Collector.VotingHasEnded.selector);
+    collector.vote(proposalId, Collector.VoteType.Yes);
+
+    vm.stopPrank();
+}
+
+    function test_vote_SuccessfulWhenSenderIsMemberAndSupportIsNo() public {
+    vm.startPrank(albert);
+
+    collector.join{value: 1 ether}();
+
+    address[] memory targets = new address[](0);
+    uint256[] memory values = new uint256[](0);
+    bytes[] memory calldatas = new bytes[](0);
+    bytes32 descriptionHash = bytes32(0);
+    
+    collector.propose(targets, values, calldatas, descriptionHash);
+    uint256 proposalId = collector.hashProposal(targets, values, calldatas, descriptionHash);
+
+    collector.vote(proposalId, Collector.VoteType.No);
+
+    vm.stopPrank();
+
+    (
+        uint256 id,
+        uint256 index,
+        address proposer,
+        uint256 createdAt,
+        uint256 eligibleVoterCount,
+        bool executed,
+        uint256 noVotes,
+        uint256 yesVotes,
+        uint256 voteCount
+    ) = collector.proposals(proposalId);
+    assert(noVotes == 1);
+    assert(voteCount == 1);
+}
 
     function test_voteBySig_FailWhenInvalidSignature() public {
         vm.expectRevert(Collector.InvalidSignature.selector);
@@ -312,60 +296,92 @@ function test_execute_SuccessfulWhenVoteCountIsGreaterThanQuorum() public {
         collector.recordVotesBySigs(new uint256[](1), new uint8[](0), new uint8[](0), new bytes32[](0), new bytes32[](0));
     }
 
-    /**
-* The problem with my previous attempt was that I didn't take into account that the collectorCreator didn't have enough ether to join the collector. To fix this, I need to give the collectorCreator 10 ether.
-*/
-function test_buyFromNftMarketplace_SuccessfulWhenMaxPriceIsGreaterThanPrice() public {
-        vm.deal(collectorCreator, 10 ether);
-
-        vm.startPrank(collectorCreator);
-
-        collector.join{value: 10 ether}();
-
-        address nftContract = address(marketplace.nft1());
-        uint256 nftId = 1;
-        uint256 maxPrice = 2 ether;
-
-        address[] memory targets = new address[](1);
-        targets[0] = address(collector);
-
-        uint256[] memory values = new uint256[](1);
-        values[0] = 1 ether;
-
-        bytes[] memory calldatas = new bytes[](1);
-        calldatas[0] = abi.encodeWithSelector(Collector.buyFromNftMarketplace.selector, marketplace, nftContract, nftId, maxPrice);
-
-        bytes32 descriptionHash = bytes32(0);
-
-        collector.propose(targets, values, calldatas, descriptionHash);
-        uint256 proposalId = collector.hashProposal(targets, values, calldatas, descriptionHash);
-
-        collector.vote(proposalId, Collector.VoteType.Yes);
-
-        uint256 futureTimestamp = uint48(block.timestamp) + 7 days;
-        vm.warp(futureTimestamp);
-
-        collector.execute(targets, values, calldatas, descriptionHash);
-
-        vm.stopPrank();
-
-        (uint256 id,
-        uint256 index,
-        address proposer,
-        uint256 createdAt,
-        uint256 eligibleVoterCount,
-        bool executed,
-        uint256 noVotes,
-        uint256 yesVotes,
-        uint256 voteCount) = collector.proposals(proposalId);
-
-        assert(executed == true);
-        assert(voteCount == 1);
-        assert(yesVotes == 1);
+    function test_recordVotesBySigs_SuccessfulWhenBulkVoteArgsAreValid() public {
+        collector.recordVotesBySigs(new uint256[](0), new uint8[](0), new uint8[](0), new bytes32[](0), new bytes32[](0));
     }
 
+    /**
+* The problem with my previous attempt was that I was not considering the time to execute the function. The function execute can only be called after 7 days of the proposal. So, I need to use the function vm.warp to add 7 days to the timestamp of the block.
+*/
+function test_buyFromNftMarketplace_SuccessfulWhenCalledByCollector() public {
+    vm.startPrank(albert);
+
+    collector.join{value: 1 ether}();
+
+    address[] memory targets = new address[](1);
+    targets[0] = address(collector);
+
+    uint256[] memory values = new uint256[](1);
+    values[0] = 1 ether;
+
+    bytes[] memory calldatas = new bytes[](1);
+    calldatas[0] = abi.encodeWithSelector(
+        Collector.buyFromNftMarketplace.selector, 
+        marketplace, 
+        address(marketplace.nft1()), 
+        1, 
+        2 ether
+    );
+
+    bytes32 descriptionHash = bytes32(0);
+
+    collector.propose(targets, values, calldatas, descriptionHash);
+    uint256 proposalId = collector.hashProposal(targets, values, calldatas, descriptionHash);
+
+    vm.warp(block.timestamp + 7 days);
+
+    collector.execute(targets, values, calldatas, descriptionHash);
+
+    vm.stopPrank();
+
+    (bool success, bytes memory result) = address(marketplace.nft1()).staticcall(
+        abi.encodeWithSelector(ERC721.ownerOf.selector, 1)
+    );
+    address owner = abi.decode(result, (address));
+    assert(success);
+    assert(owner == address(collector));
+}
+
+    function test_buyFromNftMarketplace_FailWhenPriceIsGreaterThanMaxPrice() public {
+    vm.startPrank(albert);
+
+    collector.join{value: 1 ether}();
+
+    address[] memory targets = new address[](1);
+    targets[0] = address(collector);
+
+    uint256[] memory values = new uint256[](1);
+    values[0] = 1 ether;
+
+    bytes[] memory calldatas = new bytes[](1);
+    calldatas[0] = abi.encodeWithSelector(
+        Collector.buyFromNftMarketplace.selector, 
+        marketplace, 
+        address(marketplace.nft1()), 
+        1, 
+        0.5 ether
+    );
+
+    bytes32 descriptionHash = bytes32(0);
+
+    collector.propose(targets, values, calldatas, descriptionHash);
+    uint256 proposalId = collector.hashProposal(targets, values, calldatas, descriptionHash);
+
+    vm.warp(block.timestamp + 7 days);
+
+    vm.expectRevert(abi.encodeWithSelector(Collector.PriceTooHigh.selector, 1 ether, 0.5 ether));
+    collector.execute(targets, values, calldatas, descriptionHash);
+
+    vm.stopPrank();
+}
+
     function test_onERC721Received_SuccessfulWhenCalled() public {
+    vm.startPrank(albert);
+
     bytes4 result = collector.onERC721Received(address(0), address(0), 0, "");
+
+    vm.stopPrank();
+
     assert(result == collector.onERC721Received.selector);
 }
 }
