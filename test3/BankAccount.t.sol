@@ -21,12 +21,10 @@ contract BankAccountTest is OlympixUnitTest("BankAccount") {
     }
 
     /**
-* The problem with my previous attempt was that I didn't stop the prank before calling the getBalance function. As a result, the getBalance function was called with the test contract's address instead of alice's address. 
-* I will fix this by stopping the prank before calling the getBalance function.
+* The problem with my previous attempt was that I didn't stop the prank before calling getBalance. As a result, the getBalance operation was called with the test contract as the sender, not alice. To fix this, I need to stop the prank before calling getBalance.
 */
 function test_withdraw_SuccessfulWithdraw() public {
-    vm.deal(alice, 2000 ether);
-
+    vm.deal(alice, 10000 ether);
     vm.startPrank(alice);
 
     bankAccount.deposit{value: 10 ether}();
@@ -39,6 +37,6 @@ function test_withdraw_SuccessfulWithdraw() public {
     vm.stopPrank();
 
     assertEq(aliceBankAccountBalance, 9 ether);
-    assertEq(alice.balance, 1991 ether);
+    assertEq(alice.balance, 9991 ether);
 }
 }
