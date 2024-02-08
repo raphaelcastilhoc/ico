@@ -38,7 +38,7 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
     }
 
     /**
-* The problem with my previous attempt was that I was trying to transfer 50 tokens from the coinCreator to bob. However, the coinCreator only had 0 tokens in their balance. Therefore, the transfer function was failing because the transfer amount was exceeding the balance of the coinCreator. To fix this, I need to transfer a smaller amount of tokens that is less than or equal to the balance of the coinCreator.
+* The problem with my previous attempt was that I was trying to transfer 50 tokens from the coinCreator to bob. However, the coinCreator only had 0 tokens in his balance. Therefore, the transfer function was failing because the coinCreator did not have enough tokens to transfer 50 tokens to bob.
 */
 function test_transfer_SuccessfulTransferWithoutTax() public {
         vm.prank(coinCreator);
