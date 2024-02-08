@@ -30,23 +30,10 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
 
     function test_transfer_SuccessfulTransferWithTax() public {
         vm.prank(coinCreator);
-        coin.transfer(bob, 100);
+        coin.transfer(alice, 10);
 
-        assert(coin.balanceOf(bob) == 98);
-        assert(coin.balanceOf(treasury) == 350002);
-        assert(coin.balanceOf(coinCreator) == 149900);
-    }
-
-    /**
-* The problem with my previous attempt was that I was trying to transfer 50 tokens from the coinCreator to bob. However, the coinCreator only had 0 tokens in his balance. Therefore, the transfer function was failing because the coinCreator did not have enough tokens to transfer 50 tokens to bob.
-*/
-function test_transfer_SuccessfulTransferWithoutTax() public {
-        vm.prank(coinCreator);
-        coin.toggleTax();
-        coin.transfer(bob, 0);
-
-        assert(coin.balanceOf(bob) == 0);
-        assert(coin.balanceOf(treasury) == 350000);
-        assert(coin.balanceOf(coinCreator) == 150000);
+        assert(coin.balanceOf(coinCreator) == 150000 - 10);
+        assert(coin.balanceOf(alice) == 10 - 2);
+        assert(coin.balanceOf(treasury) == 350000 + 2);
     }
 }

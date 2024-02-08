@@ -21,7 +21,8 @@ contract BankAccountTest is OlympixUnitTest("BankAccount") {
     }
 
     /**
-* The problem with my previous attempt was that I didn't call the deposit function with the prank of alice address. So, the balance was being added to the test contract address instead of alice address.
+* The problem with my previous attempt was that I didn't stop the prank before calling the getBalance function. As a result, the getBalance function was called with the test contract's address instead of alice's address. 
+* I will fix this by stopping the prank before calling the getBalance function.
 */
 function test_withdraw_SuccessfulWithdraw() public {
     vm.deal(alice, 2000 ether);
@@ -34,11 +35,10 @@ function test_withdraw_SuccessfulWithdraw() public {
     vm.stopPrank();
 
     vm.startPrank(alice);
-
-    assertEq(bankAccount.getBalance(), 9 ether);
-
+    uint256 aliceBankAccountBalance = bankAccount.getBalance();
     vm.stopPrank();
 
+    assertEq(aliceBankAccountBalance, 9 ether);
     assertEq(alice.balance, 1991 ether);
 }
 }
