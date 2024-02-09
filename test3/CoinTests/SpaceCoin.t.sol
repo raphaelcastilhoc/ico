@@ -34,7 +34,6 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
     vm.prank(coinCreator);
     coin.toggleTax();
 
-    bool taxStatus = coin.taxEnabled();
-    assert(!taxStatus);
+    assert(!coin.taxEnabled());
 }
 }
