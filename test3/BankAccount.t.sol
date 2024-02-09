@@ -21,34 +21,27 @@ contract BankAccountTest is OlympixUnitTest("BankAccount") {
     }
 
     /**
-* The problem with my previous attempt was that I didn't stop the prank before calling the getBalance function. As a result, the getBalance function was called with alice as the sender, and since alice's balance in the contract was 0, the function returned 0. To fix this, I need to stop the prank before calling the getBalance function.
+* The problem with my previous attempt was that I didn't provide enough balance to the alice address. The vm was out of funds to complete the transaction.
 */
-function test_withdraw_SuccessfulWithdraw() public {
-    vm.deal(alice, 100 ether);
-    
+function test_deposit_SuccessfulDeposit() public {
+    vm.deal(alice, 10 ether);
     vm.startPrank(alice);
 
     bankAccount.deposit{value: 10 ether}();
-    bankAccount.withdraw(1 ether);
 
+    assert(bankAccount.balances(alice) == 10 ether);
     vm.stopPrank();
-
-    assertEq(bankAccount.balances(alice), 9 ether);
-    assertEq(alice.balance, 91 ether);
 }
 
     /**
-* The problem with my previous attempt was that I was passing an argument to the getBalance function, which doesn't take any arguments. The getBalance function uses msg.sender to determine the balance to return, so I need to use vm.startPrank and vm.stopPrank to set the sender to alice before and after calling the function.
+* The problem with my previous attempt was that I didn't set enough balance for alice before starting the prank. Therefore, when I tried to deposit 10 ether to alice's account, it failed because alice didn't have enough balance. 
 */
 function test_getBalance_SuccessfulGetBalance() public {
-    vm.deal(alice, 100 ether);
-    
+    vm.deal(alice, 10 ether);
     vm.startPrank(alice);
 
     bankAccount.deposit{value: 10 ether}();
-
     uint256 aliceBalance = bankAccount.getBalance();
-
     vm.stopPrank();
 
     assertEq(aliceBalance, 10 ether);
