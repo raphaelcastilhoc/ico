@@ -21,10 +21,19 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
         vm.stopPrank();
     }
 
+    function test_transfer_SuccessfulTransferWithTax() public {
+    vm.prank(coinCreator);
+    coin.transfer(alice, 100);
+
+    assertEq(coin.balanceOf(coinCreator), 149900);
+    assertEq(coin.balanceOf(alice), 98);
+    assertEq(coin.balanceOf(treasury), 350002);
+}
+
     function test_toggleTax_SuccessfulToggleTax() public {
     vm.prank(coinCreator);
     coin.toggleTax();
-    bool taxEnabled = coin.taxEnabled();
-    assertTrue(taxEnabled == false);
+
+    assert(!coin.taxEnabled());
 }
 }
