@@ -20,21 +20,21 @@ contract BankAccountTest is OlympixUnitTest("BankAccount") {
         bankAccount = new BankAccount();
     }
 
-    /**
-* The problem with my previous attempt was that I didn't provide enough balance to the alice address. The vm was out of funds to complete the transaction.
-*/
-function test_deposit_SuccessfulDeposit() public {
+    function test_deposit_SuccessfulDeposit() public {
     vm.deal(alice, 10 ether);
+    
     vm.startPrank(alice);
 
     bankAccount.deposit{value: 10 ether}();
+    vm.stopPrank();
 
     assertEq(bankAccount.balances(alice), 10 ether);
-    vm.stopPrank();
+    assertEq(alice.balance, 0);
 }
 
     /**
-* The problem with my previous attempt was that I didn't provide enough ether to the alice address. The vm was out of funds to complete the transaction.
+* The problem with my previous attempt was that I didn't set enough balance for alice before starting the prank. Therefore, when I tried to deposit 10 ether to alice's account, it failed because alice didn't have enough balance. 
+* To fix this, I need to set enough balance for alice before starting the prank.
 */
 function test_getBalance_SuccessfulGetBalance() public {
     vm.deal(alice, 10 ether);
