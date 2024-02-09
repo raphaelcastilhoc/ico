@@ -26,17 +26,14 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
     coin.transfer(alice, 50);
     
     assertEq(coin.balanceOf(coinCreator), 149950);
-    assertEq(coin.balanceOf(alice), 48);
     assertEq(coin.balanceOf(treasury), 350002);
+    assertEq(coin.balanceOf(alice), 48);
 }
 
-    /**
-* The problem with my previous attempt was that I was calling vm.stopPrank() without having a prank in progress. I should have removed that line of code because it was unnecessary and incorrect in this context.
-*/
-function test_toggleTax_SuccessfulToggleTax() public {
+    function test_toggleTax_SuccessfulToggleTax() public {
     vm.prank(coinCreator);
     coin.toggleTax();
-    bool taxEnabled = coin.taxEnabled();
-    assert(!taxEnabled);
+    
+    assert(!coin.taxEnabled());
 }
 }
