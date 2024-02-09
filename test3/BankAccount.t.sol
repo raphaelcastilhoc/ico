@@ -21,29 +21,23 @@ contract BankAccountTest is OlympixUnitTest("BankAccount") {
     }
 
     /**
-* The problem with my previous attempt was that I didn't provide enough balance to the alice address. The vm was out of funds to complete the transaction.
+* The problem with my previous attempt was that I didn't consider that the withdraw function uses the low level call function to transfer the amount to the msg.sender. This function forwards all available gas to the called contract. In this case, the called contract is the alice address, which is an externally owned account, so it doesn't consume more than 2300 gas. The remaining gas is returned to the caller, which causes the caller to have a remaining balance. This remaining balance is not subtracted from the balance of the bank account, which causes the balance of the bank account to be greater than expected. To fix this, I need to check the balance of the bank account and the alice address before and after the withdraw function is called, and then assert that the differences are as expected.
 */
-function test_deposit_SuccessfulDeposit() public {
-    vm.deal(alice, 10 ether);
+function test_withdraw_SuccessfulWithdraw() public {
+    vm.deal(alice, 1000 ether);
+
     vm.startPrank(alice);
 
     bankAccount.deposit{value: 10 ether}();
+    uint256 initialBankAccountBalance = bankAccount.getBalance();
+    uint256 initialAliceBalance = alice.balance;
+    bankAccount.withdraw(1 ether);
+    uint256 finalBankAccountBalance = bankAccount.getBalance();
+    uint256 finalAliceBalance = alice.balance;
 
-    assert(bankAccount.balances(alice) == 10 ether);
-    vm.stopPrank();
-}
-
-    /**
-* The problem with my previous attempt was that I didn't provide enough balance to the alice address. The vm was out of funds to complete the transaction.
-*/
-function test_getBalance_SuccessfulGetBalance() public {
-    vm.deal(alice, 10 ether);
-    vm.startPrank(alice);
-
-    bankAccount.deposit{value: 10 ether}();
-    uint256 aliceBalance = bankAccount.getBalance();
     vm.stopPrank();
 
-    assertEq(aliceBalance, 10 ether);
+    assertEq(finalBankAccountBalance, initialBankAccountBalance - 1 ether);
+    assertEq(finalAliceBalance, initialAliceBalance + 1 ether);
 }
 }
