@@ -21,19 +21,23 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
         vm.stopPrank();
     }
 
-    function test_toggleTax_SuccessfulToggleTax() public {
-        vm.prank(coinCreator);
-        coin.toggleTax();
-
-        assert(!coin.taxEnabled());
-    }
-
     function test_transfer_SuccessfulTransferWithTax() public {
-        vm.prank(coinCreator);
-        coin.transfer(bob, 100);
+    vm.prank(coinCreator);
+    coin.transfer(alice, 100);
+    
+    assertEq(coin.balanceOf(coinCreator), 149900);
+    assertEq(coin.balanceOf(treasury), 350002);
+    assertEq(coin.balanceOf(alice), 98);
+}
 
-        assert(coin.balanceOf(bob) == 98);
-        assert(coin.balanceOf(treasury) == 350002);
-        assert(coin.balanceOf(coinCreator) == 149900);
-    }
+    /**
+* The problem with my previous attempt was that I was calling vm.stopPrank() without having a prank in progress. I was calling vm.prank() instead of vm.startPrank(). vm.prank() only changes the msg.sender of the next function call, not all of them until vm.stopPrank() is called.
+*/
+function test_toggleTax_SuccessfulToggleTax() public {
+    vm.startPrank(coinCreator);
+    coin.toggleTax();
+    bool taxEnabled = coin.taxEnabled();
+    vm.stopPrank();
+    assert(!taxEnabled);
+}
 }
