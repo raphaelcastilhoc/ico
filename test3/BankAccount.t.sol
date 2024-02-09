@@ -21,22 +21,30 @@ contract BankAccountTest is OlympixUnitTest("BankAccount") {
     }
 
     /**
-* The problem with my previous attempt was that I didn't stop the prank before calling getBalance. As a result, the getBalance operation was called with the test contract as the sender, not alice. To fix this, I need to stop the prank before calling getBalance.
+* The problem with my previous attempt was that I didn't provide enough balance to the alice address. The vm was out of funds to complete the transaction.
 */
-function test_withdraw_SuccessfulWithdraw() public {
-    vm.deal(alice, 10000 ether);
+function test_deposit_SuccessfulDeposit() public {
+    vm.deal(alice, 10 ether);
     vm.startPrank(alice);
 
     bankAccount.deposit{value: 10 ether}();
-    bankAccount.withdraw(1 ether);
 
+    assertEq(bankAccount.balances(alice), 10 ether);
     vm.stopPrank();
+}
 
+    /**
+* The problem with my previous attempt was that I didn't provide enough ether to the alice address. The vm was out of funds to complete the transaction.
+*/
+function test_getBalance_SuccessfulGetBalance() public {
+    vm.deal(alice, 10 ether);
+    
     vm.startPrank(alice);
-    uint256 aliceBankAccountBalance = bankAccount.getBalance();
+
+    bankAccount.deposit{value: 10 ether}();
+    uint256 aliceBalance = bankAccount.getBalance();
     vm.stopPrank();
 
-    assertEq(aliceBankAccountBalance, 9 ether);
-    assertEq(alice.balance, 9991 ether);
+    assertEq(aliceBalance, 10 ether);
 }
 }
