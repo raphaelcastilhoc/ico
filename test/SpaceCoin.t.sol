@@ -4,7 +4,7 @@ import "forge-std/Test.sol";
 import "contracts/Ico.sol";
 import "./OlympixUnitTest.sol";
 
-contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
+contract SpaceCoinTest is OlympixUnitTest("SpaceCoin")  {
     address alice = address(0x456);
     address bob = address(0x789);
     address treasury = address(0xabc);
