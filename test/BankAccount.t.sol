@@ -5,7 +5,7 @@ import "forge-std/Test.sol";
 import "contracts/BankAccount.sol";
 import "./OlympixUnitTest.sol";
 
-contract BankAccountTest is Test {
+contract BankAccountTest is OlympixUnitTest("BankAccount") {
     address alice = address(0x3);
     address bob = address(0x4);
     address david = address(0x5);
@@ -19,4 +19,33 @@ contract BankAccountTest is Test {
 
         bankAccount = new BankAccount();
     }
+
+    /**
+* The problem with my previous attempt was that I didn't set enough balance for alice before starting the prank. Therefore, when I tried to deposit 10 ether to alice's account, it failed because alice didn't have enough balance. 
+*/
+function test_deposit_SuccessfulDeposit() public {
+    vm.deal(alice, 10 ether);
+    vm.startPrank(alice);
+
+    bankAccount.deposit{value: 10 ether}();
+
+    uint256 aliceBalance = bankAccount.balances(alice);
+    vm.stopPrank();
+
+    assertEq(aliceBalance, 10 ether);
+}
+
+    /**
+* The problem with my previous attempt was that I didn't set enough balance for alice before starting the prank. Therefore, when I tried to deposit 10 ether to alice's account, it failed because alice didn't have enough balance. 
+*/
+function test_getBalance_SuccessfulGetBalance() public {
+    vm.deal(alice, 10 ether);
+    vm.startPrank(alice);
+
+    bankAccount.deposit{value: 10 ether}();
+    uint256 aliceBalance = bankAccount.getBalance();
+    vm.stopPrank();
+
+    assertEq(aliceBalance, 10 ether);
+}
 }
