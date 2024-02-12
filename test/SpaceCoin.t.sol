@@ -30,11 +30,13 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin")  {
     assertEq(coin.balanceOf(treasury), 350002);
 }
 
-    function test_toggleTax_SuccessfulToggleTax() public {
+    /**
+* The problem with my previous attempt was that I was calling vm.stopPrank() without having a prank in progress. I should have removed that line of code because vm.prank() does not start a prank, it just sets the msg.sender for the next transaction.
+*/
+function test_toggleTax_SuccessfulToggleTax() public {
     vm.prank(coinCreator);
     coin.toggleTax();
-    bool taxStatus = coin.taxEnabled();
-    vm.stopPrank();
-    assert(!taxStatus);
+    bool taxEnabled = coin.taxEnabled();
+    assert(!taxEnabled);
 }
 }
