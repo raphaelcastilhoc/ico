@@ -27,20 +27,16 @@ contract SpaceCoin is ERC20 {
         ico = Ico(_msgSender());
     }
 
-    function transfer(address recipient, uint256 amount) public virtual override returns (bool) {
-        if(taxEnabled) {
+    function transfer(
+        address recipient,
+        uint256 amount
+    ) public virtual override returns (bool) {
+        if (taxEnabled) {
             uint256 tax = 2;
-
-            if(amount < 100) {
-                tax = 1;
-            }
-
             uint256 amountAfterTax = amount - tax;
-
             _transfer(_msgSender(), treasury, tax);
             _transfer(_msgSender(), recipient, amountAfterTax);
-        }
-        else {
+        } else {
             _transfer(_msgSender(), recipient, amount);
         }
 
