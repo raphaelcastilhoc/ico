@@ -21,19 +21,33 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin")  {
         vm.stopPrank();
     }
 
-    function test_transfer_SuccessfulTransferWithTax() public {
-    vm.prank(coinCreator);
-    coin.transfer(bob, 100);
+    function test_transfer_TaxEnabled() public {
+    vm.startPrank(coinCreator);
 
-    assertEq(coin.balanceOf(bob), 98);
-    assertEq(coin.balanceOf(treasury), 350002);
-    assertEq(coin.balanceOf(coinCreator), 149900);
+    uint256 amount = 10;
+    uint256 tax = 2;
+    uint256 amountAfterTax = amount - tax;
+
+    coin.transfer(bob, amount);
+
+    assertEq(coin.balanceOf(bob), amountAfterTax);
+    assertEq(coin.balanceOf(treasury), 350000 + tax);
+
+    vm.stopPrank();
 }
 
-    function test_toggleTax_SuccessfulToggleTax() public {
-    vm.prank(coinCreator);
+    function test_transfer_TaxDisabled() public {
+    vm.startPrank(coinCreator);
+
     coin.toggleTax();
 
-    assert(!coin.taxEnabled());
+    uint256 amount = 10;
+
+    coin.transfer(bob, amount);
+
+    assertEq(coin.balanceOf(bob), amount);
+    assertEq(coin.balanceOf(treasury), 350000);
+
+    vm.stopPrank();
 }
 }
