@@ -13,25 +13,37 @@ contract BankAccountTest is OlympixUnitTest("BankAccount") {
     BankAccount bankAccount;
 
     function setUp() public {
-        vm.deal(alice, 1000);
-        vm.deal(bob, 1000);
-        vm.deal(david, 1000);
+        vm.deal(alice, 1000 ether);
+        vm.deal(bob, 1000 ether);
+        vm.deal(david, 1000 ether);
 
         bankAccount = new BankAccount();
     }
 
+    function test_withdraw_SuccessfulWithdraw() public {
+    vm.startPrank(bob);
+
+    bankAccount.deposit{value: 1 ether}();
+    bankAccount.withdraw(100);
+
+    vm.stopPrank();
+    
+    assert(bob.balance == 1000 ether - 1 ether + 100);
+    assert(bankAccount.balances(bob) == 1 ether - 100);
+}
+
     /**
-* The problem with my previous attempt was that I didn't provide enough ether to the alice address. The vm was out of funds to complete the transaction.
+* The problem with my previous attempt was that I didn't start a prank before calling the getBalance function. Therefore, the msg.sender was the test contract itself and not the bob address. 
 */
 function test_getBalance_SuccessfulGetBalance() public {
-    vm.deal(alice, 10 ether);
+    vm.startPrank(bob);
+
+    bankAccount.deposit{value: 1 ether}();
     
-    vm.startPrank(alice);
+    uint256 bobBalance = bankAccount.getBalance();
 
-    bankAccount.deposit{value: 10 ether}();
-    uint256 balance = bankAccount.getBalance();
     vm.stopPrank();
-
-    assertEq(balance, 10 ether);
+    
+    assert(bobBalance == 1 ether);
 }
 }
