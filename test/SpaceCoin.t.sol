@@ -21,33 +21,30 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin")  {
         vm.stopPrank();
     }
 
-    function test_transfer_TaxEnabled() public {
-    vm.startPrank(coinCreator);
-
-    uint256 amount = 10;
-    uint256 tax = 2;
-    uint256 amountAfterTax = amount - tax;
-
-    coin.transfer(bob, amount);
-
-    assertEq(coin.balanceOf(bob), amountAfterTax);
-    assertEq(coin.balanceOf(treasury), 350000 + tax);
-
+    function test_transfer_SuccessfulTransferWhenTaxIsEnabled() public {
+    uint transferAmount = 10;
+    vm.prank(coinCreator);
+    coin.transfer(alice, transferAmount);
     vm.stopPrank();
+
+    uint tax = 2;
+    uint amountAfterTax = transferAmount - tax;
+    assertEq(coin.balanceOf(coinCreator), 150000 - transferAmount);
+    assertEq(coin.balanceOf(alice), amountAfterTax);
+    assertEq(coin.balanceOf(treasury), 350000 + tax);
 }
 
-    function test_transfer_TaxDisabled() public {
-    vm.startPrank(coinCreator);
-
+    function test_transfer_SuccessfulTransferWhenTaxIsDisabled() public {
+    vm.prank(coinCreator);
     coin.toggleTax();
-
-    uint256 amount = 10;
-
-    coin.transfer(bob, amount);
-
-    assertEq(coin.balanceOf(bob), amount);
-    assertEq(coin.balanceOf(treasury), 350000);
-
     vm.stopPrank();
+
+    uint transferAmount = 10;
+    vm.prank(coinCreator);
+    coin.transfer(alice, transferAmount);
+    vm.stopPrank();
+
+    assertEq(coin.balanceOf(coinCreator), 150000 - transferAmount);
+    assertEq(coin.balanceOf(alice), transferAmount);
 }
 }
