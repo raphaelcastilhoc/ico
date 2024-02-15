@@ -1,10 +1,11 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity 0.8.19;
+
 import "forge-std/Test.sol";
 import "contracts/Ico.sol";
 import "./OlympixUnitTest.sol";
 
-contract SpaceCoinTest is OlympixUnitTest("SpaceCoin")  {
+contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
     address alice = address(0x456);
     address bob = address(0x789);
     address treasury = address(0xabc);
@@ -23,9 +24,9 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin")  {
 
     function test_transfer_SuccessfulTransferWithTax() public {
     vm.prank(coinCreator);
-    coin.transfer(bob, 100);
-
-    assertEq(coin.balanceOf(bob), 98);
+    coin.transfer(alice, 100);
+    
+    assertEq(coin.balanceOf(alice), 98);
     assertEq(coin.balanceOf(treasury), 350002);
     assertEq(coin.balanceOf(coinCreator), 149900);
 }
@@ -33,8 +34,8 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin")  {
     function test_toggleTax_SuccessfulToggleTax() public {
     vm.prank(coinCreator);
     coin.toggleTax();
-
-    bool taxEnabled = coin.taxEnabled();
-    assert(!taxEnabled);
+    bool taxStatus = coin.taxEnabled();
+    vm.stopPrank();
+    assert(!taxStatus);
 }
 }
