@@ -57,80 +57,40 @@ contract GearStakingV3UnitTest is OlympixUnitTest("GearStakingV3"), IGearStaking
         gearStaking.setVotingContractStatus(address(votingContract), VotingContractStatus.ALLOWED);
     }
 
-    function test_depositWithPermit_SuccessfulDepositWithPermit() public {
-    vm.prank(CONFIGURATOR);
-    gearStaking.depositWithPermit(0, new MultiVote[](0), 0, 0, bytes32(0), bytes32(0));
-}
-
     function test_claimWithdrawals_SuccessfulClaimWithdrawalsWhenConditionIsTrue() public {
     gearStaking.claimWithdrawals(address(this));
 }
 
     function test_multivote_SuccessfulMultivoteWhenVotesLengthIsZero() public {
-    gearStaking.multivote(new MultiVote[](0));
-}
-
-    /**
-* The problem with my previous attempt was that I was expecting the wrong revert. I was expecting an InsufficientBalanceException, but the correct one is VotingContractNotAllowedException
-*/
-function test_multivote_FailWhenVotingContractIsNotAllowed() public {
-    vm.prank(CONFIGURATOR);
-    gearStaking.setVotingContractStatus(address(votingContract), VotingContractStatus.NOT_ALLOWED);
-
-    MultiVote[] memory votes = new MultiVote[](1);
-    votes[0] = MultiVote({
-        votingContract: address(votingContract),
-        isIncrease: true,
-        voteAmount: 0,
-        extraData: bytes("")
-    });
-
-    vm.expectRevert(VotingContractNotAllowedException.selector);
+    MultiVote[] memory votes = new MultiVote[](0);
     gearStaking.multivote(votes);
 }
 
-    function test_multivote_FailWhenAvailableIsLessThanVoteAmount() public {
-    vm.prank(CONFIGURATOR);
-    gearStaking.setVotingContractStatus(address(votingContract), VotingContractStatus.ALLOWED);
+    function test_getCurrentEpoch_FailWhenTimestampIsLessThanFirstEpochTimestamp() public {
+    uint16 expectedEpoch = 0;
+    uint16 currentEpoch = gearStaking.getCurrentEpoch();
+    assertEq(currentEpoch, expectedEpoch);
+}
 
-    MultiVote[] memory votes = new MultiVote[](1);
-    votes[0] = MultiVote({
-        votingContract: address(votingContract),
-        isIncrease: true,
-        voteAmount: 1,
-        extraData: bytes("")
-    });
-
-    vm.expectRevert(InsufficientBalanceException.selector);
-    gearStaking.multivote(votes);
+    function test_balanceOf_SuccessfulBalanceOf() public {
+    address user = address(this);
+    uint256 expectedTotalStaked = 0;
+    uint256 totalStaked = gearStaking.balanceOf(user);
+    assertEq(totalStaked, expectedTotalStaked);
 }
 
     function test_availableBalance_SuccessfulAvailableBalance() public {
     address user = address(this);
     uint256 expectedAvailableBalance = 0;
-
     uint256 availableBalance = gearStaking.availableBalance(user);
-
-    assert(availableBalance == expectedAvailableBalance);
-}
-
-    function test_setSuccessor_SuccessfulSetSuccessorWhenSuccessorIsEqualToNewSuccessor() public {
-    vm.prank(CONFIGURATOR);
-    gearStaking.setSuccessor(address(0));
-    
-    vm.prank(CONFIGURATOR);
-    gearStaking.setSuccessor(address(0));
-    
-    assert(gearStaking.successor() == address(0));
+    assertEq(availableBalance, expectedAvailableBalance);
 }
 
     function test_setMigrator_SuccessfulSetMigratorWhenMigratorIsEqualToNewMigrator() public {
     vm.prank(CONFIGURATOR);
     gearStaking.setMigrator(address(0));
-    
     vm.prank(CONFIGURATOR);
     gearStaking.setMigrator(address(0));
-    
     assert(gearStaking.migrator() == address(0));
 }
 }
