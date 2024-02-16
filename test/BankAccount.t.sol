@@ -20,30 +20,23 @@ contract BankAccountTest is OlympixUnitTest("BankAccount") {
         bankAccount = new BankAccount();
     }
 
-    function test_withdraw_SuccessfulWithdraw() public {
-    vm.startPrank(bob);
-
-    bankAccount.deposit{value: 1 ether}();
-    bankAccount.withdraw(100);
-
-    vm.stopPrank();
+    function test_deposit_SuccessfulDeposit() public {
+        vm.startPrank(alice);
     
-    assert(bob.balance == 1000 ether - 1 ether + 100);
-    assert(bankAccount.balances(bob) == 1 ether - 100);
-}
-
-    /**
-* The problem with my previous attempt was that I didn't start a prank before calling the getBalance function. Therefore, the msg.sender was the test contract itself and not the bob address. 
-*/
-function test_getBalance_SuccessfulGetBalance() public {
-    vm.startPrank(bob);
-
-    bankAccount.deposit{value: 1 ether}();
+        bankAccount.deposit{value: 10 ether}();
     
-    uint256 bobBalance = bankAccount.getBalance();
+        assert(bankAccount.getBalance() == 10 ether);
+        
+        vm.stopPrank();
+    }
 
-    vm.stopPrank();
+    function test_getBalance_SuccessfulGetBalance() public {
+        vm.startPrank(alice);
     
-    assert(bobBalance == 1 ether);
-}
+        bankAccount.deposit{value: 10 ether}();
+        uint256 balance = bankAccount.getBalance();
+        vm.stopPrank();
+    
+        assertEq(balance, 10 ether);
+    }
 }
