@@ -38,6 +38,9 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
         vm.stopPrank();
     }
 
+    /**
+    * The problem with my previous attempt was that I didn't consider the tax that is deducted from the amount to be transferred. The tax is transferred to the treasury and the remaining amount is transferred to the recipient. Therefore, the recipient's balance should increase by amountAfterTax and the sender's balance should decrease by the amount.
+    */
     function test_transfer_SuccessfulTransferWhenAmountIsLessThan100() public {
         vm.startPrank(coinCreator);
     
@@ -57,19 +60,19 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
     }
 
     function test_transfer_SuccessfulTransferWhenTaxIsDisabled() public {
-        vm.startPrank(coinCreator);
+            vm.startPrank(coinCreator);
     
-        coin.toggleTax();
+            coin.toggleTax();
     
-        uint initialSenderBalance = coin.balanceOf(coinCreator);
-        uint initialRecipientBalance = coin.balanceOf(treasury);
+            uint initialSenderBalance = coin.balanceOf(coinCreator);
+            uint initialRecipientBalance = coin.balanceOf(treasury);
+            
+            uint amount = 99;
+            coin.transfer(treasury, amount);
         
-        uint amount = 99;
-        coin.transfer(treasury, amount);
-    
-        assertEq(coin.balanceOf(coinCreator), initialSenderBalance - amount);
-        assertEq(coin.balanceOf(treasury), initialRecipientBalance + amount);
-    
-        vm.stopPrank();
-    }
+            assertEq(coin.balanceOf(coinCreator), initialSenderBalance - amount);
+            assertEq(coin.balanceOf(treasury), initialRecipientBalance + amount);
+        
+            vm.stopPrank();
+        }
 }
