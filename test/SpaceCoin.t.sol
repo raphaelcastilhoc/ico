@@ -22,22 +22,51 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
         vm.stopPrank();
     }
 
-    function test_transfer_SuccessfulTransferWithTax() public {
-        vm.prank(coinCreator);
-        coin.transfer(alice, 100);
+    function test_transfer_FailWhenAmountIsGreaterThan100() public {
+        vm.startPrank(coinCreator);
+    
+        uint initialSenderBalance = coin.balanceOf(coinCreator);
+        uint initialRecipientBalance = coin.balanceOf(treasury);
         
-        assertEq(coin.balanceOf(alice), 98);
-        assertEq(coin.balanceOf(treasury), 350002);
-        assertEq(coin.balanceOf(coinCreator), 149900);
+        uint amount = 101;
+        vm.expectRevert();
+        coin.transfer(treasury, amount);
+    
+        assertEq(coin.balanceOf(coinCreator), initialSenderBalance);
+        assertEq(coin.balanceOf(treasury), initialRecipientBalance);
+    
+        vm.stopPrank();
     }
 
-    /**
-    * The problem with my previous attempt was that I was calling vm.stopPrank() without having a prank in progress. I should have removed that line of code because vm.prank() does not start a prank, it just sets the msg.sender for the next transaction.
-    */
-    function test_toggleTax_SuccessfulToggleTax() public {
-        vm.prank(coinCreator);
+    function test_transfer_SuccessWhenAmountIsLessThan100() public {
+        vm.startPrank(coinCreator);
+    
+        uint initialSenderBalance = coin.balanceOf(coinCreator);
+        uint initialRecipientBalance = coin.balanceOf(treasury);
+        
+        uint amount = 99;
+        coin.transfer(treasury, amount);
+    
+        assertEq(coin.balanceOf(coinCreator), initialSenderBalance - amount);
+        assertEq(coin.balanceOf(treasury), initialRecipientBalance + amount);
+    
+        vm.stopPrank();
+    }
+
+    function test_transfer_SuccessWhenTaxIsDisabledAndAmountIsLessThan100() public {
+        vm.startPrank(coinCreator);
+    
         coin.toggleTax();
-        bool taxEnabled = coin.taxEnabled();
-        assert(!taxEnabled);
+    
+        uint initialSenderBalance = coin.balanceOf(coinCreator);
+        uint initialRecipientBalance = coin.balanceOf(treasury);
+        
+        uint amount = 99;
+        coin.transfer(treasury, amount);
+    
+        assertEq(coin.balanceOf(coinCreator), initialSenderBalance - amount);
+        assertEq(coin.balanceOf(treasury), initialRecipientBalance + amount);
+    
+        vm.stopPrank();
     }
 }
