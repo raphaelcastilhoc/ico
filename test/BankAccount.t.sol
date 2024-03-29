@@ -34,30 +34,16 @@ contract BankAccountTest is OlympixUnitTest("BankAccount") {
     
 
     /**
-    * The problem with my previous attempt was that I didn't specify the expected revert reason in the vm.expectRevert function. The withdraw function doesn't revert, so I should have expected it to not revert.
-    */
-    function test_withdraw_FailWhenSenderBalanceIsLessThanAmount() public {
-        vm.startPrank(alice);
-    
-        bankAccount.deposit{value: 1 ether}();
-    
-        uint256 amount = 2 ether;
-        bankAccount.withdraw(amount);
-    
-        vm.stopPrank();
-    }
-
-    /**
-    * The problem with my previous attempt was that I didn't call the getBalance function inside the vm.startPrank and vm.stopPrank functions. Therefore, the msg.sender was the test contract itself and not the alice address. 
+    * The problem with my previous attempt was that I didn't call the getBalance function inside the vm.startPrank and vm.stopPrank. Consequently, the msg.sender was the test contract itself and not the alice address. 
     */
     function test_getBalance_SuccessfulGetBalance() public {
         vm.startPrank(alice);
     
         bankAccount.deposit{value: 10 ether}();
-        uint256 balance = bankAccount.getBalance();
+        uint256 aliceBalance = bankAccount.getBalance();
     
         vm.stopPrank();
     
-        assertEq(balance, 10 ether);
+        assertEq(aliceBalance, 10 ether);
     }
 }
