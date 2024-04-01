@@ -32,15 +32,12 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
         vm.expectRevert();
         coin.transfer(treasury, amount);
     
-        assertEq(coin.balanceOf(coinCreator), initialSenderBalance);
-        assertEq(coin.balanceOf(treasury), initialRecipientBalance);
+        assert(coin.balanceOf(coinCreator) == initialSenderBalance);
+        assert(coin.balanceOf(treasury) == initialRecipientBalance);
     
         vm.stopPrank();
     }
 
-    /**
-    * The problem with my previous attempt was that I didn't consider the tax that is deducted from the amount during the transfer. The tax is transferred to the treasury, so the treasury balance should be initialRecipientBalance + amountAfterTax + tax.
-    */
     function test_transfer_SuccessfulTransferWhenAmountIsLessThan100() public {
         vm.startPrank(coinCreator);
     
@@ -53,8 +50,8 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
         uint tax = 2;
         uint amountAfterTax = amount - tax;
     
-        assertEq(coin.balanceOf(coinCreator), initialSenderBalance - amount);
-        assertEq(coin.balanceOf(treasury), initialRecipientBalance + amountAfterTax + tax);
+        assert(coin.balanceOf(coinCreator) == initialSenderBalance - amount);
+        assert(coin.balanceOf(treasury) == initialRecipientBalance + amountAfterTax + tax);
     
         vm.stopPrank();
     }
@@ -70,8 +67,8 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
         uint amount = 99;
         coin.transfer(treasury, amount);
     
-        assertEq(coin.balanceOf(coinCreator), initialSenderBalance - amount);
-        assertEq(coin.balanceOf(treasury), initialRecipientBalance + amount);
+        assert(coin.balanceOf(coinCreator) == initialSenderBalance - amount);
+        assert(coin.balanceOf(treasury) == initialRecipientBalance + amount);
     
         vm.stopPrank();
     }

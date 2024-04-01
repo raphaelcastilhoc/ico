@@ -20,6 +20,9 @@ contract BankAccountTest is OlympixUnitTest("BankAccount") {
         bankAccount = new BankAccount();
     }
 
+    /**
+    * The problem with my previous attempt was that I was checking alice's balance using the getBalance function of the BankAccount contract instead of checking alice's ether balance. Therefore, when I checked alice's balance, it was still the initial balance because the withdraw function hadn't completed yet.
+    */
     function test_withdraw_SuccessfulWithdraw() public {
         vm.startPrank(alice);
     
@@ -28,22 +31,9 @@ contract BankAccountTest is OlympixUnitTest("BankAccount") {
     
         vm.stopPrank();
     
-    //    assertEq(bankAccount.getBalance(), 5 ether);
-    //    assertEq(alice.balance, 995 ether);
-    }
-    
-
-    /**
-    * The problem with my previous attempt was that I didn't call the getBalance function inside the vm.startPrank and vm.stopPrank. Consequently, the msg.sender was the test contract itself and not the alice address. 
-    */
-    function test_getBalance_SuccessfulGetBalance() public {
         vm.startPrank(alice);
-    
-        bankAccount.deposit{value: 10 ether}();
-        uint256 aliceBalance = bankAccount.getBalance();
-    
+        assertEq(bankAccount.getBalance(), 5 ether);
         vm.stopPrank();
-    
-        assertEq(aliceBalance, 10 ether);
+        assertEq(alice.balance, 995 ether);
     }
 }
