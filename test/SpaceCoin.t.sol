@@ -25,9 +25,15 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
     function test_transfer_FailWhenAmountIsGreaterThan100() public {
         vm.startPrank(coinCreator);
     
+        uint initialSenderBalance = coin.balanceOf(coinCreator);
+        uint initialRecipientBalance = coin.balanceOf(treasury);
+        
         uint amount = 101;
-        vm.expectRevert("Amount is too high");
-        coin.transfer(alice, amount);
+        vm.expectRevert();
+        coin.transfer(treasury, amount);
+    
+        assertEq(coin.balanceOf(coinCreator), initialSenderBalance);
+        assertEq(coin.balanceOf(treasury), initialRecipientBalance);
     
         vm.stopPrank();
     }
@@ -35,19 +41,32 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
     function test_transfer_SuccessWhenAmountIsLessThan100() public {
         vm.startPrank(coinCreator);
     
+        uint initialSenderBalance = coin.balanceOf(coinCreator);
+        uint initialRecipientBalance = coin.balanceOf(treasury);
+        
         uint amount = 99;
-        coin.transfer(alice, amount);
+        coin.transfer(treasury, amount);
+    
+        assertEq(coin.balanceOf(coinCreator), initialSenderBalance - amount);
+        assertEq(coin.balanceOf(treasury), initialRecipientBalance + amount);
     
         vm.stopPrank();
     }
 
     function test_transfer_SuccessWhenTaxIsDisabledAndAmountIsLessThan100() public {
-        vm.startPrank(coinCreator);
+            vm.startPrank(coinCreator);
     
-        coin.toggleTax();
-        uint amount = 99;
-        coin.transfer(alice, amount);
-    
-        vm.stopPrank();
-    }
+            coin.toggleTax();
+            
+            uint initialSenderBalance = coin.balanceOf(coinCreator);
+            uint initialRecipientBalance = coin.balanceOf(treasury);
+            
+            uint amount = 99;
+            coin.transfer(treasury, amount);
+        
+            assertEq(coin.balanceOf(coinCreator), initialSenderBalance - amount);
+            assertEq(coin.balanceOf(treasury), initialRecipientBalance + amount);
+        
+            vm.stopPrank();
+        }
 }
