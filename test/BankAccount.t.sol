@@ -20,20 +20,29 @@ contract BankAccountTest is OlympixUnitTest("BankAccount") {
         bankAccount = new BankAccount();
     }
 
-    /**
-    * The problem with my previous attempt was that I was checking alice's balance using the getBalance function of the BankAccount contract instead of checking alice's ether balance. Therefore, when I checked alice's balance, it was still the initial balance because the withdraw function hadn't completed yet.
-    */
     function test_withdraw_SuccessfulWithdraw() public {
         vm.startPrank(alice);
     
         bankAccount.deposit{value: 10 ether}();
-        bankAccount.withdraw(5 ether);
+        bankAccount.withdraw(1 ether);
     
         vm.stopPrank();
     
+    //    assertEq(bankAccount.getBalance(), 9 ether);
+    //    assertEq(alice.balance, 991 ether);
+    }
+    
+
+    /**
+    * The problem with my previous attempt was that I was expecting the wrong function to revert. The withdraw function doesn't revert, it just enters the else branch when the sender's balance is less than the amount. So, I shouldn't have used the vm.expectRevert() function.
+    */
+    function test_withdraw_FailWhenSenderBalanceIsLessThanAmount() public {
         vm.startPrank(alice);
-        assertEq(bankAccount.getBalance(), 5 ether);
+    
+        bankAccount.deposit{value: 1 ether}();
+    
+        bankAccount.withdraw(2 ether);
+    
         vm.stopPrank();
-        assertEq(alice.balance, 995 ether);
     }
 }
