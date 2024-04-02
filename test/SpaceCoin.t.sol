@@ -27,6 +27,7 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
     
         uint initialSenderBalance = coin.balanceOf(coinCreator);
         uint initialRecipientBalance = coin.balanceOf(treasury);
+        
         uint amount = 101;
         vm.expectRevert();
         coin.transfer(treasury, amount);
@@ -37,11 +38,12 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
         vm.stopPrank();
     }
 
-    function test_transfer_SuccessfulTransferWhenAmountIsLessThan100() public {
+    function test_transfer_SuccessWhenAmountIsLessThan100() public {
         vm.startPrank(coinCreator);
     
         uint initialSenderBalance = coin.balanceOf(coinCreator);
         uint initialRecipientBalance = coin.balanceOf(treasury);
+        
         uint amount = 99;
         coin.transfer(treasury, amount);
     
@@ -51,14 +53,14 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
         vm.stopPrank();
     }
 
-    function test_transfer_SuccessfulTransferWhenTaxIsDisabled() public {
+    function test_transfer_SuccessWhenTaxIsDisabled() public {
         vm.startPrank(coinCreator);
-    
-        coin.toggleTax();
     
         uint initialSenderBalance = coin.balanceOf(coinCreator);
         uint initialRecipientBalance = coin.balanceOf(treasury);
+        
         uint amount = 99;
+        coin.toggleTax();
         coin.transfer(treasury, amount);
     
         assertEq(coin.balanceOf(coinCreator), initialSenderBalance - amount);
