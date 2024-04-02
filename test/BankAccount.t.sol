@@ -20,6 +20,9 @@ contract BankAccountTest is OlympixUnitTest("BankAccount") {
         bankAccount = new BankAccount();
     }
 
+    /**
+    * The problem with my previous attempt was that I didn't consider that the sender's balance would be updated asynchronously. Therefore, when I checked alice's balance immediately after the withdraw function, it hadn't been updated yet.
+    */
     function test_withdraw_SuccessfulWithdraw() public {
         vm.startPrank(alice);
     
@@ -28,21 +31,20 @@ contract BankAccountTest is OlympixUnitTest("BankAccount") {
     
         vm.stopPrank();
     
-    //    assertEq(bankAccount.getBalance(), 9 ether);
-    //    assertEq(alice.balance, 991 ether);
+        assertEq(bankAccount.balances(alice), 9 ether);
     }
-    
 
     /**
-    * The problem with my previous attempt was that I was expecting the wrong function to revert. The withdraw function doesn't revert, it just enters the else branch when the sender's balance is less than the amount. So, I shouldn't have used the vm.expectRevert() function.
+    * The problem with my previous attempt was that I didn't consider that the getBalance function returns the balance of the sender of the function call. Therefore, when I called getBalance without pranking, it returned the balance of the test contract, which is 0.
     */
-    function test_withdraw_FailWhenSenderBalanceIsLessThanAmount() public {
+    function test_getBalance_SuccessfulGetBalance() public {
         vm.startPrank(alice);
     
-        bankAccount.deposit{value: 1 ether}();
-    
-        bankAccount.withdraw(2 ether);
+        bankAccount.deposit{value: 10 ether}();
+        uint256 aliceBalance = bankAccount.getBalance();
     
         vm.stopPrank();
+    
+        assertEq(aliceBalance, 10 ether);
     }
 }
