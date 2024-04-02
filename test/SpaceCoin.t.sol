@@ -39,7 +39,7 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
     }
 
     /**
-    * The problem with my previous attempt was that I was not considering the tax that is deducted from the amount to be transferred. So, the balance of the sender was being decreased by the full amount, but the balance of the recipient was being increased by the amount minus the tax. 
+    * The problem with my previous attempt was that I didn't consider the tax that is deducted from the amount during the transfer. The tax is 2 and it's transferred to the treasury. So, the treasury receives the amount - tax and the sender's balance is reduced by the amount.
     */
     function test_transfer_SuccessfulTransferWhenAmountIsLessThan100() public {
         vm.startPrank(coinCreator);
@@ -59,19 +59,18 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
     }
 
     function test_transfer_SuccessfulTransferWhenTaxIsDisabled() public {
-            vm.startPrank(coinCreator);
+        vm.startPrank(coinCreator);
     
-            coin.toggleTax();
-            
-            uint initialSenderBalance = coin.balanceOf(coinCreator);
-            uint initialRecipientBalance = coin.balanceOf(treasury);
-            
-            uint amount = 99;
-            coin.transfer(treasury, amount);
+        uint initialSenderBalance = coin.balanceOf(coinCreator);
+        uint initialRecipientBalance = coin.balanceOf(treasury);
         
-            assertEq(coin.balanceOf(coinCreator), initialSenderBalance - amount);
-            assertEq(coin.balanceOf(treasury), initialRecipientBalance + amount);
-        
-            vm.stopPrank();
-        }
+        coin.toggleTax();
+        uint amount = 99;
+        coin.transfer(treasury, amount);
+    
+        assertEq(coin.balanceOf(coinCreator), initialSenderBalance - amount);
+        assertEq(coin.balanceOf(treasury), initialRecipientBalance + amount);
+    
+        vm.stopPrank();
+    }
 }
