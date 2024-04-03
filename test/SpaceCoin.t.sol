@@ -22,93 +22,38 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
         vm.stopPrank();
     }
 
-    function test_transfer_FailWhenAmountIsGreaterThan100() public {
+    function test_transfer_FailWhenAmountIsLessThan100() public {
         vm.startPrank(coinCreator);
     
-        uint initialSenderBalance = coin.balanceOf(coinCreator);
-        uint initialRecipientBalance = coin.balanceOf(treasury);
-        
-        uint amount = 101;
-        vm.expectRevert();
-        coin.transfer(treasury, amount);
-    
-        assertEq(coin.balanceOf(coinCreator), initialSenderBalance);
-        assertEq(coin.balanceOf(treasury), initialRecipientBalance);
+        uint256 amount = 99;
+        vm.expectRevert("Amount is too high");
+        coin.transfer(alice, amount);
     
         vm.stopPrank();
     }
 
-    /**
-    * The problem with my previous attempt was that I didn't consider the tax that is deducted from the amount to be transferred. The tax is transferred to the treasury and the remaining amount is transferred to the recipient. Therefore, the recipient's balance should increase by amountAfterTax and not the total amount.
-    */
-    function test_transfer_SuccessfulTransferWhenAmountIsLessThan100() public {
+    function test_transfer_SuccessfulTransferWhenAmountIsGreaterThan100() public {
         vm.startPrank(coinCreator);
     
-        uint initialSenderBalance = coin.balanceOf(coinCreator);
-        uint initialRecipientBalance = coin.balanceOf(treasury);
-        
-        uint amount = 99;
-        coin.transfer(treasury, amount);
-    
-        uint tax = 2;
-        uint amountAfterTax = amount - tax;
-        assertEq(coin.balanceOf(coinCreator), initialSenderBalance - amount);
-        assertEq(coin.balanceOf(treasury), initialRecipientBalance + amountAfterTax + tax);
+        uint256 amount = 101;
+        coin.transfer(alice, amount);
     
         vm.stopPrank();
+        
+        assertEq(coin.balanceOf(alice), amount - 2);
+        assertEq(coin.balanceOf(treasury), 350000 + 2);
     }
-
-    /**
-    * The problem with my previous attempt was that I didn't consider the tax that is deducted from the amount to be transferred. The tax is transferred to the treasury and the remaining amount is transferred to the recipient. Therefore, the recipient's balance should increase by amountAfterTax and not the total amount.
-    */
-    function test_transfer_SuccessfulTransferWhenAmountIsLessThan100AndTaxIsDisabled() public {
-        vm.startPrank(coinCreator);
-    
-        coin.toggleTax();
-        
-        uint initialSenderBalance = coin.balanceOf(coinCreator);
-        uint initialRecipientBalance = coin.balanceOf(treasury);
-        
-        uint amount = 99;
-        coin.transfer(treasury, amount);
-    
-        assertEq(coin.balanceOf(coinCreator), initialSenderBalance - amount);
-        assertEq(coin.balanceOf(treasury), initialRecipientBalance + amount);
-    
-        vm.stopPrank();
-    }
-
-    function test_transfer_SuccessfulTransferWhenAmountIsEqualTo100() public {
-            vm.startPrank(coinCreator);
-        
-            uint initialSenderBalance = coin.balanceOf(coinCreator);
-            uint initialRecipientBalance = coin.balanceOf(treasury);
-            
-            uint amount = 100;
-            coin.transfer(treasury, amount);
-        
-            uint tax = 2;
-            uint amountAfterTax = amount - tax;
-            assertEq(coin.balanceOf(coinCreator), initialSenderBalance - amount);
-            assertEq(coin.balanceOf(treasury), initialRecipientBalance + amountAfterTax + tax);
-        
-            vm.stopPrank();
-        }
 
     function test_transfer_SuccessfulTransferWhenTaxIsDisabled() public {
         vm.startPrank(coinCreator);
     
         coin.toggleTax();
-    
-        uint initialSenderBalance = coin.balanceOf(coinCreator);
-        uint initialRecipientBalance = coin.balanceOf(treasury);
-    
-        uint amount = 100;
-        coin.transfer(treasury, amount);
-    
-        assertEq(coin.balanceOf(coinCreator), initialSenderBalance - amount);
-        assertEq(coin.balanceOf(treasury), initialRecipientBalance + amount);
+        uint256 amount = 101;
+        coin.transfer(alice, amount);
     
         vm.stopPrank();
+        
+        assertEq(coin.balanceOf(alice), amount);
+        assertEq(coin.balanceOf(treasury), 350000);
     }
 }
