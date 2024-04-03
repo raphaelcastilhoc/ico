@@ -39,7 +39,7 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
     }
 
     /**
-    * The problem with my previous attempt was that I didn't consider the tax that is deducted from the amount during the transfer. The tax is 2 and it's transferred to the treasury. So, the treasury receives the amount - tax and the sender's balance is reduced by the amount.
+    * The problem with my previous attempt was that I didn't consider the tax that is deducted from the amount to be transferred. The tax is transferred to the treasury and the remaining amount is transferred to the recipient. Therefore, the recipient's balance should increase by amountAfterTax and not the total amount.
     */
     function test_transfer_SuccessfulTransferWhenAmountIsLessThan100() public {
         vm.startPrank(coinCreator);
@@ -58,13 +58,17 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
         vm.stopPrank();
     }
 
-    function test_transfer_SuccessfulTransferWhenTaxIsDisabled() public {
+    /**
+    * The problem with my previous attempt was that I didn't consider the tax that is deducted from the amount to be transferred. The tax is transferred to the treasury and the remaining amount is transferred to the recipient. Therefore, the recipient's balance should increase by amountAfterTax and not the total amount.
+    */
+    function test_transfer_SuccessfulTransferWhenAmountIsLessThan100AndTaxIsDisabled() public {
         vm.startPrank(coinCreator);
     
+        coin.toggleTax();
+        
         uint initialSenderBalance = coin.balanceOf(coinCreator);
         uint initialRecipientBalance = coin.balanceOf(treasury);
         
-        coin.toggleTax();
         uint amount = 99;
         coin.transfer(treasury, amount);
     
