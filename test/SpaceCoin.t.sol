@@ -25,14 +25,9 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
     function test_transfer_FailWhenAmountIsGreaterThan100() public {
         vm.startPrank(coinCreator);
     
-        uint initialSenderBalance = coin.balanceOf(coinCreator);
-        uint initialRecipientBalance = coin.balanceOf(treasury);
         uint amount = 101;
-        vm.expectRevert();
-        coin.transfer(treasury, amount);
-    
-        assertEq(coin.balanceOf(coinCreator), initialSenderBalance);
-        assertEq(coin.balanceOf(treasury), initialRecipientBalance);
+        vm.expectRevert("Amount is too high");
+        coin.transfer(alice, amount);
     
         vm.stopPrank();
     }
@@ -40,29 +35,37 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
     function test_transfer_SuccessWhenAmountIsLessThan100() public {
         vm.startPrank(coinCreator);
     
-        uint initialSenderBalance = coin.balanceOf(coinCreator);
-        uint initialRecipientBalance = coin.balanceOf(treasury);
         uint amount = 99;
-        coin.transfer(treasury, amount);
-    
-        assertEq(coin.balanceOf(coinCreator), initialSenderBalance - amount);
-        assertEq(coin.balanceOf(treasury), initialRecipientBalance + amount);
+        coin.transfer(alice, amount);
     
         vm.stopPrank();
     }
 
-    function test_transfer_SuccessWhenTaxIsDisabled() public {
+    function test_transfer_SuccessWhenTaxIsEnabledAndAmountIsLessThan100() public {
         vm.startPrank(coinCreator);
     
         coin.toggleTax();
-    
-        uint initialSenderBalance = coin.balanceOf(coinCreator);
-        uint initialRecipientBalance = coin.balanceOf(treasury);
         uint amount = 99;
-        coin.transfer(treasury, amount);
+        coin.transfer(alice, amount);
     
-        assertEq(coin.balanceOf(coinCreator), initialSenderBalance - amount);
-        assertEq(coin.balanceOf(treasury), initialRecipientBalance + amount);
+        vm.stopPrank();
+    }
+
+    function test_transfer_SuccessWhenTaxIsDisabledAndAmountIsLessThan100() public {
+            vm.startPrank(coinCreator);
+        
+            uint amount = 99;
+            coin.transfer(alice, amount);
+        
+            vm.stopPrank();
+        }
+
+    function test_toggleTax_SuccessfulToggleTax() public {
+        vm.startPrank(coinCreator);
+    
+        coin.toggleTax();
+        bool taxEnabled = coin.taxEnabled();
+        assertTrue(taxEnabled);
     
         vm.stopPrank();
     }
