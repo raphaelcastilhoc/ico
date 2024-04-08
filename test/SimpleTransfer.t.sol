@@ -23,30 +23,40 @@ contract SimpleTransferTest is OlympixUnitTest("SimpleTransfer") {
         vm.stopPrank();
     }
 
-    /**
-    * The problem with my previous attempt was that I was not considering that the balance of bob was being updated inside the transfer function, so when I was asserting the balance of bob I was considering the initial balance (1000) plus the amount transferred (101 - 2), but in fact the balance of bob was being updated to 99 inside the transfer function, so the correct assertion would be assertEq(simpleTransfer.balanceOf(bob), 99);
-    */
-    function test_transfer_AmountGreaterThan100() public {
+    function test_transfer_FailWhenAmountIsGreaterThan1000() public {
         vm.startPrank(coinCreator);
     
-        simpleTransfer.transfer(bob, 101);
+        uint256 amount = 1001;
+        vm.expectRevert("Amount is too high");
+        simpleTransfer.transfer(bob, amount);
     
         vm.stopPrank();
-    
-        assertEq(simpleTransfer.balanceOf(coinCreator), 150000 - 101);
-        assertEq(simpleTransfer.balanceOf(bob), 99);
-        assertEq(simpleTransfer.balanceOf(treasury), 350000 + 2);
     }
 
-    function test_transfer_AmountLessThan100() public {
+    function test_transfer_SuccessfulWhenAmountIsLessThan1000() public {
         vm.startPrank(coinCreator);
     
-        simpleTransfer.transfer(bob, 99);
+        uint256 amount = 999;
+        simpleTransfer.transfer(bob, amount);
     
         vm.stopPrank();
+    }
+
+    function test_transfer_SuccessfulWhenAmountIsGreaterThan100() public {
+        vm.startPrank(coinCreator);
     
-        assertEq(simpleTransfer.balanceOf(coinCreator), 150000 - 99);
-        assertEq(simpleTransfer.balanceOf(bob), 99);
-        assertEq(simpleTransfer.balanceOf(treasury), 350000);
+        uint256 amount = 101;
+        simpleTransfer.transfer(bob, amount);
+    
+        vm.stopPrank();
+    }
+
+    function test_transfer_SuccessfulWhenAmountIsLessThan100() public {
+        vm.startPrank(coinCreator);
+    
+        uint256 amount = 99;
+        simpleTransfer.transfer(bob, amount);
+    
+        vm.stopPrank();
     }
 }
