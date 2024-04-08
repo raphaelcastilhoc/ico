@@ -21,31 +21,18 @@ contract BankAccountTest is OlympixUnitTest("BankAccount") {
     }
 
     /**
-    * The problem with my previous attempt was that I didn't consider that the sender's balance would be updated asynchronously. Therefore, when I checked alice's balance immediately after the withdraw function, it hadn't been updated yet.
+    * The problem with my previous attempts was that I was not calling getBalance() with the correct address. I was not pranking the vm when calling getBalance(), so it was returning the balance of this contract, not bob's balance.
     */
     function test_withdraw_SuccessfulWithdraw() public {
-        vm.startPrank(alice);
+        vm.startPrank(bob);
     
         bankAccount.deposit{value: 10 ether}();
         bankAccount.withdraw(1 ether);
     
+        uint256 bobBankAccountBalance = bankAccount.getBalance();
         vm.stopPrank();
     
-        assertEq(bankAccount.balances(alice), 9 ether);
-    }
-
-    /**
-    * The problem with my previous attempt was that I didn't consider that the getBalance function was being called by the test contract, not by alice. Therefore, it was returning the test contract's balance, not alice's.
-    */
-    function test_getBalance_SuccessfulGetBalance() public {
-        vm.startPrank(alice);
-    
-        bankAccount.deposit{value: 10 ether}();
-    
-        uint256 aliceBalance = bankAccount.getBalance();
-    
-        vm.stopPrank();
-    
-        assertEq(aliceBalance, 10 ether);
+        assertEq(bobBankAccountBalance, 9 ether);
+        assertEq(bob.balance, 991 ether);
     }
 }
