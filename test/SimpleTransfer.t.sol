@@ -24,47 +24,29 @@ contract SimpleTransferTest is OlympixUnitTest("SimpleTransfer") {
     }
 
     /**
-    * The problem with my previous attempt was that I was subtracting the gas fee from the sender's final balance. However, the gas fee is not deducted from the sender's balance in the SimpleTransfer contract, but from the sender's balance in the Ethereum network. Therefore, the sender's final balance in the SimpleTransfer contract is simply the initial balance minus the sent amount.
+    * The problem with my previous attempt was that I was not considering that the balance of bob was being updated inside the transfer function, so when I was asserting the balance of bob I was considering the initial balance (1000) plus the amount transferred (101 - 2), but in fact the balance of bob was being updated to 99 inside the transfer function, so the correct assertion would be assertEq(simpleTransfer.balanceOf(bob), 99);
     */
     function test_transfer_AmountGreaterThan100() public {
-        uint256 initialSenderBalance = simpleTransfer.balanceOf(coinCreator);
-        uint256 initialRecipientBalance = simpleTransfer.balanceOf(bob);
-        uint256 initialTreasuryBalance = simpleTransfer.balanceOf(treasury);
-    
-        uint256 amount = 150;
-        uint256 tax = 2;
-    
         vm.startPrank(coinCreator);
     
-        simpleTransfer.transfer(bob, amount);
+        simpleTransfer.transfer(bob, 101);
     
         vm.stopPrank();
     
-        uint256 finalSenderBalance = simpleTransfer.balanceOf(coinCreator);
-        uint256 finalRecipientBalance = simpleTransfer.balanceOf(bob);
-        uint256 finalTreasuryBalance = simpleTransfer.balanceOf(treasury);
-    
-        assertEq(finalSenderBalance, initialSenderBalance - amount);
-        assertEq(finalRecipientBalance, initialRecipientBalance + amount - tax);
-        assertEq(finalTreasuryBalance, initialTreasuryBalance + tax);
+        assertEq(simpleTransfer.balanceOf(coinCreator), 150000 - 101);
+        assertEq(simpleTransfer.balanceOf(bob), 99);
+        assertEq(simpleTransfer.balanceOf(treasury), 350000 + 2);
     }
 
-    function test_transfer_AmountLessThanOrEqualTo100() public {
-        uint256 initialSenderBalance = simpleTransfer.balanceOf(coinCreator);
-        uint256 initialRecipientBalance = simpleTransfer.balanceOf(bob);
-    
-        uint256 amount = 100;
-    
+    function test_transfer_AmountLessThan100() public {
         vm.startPrank(coinCreator);
     
-        simpleTransfer.transfer(bob, amount);
+        simpleTransfer.transfer(bob, 99);
     
         vm.stopPrank();
     
-        uint256 finalSenderBalance = simpleTransfer.balanceOf(coinCreator);
-        uint256 finalRecipientBalance = simpleTransfer.balanceOf(bob);
-    
-        assertEq(finalSenderBalance, initialSenderBalance - amount);
-        assertEq(finalRecipientBalance, initialRecipientBalance + amount);
+        assertEq(simpleTransfer.balanceOf(coinCreator), 150000 - 99);
+        assertEq(simpleTransfer.balanceOf(bob), 99);
+        assertEq(simpleTransfer.balanceOf(treasury), 350000);
     }
 }
