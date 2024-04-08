@@ -53,8 +53,8 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
     function test_transfer_SuccessWhenTaxIsDisabledAndAmountIsLessThan100() public {
             vm.startPrank(coinCreator);
         
-            uint amount = 99;
             coin.toggleTax();
+            uint amount = 99;
             coin.transfer(alice, amount);
         
             vm.stopPrank();
