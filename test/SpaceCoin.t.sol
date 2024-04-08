@@ -38,9 +38,6 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
         vm.stopPrank();
     }
 
-    /**
-    * The problem with my previous attempt was that I didn't consider the tax that is deducted from the amount during the transfer. The tax is transferred to the treasury, so the treasury balance increases by the tax amount and the amountAfterTax.
-    */
     function test_transfer_SuccessfulTransferWhenAmountIsLessThan100() public {
         vm.startPrank(coinCreator);
     

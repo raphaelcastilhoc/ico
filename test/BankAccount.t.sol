@@ -20,19 +20,17 @@ contract BankAccountTest is OlympixUnitTest("BankAccount") {
         bankAccount = new BankAccount();
     }
 
-    /**
-    * The problem with my previous attempts was that I was not calling getBalance() with the correct address. I was not pranking the vm when calling getBalance(), so it was returning the balance of this contract, not bob's balance.
-    */
     function test_withdraw_SuccessfulWithdraw() public {
-        vm.startPrank(bob);
+        vm.startPrank(alice);
     
         bankAccount.deposit{value: 10 ether}();
         bankAccount.withdraw(1 ether);
     
-        uint256 bobBankAccountBalance = bankAccount.getBalance();
         vm.stopPrank();
     
-        assertEq(bobBankAccountBalance, 9 ether);
-        assertEq(bob.balance, 991 ether);
+        vm.startPrank(alice);
+        assertEq(bankAccount.getBalance(), 9 ether);
+        assertEq(alice.balance, 991 ether);
+        vm.stopPrank();
     }
 }
