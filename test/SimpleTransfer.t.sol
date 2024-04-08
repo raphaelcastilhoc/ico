@@ -33,30 +33,43 @@ contract SimpleTransferTest is OlympixUnitTest("SimpleTransfer") {
         vm.stopPrank();
     }
 
-    function test_transfer_SuccessfulWhenAmountIsLessThan1000() public {
+    /**
+    * The problem with my previous attempt was that I didn't consider the tax that is deducted when the amount is greater than 100. The tax is 2, so the amount that bob receives is 997, not 999.
+    */
+    function test_transfer_SuccessfulTransferWhenAmountIsLessThan1000() public {
         vm.startPrank(coinCreator);
     
         uint256 amount = 999;
         simpleTransfer.transfer(bob, amount);
     
         vm.stopPrank();
+        
+        assertEq(simpleTransfer.balanceOf(coinCreator), 150000 - amount);
+        assertEq(simpleTransfer.balanceOf(bob), amount - 2);
     }
 
-    function test_transfer_SuccessfulWhenAmountIsGreaterThan100() public {
+    function test_transfer_SuccessfulTransferWhenAmountIsGreaterThan100() public {
         vm.startPrank(coinCreator);
     
         uint256 amount = 101;
         simpleTransfer.transfer(bob, amount);
     
         vm.stopPrank();
+        
+        assertEq(simpleTransfer.balanceOf(coinCreator), 150000 - amount);
+        assertEq(simpleTransfer.balanceOf(bob), amount - 2);
+        assertEq(simpleTransfer.balanceOf(treasury), 350000 + 2);
     }
 
-    function test_transfer_SuccessfulWhenAmountIsLessThan100() public {
-        vm.startPrank(coinCreator);
-    
-        uint256 amount = 99;
-        simpleTransfer.transfer(bob, amount);
-    
-        vm.stopPrank();
-    }
+    function test_transfer_SuccessfulTransferWhenAmountIsLessThan100() public {
+            vm.startPrank(coinCreator);
+        
+            uint256 amount = 99;
+            simpleTransfer.transfer(bob, amount);
+        
+            vm.stopPrank();
+            
+            assertEq(simpleTransfer.balanceOf(coinCreator), 150000 - amount);
+            assertEq(simpleTransfer.balanceOf(bob), amount);
+        }
 }
