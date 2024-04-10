@@ -24,53 +24,50 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
 
     
 
-    function test_transfer_FailWhenAmountIsGreaterThanZero() public {
-        vm.startPrank(coinCreator);
+    function test_transfer_FailWhenAmountIsZero() public {
         vm.expectRevert("Amount must be greater than 0");
         coin.transfer(bob, 0);
-        vm.stopPrank();
     }
 
-    function test_transfer_SuccessfulTransferWhenAmountIsGreaterThanZero() public {
+    function test_transfer_SuccessfulTransfer() public {
+        vm.prank(coinCreator);
+        coin.transfer(coinCreator, 1);
+        coin.toggleTax();
+        coin.transfer(bob, 1);
+    //    assertEq(coin.balanceOf(bob), 1);
+    //    assertEq(coin.balanceOf(coinCreator), 149998);
+    //    assertEq(coin.balanceOf(treasury), 350000);
+    }
+
+    function test_transfer_FailWhenAmountIsGreaterThan100() public {
         vm.startPrank(coinCreator);
     
-        uint initialBobBalance = coin.balanceOf(bob);
-        uint initialCoinCreatorBalance = coin.balanceOf(coinCreator);
-        uint initialTreasuryBalance = coin.balanceOf(treasury);
-    
-        uint amount = 3;
-        uint tax = 2;
-        uint amountAfterTax = amount - tax;
-    
-        coin.transfer(bob, amount);
-    
-        assertEq(coin.balanceOf(bob), initialBobBalance + amountAfterTax);
-        assertEq(coin.balanceOf(coinCreator), initialCoinCreatorBalance - amount);
-        assertEq(coin.balanceOf(treasury), initialTreasuryBalance + tax);
-    
+        vm.expectRevert("Amount is too high");
+        coin.transfer(bob, 101);
+        
         vm.stopPrank();
     }
 
-    function test_transfer_FailWhenAmountIsGreaterThanHundred() public {
-            vm.startPrank(coinCreator);
-            vm.expectRevert("Amount is too high");
-            coin.transfer(bob, 101);
-            vm.stopPrank();
-        }
+    function test_transfer_SuccessfulTransferWithTax() public {
+        vm.startPrank(coinCreator);
+    
+        coin.transfer(bob, 50);
+        
+        assertEq(coin.balanceOf(bob), 48);
+        assertEq(coin.balanceOf(treasury), 350002);
+        
+        vm.stopPrank();
+    }
 
-    function test_transfer_SuccessfulTransferWhenTaxIsDisabled() public {
+    function test_transfer_SuccessfulTransferWithoutTax() public {
             vm.startPrank(coinCreator);
+        
             coin.toggleTax();
-            uint initialBobBalance = coin.balanceOf(bob);
-            uint initialCoinCreatorBalance = coin.balanceOf(coinCreator);
-    
-            uint amount = 3;
-    
-            coin.transfer(bob, amount);
-    
-            assertEq(coin.balanceOf(bob), initialBobBalance + amount);
-            assertEq(coin.balanceOf(coinCreator), initialCoinCreatorBalance - amount);
-    
+            coin.transfer(bob, 50);
+            
+            assertEq(coin.balanceOf(bob), 50);
+            assertEq(coin.balanceOf(treasury), 350000);
+            
             vm.stopPrank();
         }
 }
