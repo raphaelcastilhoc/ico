@@ -40,6 +40,16 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
     //     vm.stopPrank();
     // }
 
+    function test_transfer_FailWhenAmountIsZero() public {
+        vm.startPrank(coinCreator);
+    
+        uint amount = 0;
+        vm.expectRevert("Amount must be greater than 0");
+        coin.transfer(treasury, amount);
+    
+        vm.stopPrank();
+    }
+
     function test_transfer_SuccessWhenAmountIsGreaterThanZero() public {
         vm.startPrank(coinCreator);
     
@@ -87,6 +97,6 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
         vm.startPrank(coinCreator);
         coin.toggleTax();
         vm.stopPrank();
-        assertFalse(coin.taxEnabled());
+        assertTrue(!coin.taxEnabled());
     }
 }
