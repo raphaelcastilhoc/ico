@@ -39,13 +39,13 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
             coin.transfer(bob, amount);
     
             vm.stopPrank();
-            
+    
     //        assertEq(coin.balanceOf(alice), 99);
     //        assertEq(coin.balanceOf(bob), 1001);
     //        assertEq(coin.balanceOf(treasury), 350000);
         }
 
-    function test_transfer_FailWhenRecipientIsOwner() public {
+    function test_transfer_FailWhenRecipientIsOwnerOrTreasury() public {
             vm.expectRevert("Recipient must be a valid address");
             coin.transfer(coinCreator, 10);
         }
@@ -60,20 +60,31 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
         vm.stopPrank();
     }
 
+    function test_simpleTransfer_SuccessfulTransfer() public {
+            vm.startPrank(coinCreator);
+    
+            uint amount = 1;
+            coin.simpleTransfer(alice, amount);
+    
+            vm.stopPrank();
+    
+            assertEq(coin.balanceOf(alice), 2);
+            assertEq(coin.balanceOf(coinCreator), 149998);
+        }
+
     function test_toggleTax_FailWhenSenderIsNotOwner() public {
         vm.expectRevert("Only owner can call this function");
         coin.toggleTax();
     }
 
-    function test_toggleTax_SuccessfulToggleWhenSenderIsOwner() public {
+    function test_toggleTax_SuccessWhenSenderIsOwner() public {
         vm.startPrank(coinCreator);
     
-        bool initialTaxStatus = coin.taxEnabled();
         coin.toggleTax();
-        bool finalTaxStatus = coin.taxEnabled();
     
         vm.stopPrank();
-    
-        assert(initialTaxStatus != finalTaxStatus);
+        
+        bool taxEnabled = coin.taxEnabled();
+        assertTrue(taxEnabled == false);
     }
 }
