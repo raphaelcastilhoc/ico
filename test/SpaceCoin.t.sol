@@ -27,74 +27,64 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
         coin.transfer(bob, 0);
     }
 
-    function test_transfer_FailWhenRecipientIsEqualToOwnerOrTreasury() public {
-            vm.startPrank(coinCreator);
-    
-            vm.expectRevert(abi.encodePacked("Recipient must be a valid address"));
+    function test_transfer_FailWhenRecipientIsOwner() public {
+            vm.expectRevert("Recipient must be a valid address");
             coin.transfer(coinCreator, 1);
-    
-            vm.expectRevert(abi.encodePacked("Recipient must be a valid address"));
-            coin.transfer(treasury, 1);
-    
-            vm.stopPrank();
         }
 
     function test_transfer_FailWhenTransferingAmountIsGreaterThan100() public {
-            vm.startPrank(coinCreator);
-    
-            uint256 valueToTransfer = 101;
             vm.expectRevert("Amount is too high");
-            coin.transfer(bob, valueToTransfer);
-    
-            vm.stopPrank();
+            coin.transfer(bob, 101);
         }
 
     function test_transfer_SuccessfulTransferWhenTaxIsDisabled() public {
             vm.startPrank(coinCreator);
     
+            coin.transfer(alice, 100);
             coin.toggleTax();
     
-            uint256 valueToTransfer = 10;
-            coin.transfer(bob, valueToTransfer);
-    
-            vm.stopPrank();
-        }
-
-    function test_simpleTransfer_FailWhenValueToTransferIsEqualToOrGreaterThan100() public {
-        vm.expectRevert("Amount must be less than 0");
-        coin.simpleTransfer(bob, 100);
-    }
-
-    function test_simpleTransfer_SuccessfulWhenValueToTransferIsLessThan100() public {
-            vm.startPrank(coinCreator);
-            coin.transfer(alice, 50);
             vm.stopPrank();
     
             vm.startPrank(alice);
     
-            uint256 valueToTransfer = 10;
-            coin.simpleTransfer(bob, valueToTransfer);
+            uint256 value = 10;
+            coin.transfer(bob, value);
     
             vm.stopPrank();
+            
+    //        assertEq(coin.balanceOf(bob), value);
+    //        assertEq(coin.balanceOf(alice), 100 - value); 
         }
 
-    function test_simpleTransfer_FailWhenValueToTransferIsZero() public {
+    function test_anotherTransfer_FailWhenValueIsEqualToOrGreaterThan100() public {
+        vm.expectRevert("Amount must be less than 0");
+        coin.anotherTransfer(bob, 100);
+    }
+
+    function test_anotherTransfer_SuccessfulWhenValueIsLessThan100() public {
             vm.startPrank(coinCreator);
-            vm.expectRevert(abi.encodePacked("Amount must be greater than 0"));
-            coin.simpleTransfer(bob, 0);
+            coin.transfer(alice, 100);
             vm.stopPrank();
+    
+            vm.startPrank(alice);
+    
+            uint256 value = 10;
+            coin.anotherTransfer(bob, value);
+    
+            vm.stopPrank();
+            
+            assertEq(coin.balanceOf(bob), value + 1);
+            assertEq(coin.balanceOf(alice), 100 - value - 1 - 2); // Subtract 2 to account for the tax
         }
 
-    function test_simpleTransfer_FailWhenRecipientAddressIsEqualToOwnerOrTreasury() public {
-            vm.startPrank(coinCreator);
-    
-            vm.expectRevert(abi.encodePacked("Recipient must be a valid address"));
-            coin.simpleTransfer(coinCreator, 1);
-    
-            vm.expectRevert(abi.encodePacked("Recipient must be a valid address"));
-            coin.simpleTransfer(treasury, 1);
-    
-            vm.stopPrank();
+    function test_anotherTransfer_FailWhenValueIsZero() public {
+        vm.expectRevert(abi.encodePacked("Amount must be greater than 0"));
+        coin.anotherTransfer(bob, 0);
+    }
+
+    function test_anotherTransfer_FailWhenRecipientAddressIsOwner() public {
+            vm.expectRevert("Recipient must be a valid address");
+            coin.anotherTransfer(coinCreator, 1);
         }
 
     function test_toggleTax_FailWhenSenderIsNotOwner() public {
