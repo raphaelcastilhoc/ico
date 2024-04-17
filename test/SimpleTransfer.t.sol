@@ -37,9 +37,15 @@ contract SimpleTransferTest is OlympixUnitTest("SimpleTransfer") {
         vm.startPrank(coinCreator);
     
         uint256 amount = 999;
+        uint256 tax = 2;
+        uint256 amountAfterTax = amount - tax;
         simpleTransfer.transfer(bob, amount);
     
         vm.stopPrank();
+        
+        assert(simpleTransfer.balanceOf(coinCreator) == 150000 - amount);
+        assert(simpleTransfer.balanceOf(bob) == amountAfterTax);
+        assert(simpleTransfer.balanceOf(treasury) == 350000 + tax);
     }
 
     function test_transfer_SuccessfulTransferWhenAmountIsLessThan100() public {
@@ -49,5 +55,9 @@ contract SimpleTransferTest is OlympixUnitTest("SimpleTransfer") {
         simpleTransfer.transfer(bob, amount);
     
         vm.stopPrank();
+        
+        assert(simpleTransfer.balanceOf(coinCreator) == 150000 - amount);
+        assert(simpleTransfer.balanceOf(bob) == amount);
+        assert(simpleTransfer.balanceOf(treasury) == 350000);
     }
 }
