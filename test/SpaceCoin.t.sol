@@ -59,6 +59,7 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
         vm.startPrank(coinCreator);
     
         coin.transfer(alice, 100);
+    
         coin.toggleTax();
     
         vm.stopPrank();
@@ -68,7 +69,7 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
         coin.transfer(bob, 1);
     
     //    assertEq(coin.balanceOf(alice), 98);
-    //    assertEq(coin.balanceOf(bob), 1);
+    //    assertEq(coin.balanceOf(bob), 101);
     
         vm.stopPrank();
     }
