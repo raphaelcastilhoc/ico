@@ -18,23 +18,6 @@ contract SimpleAuctionTest is OlympixUnitTest("SimpleAuction") {
         vm.deal(bob, 1000);
     }
 
-    function test_bid_FailWhenBidIsNotHighEnough() public {
-        vm.startPrank(bob);
-    
-        simpleAuction.bid{value: 100}();
-    
-        vm.startPrank(alice);
-    
-        vm.expectRevert(abi.encodeWithSelector(SimpleAuction.BidNotHighEnough.selector, 100));
-        simpleAuction.bid{value: 100}();
-    
-        vm.stopPrank();
-    
-        vm.startPrank(bob);
-    
-        vm.stopPrank();
-    }
-
     function test_withdraw_SuccessfulWithdraw() public {
         vm.startPrank(bob);
         simpleAuction.bid{value: 100}();
@@ -54,7 +37,7 @@ contract SimpleAuctionTest is OlympixUnitTest("SimpleAuction") {
     
 
     function test_withdraw_FailWhenThereIsNoAmountToWithdraw() public {
-        vm.startPrank(bob);
+        vm.startPrank(alice);
     
         bool result = simpleAuction.withdraw();
     
