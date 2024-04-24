@@ -23,7 +23,7 @@ contract BlindAuctionTest is OlympixUnitTest("BlindAuction") {
     
         vm.warp(block.timestamp + 7 days);
         vm.expectRevert(abi.encodeWithSelector(BlindAuction.TooLate.selector, blindAuction.biddingEnd()));
-        blindAuction.bid(keccak256(abi.encodePacked(uint(100), false, "")));
+        blindAuction.bid(keccak256(abi.encodePacked(uint256(100), false, "")));
     
         vm.stopPrank();
     }
@@ -38,34 +38,61 @@ contract BlindAuctionTest is OlympixUnitTest("BlindAuction") {
         vm.stopPrank();
     }
 
+    function test_reveal_SuccessfulReveal() public {
+        vm.startPrank(bob);
+    
+        bytes32 blindedBid = keccak256(abi.encodePacked(uint256(100), false, bytes32(0)));
+        blindAuction.bid{value: 100}(blindedBid);
+    
+        vm.warp(blindAuction.biddingEnd() + 1);
+    
+        uint256[] memory values = new uint256[](1);
+        values[0] = 100;
+        bool[] memory fakes = new bool[](1);
+        fakes[0] = false;
+        bytes32[] memory secrets = new bytes32[](1);
+        secrets[0] = bytes32(0);
+    
+        blindAuction.reveal(values, fakes, secrets);
+    
+        assertEq(bob.balance, 900);
+        assertEq(blindAuction.highestBid(), 100);
+        assertEq(blindAuction.highestBidder(), bob);
+    
+        vm.stopPrank();
+    }
+
     function test_reveal_FailWhenItIsTooEarly() public {
         vm.startPrank(alice);
     
+        vm.warp(block.timestamp + 7 days - 1);
         vm.expectRevert(abi.encodeWithSelector(BlindAuction.TooEarly.selector, blindAuction.biddingEnd()));
         blindAuction.reveal(new uint256[](0), new bool[](0), new bytes32[](0));
     
         vm.stopPrank();
     }
 
-    function test_reveal_FailWhenValuesLengthIsDifferentFromBidsLength() public {
-        vm.startPrank(alice);
+    function test_reveal_FailWhenValuesLengthIsNotEqualToBidsLength() public {
+        vm.startPrank(bob);
     
-        blindAuction.bid{value: 100}(keccak256(abi.encodePacked(uint(100), false, "")));
+        bytes32 blindedBid = keccak256(abi.encodePacked(uint256(100), false, bytes32(0)));
+        blindAuction.bid{value: 100}(blindedBid);
     
-        vm.warp(block.timestamp + 7 days + 1);
+        vm.warp(blindAuction.biddingEnd() + 1);
     
         vm.expectRevert();
-        blindAuction.reveal(new uint256[](0), new bool[](0), new bytes32[](0));
+        blindAuction.reveal(new uint256[](0), new bool[](1), new bytes32[](1));
     
         vm.stopPrank();
     }
 
-    function test_reveal_FailWhenFakesLengthIsDifferentFromBidsLength() public {
-        vm.startPrank(alice);
+    function test_reveal_FailWhenFakesLengthIsNotEqualToBidsLength() public {
+        vm.startPrank(bob);
     
-        blindAuction.bid{value: 100}(keccak256(abi.encodePacked(uint(100), false, "")));
+        bytes32 blindedBid = keccak256(abi.encodePacked(uint256(100), false, bytes32(0)));
+        blindAuction.bid{value: 100}(blindedBid);
     
-        vm.warp(block.timestamp + 7 days + 1);
+        vm.warp(blindAuction.biddingEnd() + 1);
     
         vm.expectRevert();
         blindAuction.reveal(new uint256[](1), new bool[](0), new bytes32[](1));
@@ -73,12 +100,13 @@ contract BlindAuctionTest is OlympixUnitTest("BlindAuction") {
         vm.stopPrank();
     }
 
-    function test_reveal_FailWhenSecretsLengthIsDifferentFromBidsLength() public {
-        vm.startPrank(alice);
+    function test_reveal_FailWhenSecretsLengthIsNotEqualToBidsLength() public {
+        vm.startPrank(bob);
     
-        blindAuction.bid{value: 100}(keccak256(abi.encodePacked(uint(100), false, "")));
+        bytes32 blindedBid = keccak256(abi.encodePacked(uint256(100), false, bytes32(0)));
+        blindAuction.bid{value: 100}(blindedBid);
     
-        vm.warp(block.timestamp + 7 days + 1);
+        vm.warp(blindAuction.biddingEnd() + 1);
     
         vm.expectRevert();
         blindAuction.reveal(new uint256[](1), new bool[](1), new bytes32[](0));
@@ -87,15 +115,49 @@ contract BlindAuctionTest is OlympixUnitTest("BlindAuction") {
     }
 
     function test_reveal_FailWhenBlindedBidIsInvalid() public {
-        vm.startPrank(alice);
+        vm.startPrank(bob);
     
-        blindAuction.bid{value: 100}(keccak256(abi.encodePacked(uint(100), false, "")));
+        bytes32 blindedBid = keccak256(abi.encodePacked(uint256(100), false, bytes32(0)));
+        blindAuction.bid{value: 100}(blindedBid);
     
-        vm.warp(block.timestamp + 7 days + 1);
+        vm.warp(blindAuction.biddingEnd() + 1);
     
-        blindAuction.reveal(new uint256[](1), new bool[](1), new bytes32[](1));
+        uint256[] memory values = new uint256[](1);
+        values[0] = 101;
+        bool[] memory fakes = new bool[](1);
+        fakes[0] = false;
+        bytes32[] memory secrets = new bytes32[](1);
+        secrets[0] = bytes32(0);
     
-        assertEq(alice.balance, 900);
+        blindAuction.reveal(values, fakes, secrets);
+    
+        assertEq(bob.balance, 900);
+        assertEq(blindAuction.highestBid(), 0);
+        assertEq(blindAuction.highestBidder(), address(0));
+    
+        vm.stopPrank();
+    }
+
+    function test_reveal_SuccessfulRevealWithFakeBid() public {
+        vm.startPrank(bob);
+    
+        bytes32 blindedBid = keccak256(abi.encodePacked(uint256(100), true, bytes32(0)));
+        blindAuction.bid{value: 100}(blindedBid);
+    
+        vm.warp(blindAuction.biddingEnd() + 1);
+    
+        uint256[] memory values = new uint256[](1);
+        values[0] = 100;
+        bool[] memory fakes = new bool[](1);
+        fakes[0] = true;
+        bytes32[] memory secrets = new bytes32[](1);
+        secrets[0] = bytes32(0);
+    
+        blindAuction.reveal(values, fakes, secrets);
+    
+        assertEq(bob.balance, 1000);
+        assertEq(blindAuction.highestBid(), 0);
+        assertEq(blindAuction.highestBidder(), address(0));
     
         vm.stopPrank();
     }
@@ -124,6 +186,8 @@ contract BlindAuctionTest is OlympixUnitTest("BlindAuction") {
         blindAuction.auctionEnd();
     
         assertEq(beneficiary.balance, 0);
+        assertEq(blindAuction.highestBid(), 0);
+        assertEq(blindAuction.highestBidder(), address(0));
         assertEq(blindAuction.ended(), true);
     
         vm.stopPrank();
@@ -137,6 +201,48 @@ contract BlindAuctionTest is OlympixUnitTest("BlindAuction") {
     
         vm.expectRevert(BlindAuction.AuctionEndAlreadyCalled.selector);
         blindAuction.auctionEnd();
+    
+        vm.stopPrank();
+    }
+
+    function test_reveal_SuccessfulRevealWithLowerBid() public {
+        vm.startPrank(alice);
+    
+        bytes32 blindedBid = keccak256(abi.encodePacked(uint256(100), false, bytes32(0)));
+        blindAuction.bid{value: 100}(blindedBid);
+    
+        vm.stopPrank();
+    
+        vm.startPrank(bob);
+    
+        blindedBid = keccak256(abi.encodePacked(uint256(200), false, bytes32(0)));
+        blindAuction.bid{value: 200}(blindedBid);
+    
+        vm.warp(blindAuction.biddingEnd() + 1);
+    
+        uint256[] memory values = new uint256[](1);
+        values[0] = 200;
+        bool[] memory fakes = new bool[](1);
+        fakes[0] = false;
+        bytes32[] memory secrets = new bytes32[](1);
+        secrets[0] = bytes32(0);
+    
+        blindAuction.reveal(values, fakes, secrets);
+    
+        assertEq(bob.balance, 800);
+        assertEq(blindAuction.highestBid(), 200);
+        assertEq(blindAuction.highestBidder(), bob);
+    
+        vm.stopPrank();
+    
+        vm.startPrank(alice);
+    
+        values[0] = 100;
+        blindAuction.reveal(values, fakes, secrets);
+    
+        assertEq(alice.balance, 1000);
+        assertEq(blindAuction.highestBid(), 200);
+        assertEq(blindAuction.highestBidder(), bob);
     
         vm.stopPrank();
     }
