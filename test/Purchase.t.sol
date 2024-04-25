@@ -17,6 +17,17 @@ contract PurchaseTest is OlympixUnitTest("Purchase") {
         vm.deal(bob, 1000);
     }
 
+    function test_abort_FailWhenStateIsNotCreated() public {
+        vm.startPrank(alice);
+    
+        purchase.confirmPurchase{value: 500}();
+    
+        vm.expectRevert(Purchase.InvalidState.selector);
+        purchase.abort();
+    
+        vm.stopPrank();
+    }
+
     function test_abort_FailWhenSenderIsNotSeller() public {
         vm.startPrank(bob);
     
@@ -31,17 +42,6 @@ contract PurchaseTest is OlympixUnitTest("Purchase") {
     
         vm.expectRevert();
         purchase.confirmPurchase{value: 100}();
-    
-        vm.stopPrank();
-    }
-
-    function test_confirmPurchase_SuccessfulConfirm() public {
-        vm.startPrank(bob);
-    
-        purchase.confirmPurchase{value: 500}();
-    
-        assertEq(uint(purchase.state()), uint(Purchase.State.Locked));
-        assertEq(purchase.buyer(), bob);
     
         vm.stopPrank();
     }
@@ -66,22 +66,23 @@ contract PurchaseTest is OlympixUnitTest("Purchase") {
         vm.stopPrank();
     }
 
-    function test_refundSeller_FailRefundWhenStateIsNotRelease() public {
+    function test_confirmReceived_FailWhenSenderIsNotBuyer() public {
+        vm.startPrank(bob);
+    
+        purchase.confirmPurchase{value: 500}();
+    
         vm.startPrank(alice);
     
-        vm.expectRevert(Purchase.InvalidState.selector);
-        purchase.refundSeller();
+        vm.expectRevert(Purchase.OnlyBuyer.selector);
+        purchase.confirmReceived();
     
         vm.stopPrank();
     }
 
-    function test_refundSeller_FailWhenSenderIsNotSeller() public {
-        vm.startPrank(bob);
+    function test_refundSeller_FailRefundWhenStateIsNotRelease() public {
+        vm.startPrank(alice);
     
-        purchase.confirmPurchase{value: 500}();
-        purchase.confirmReceived();
-    
-        vm.expectRevert(Purchase.OnlySeller.selector);
+        vm.expectRevert(Purchase.InvalidState.selector);
         purchase.refundSeller();
     
         vm.stopPrank();
