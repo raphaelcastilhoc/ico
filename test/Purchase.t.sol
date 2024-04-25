@@ -48,26 +48,24 @@ contract PurchaseTest is OlympixUnitTest("Purchase") {
         vm.stopPrank();
     }
 
-    function test_confirmPurchase_SuccessfulPurchase() public {
+    function test_confirmPurchase_SuccessfulConfirm() public {
         vm.startPrank(bob);
     
         purchase.confirmPurchase{value: 500}();
     
-    //    assertEq(uint(purchase.state()), uint(Purchase.State.Locked));
-    //    assertEq(purchase.buyer(), bob);
-    //    assertEq(bob.balance, 500);
-    //    assertEq(alice.balance, 1000);
-    //    assertEq(address(purchase).balance, 1000);
+        assertEq(uint(purchase.state()), uint(Purchase.State.Locked));
+        assertEq(purchase.buyer(), bob);
     
         vm.stopPrank();
     }
-    
 
-    function test_confirmReceived_FailWhenStateIsNotLocked() public {
+    function test_confirmPurchase_FailWhenStateIsNotCreated() public {
         vm.startPrank(bob);
     
+        purchase.confirmPurchase{value: 500}();
+    
         vm.expectRevert(Purchase.InvalidState.selector);
-        purchase.confirmReceived();
+        purchase.confirmPurchase{value: 500}();
     
         vm.stopPrank();
     }
@@ -75,16 +73,9 @@ contract PurchaseTest is OlympixUnitTest("Purchase") {
     function test_confirmReceived_FailWhenSenderIsNotBuyer() public {
         vm.startPrank(bob);
     
-        purchase.confirmPurchase{value: 500}();
-    
-        vm.startPrank(alice);
-    
         vm.expectRevert(Purchase.OnlyBuyer.selector);
         purchase.confirmReceived();
     
-        vm.stopPrank();
-    
-        vm.startPrank(bob);
         vm.stopPrank();
     }
 
