@@ -11,10 +11,12 @@ contract PurchaseTest is OlympixUnitTest("Purchase") {
     Purchase purchase;
 
     function setUp() public {
-        purchase = new Purchase{value: 500}();
-
         vm.deal(alice, 1000);
         vm.deal(bob, 1000);
+
+        vm.startPrank(alice);
+        purchase = new Purchase{value: 500}();
+        vm.stopPrank();
     }
 
     function test_abort_FailWhenStateIsNotCreated() public {
@@ -46,13 +48,13 @@ contract PurchaseTest is OlympixUnitTest("Purchase") {
         vm.stopPrank();
     }
 
-    function test_confirmPurchase_FailWhenStateIsNotCreated() public {
+    function test_confirmPurchase_SuccessfulConfirm() public {
         vm.startPrank(bob);
     
         purchase.confirmPurchase{value: 500}();
     
-        vm.expectRevert(Purchase.InvalidState.selector);
-        purchase.confirmPurchase{value: 500}();
+        assertEq(uint(purchase.state()), uint(Purchase.State.Locked));
+        assertEq(purchase.buyer(), bob);
     
         vm.stopPrank();
     }
@@ -67,16 +69,18 @@ contract PurchaseTest is OlympixUnitTest("Purchase") {
     }
 
     function test_confirmReceived_FailWhenSenderIsNotBuyer() public {
-        vm.startPrank(bob);
+        vm.startPrank(alice);
     
         purchase.confirmPurchase{value: 500}();
     
-        vm.startPrank(alice);
+        vm.startPrank(bob);
     
         vm.expectRevert(Purchase.OnlyBuyer.selector);
         purchase.confirmReceived();
     
         vm.stopPrank();
+    
+        vm.startPrank(alice);
     }
 
     function test_refundSeller_FailRefundWhenStateIsNotRelease() public {
