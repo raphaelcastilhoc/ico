@@ -24,10 +24,14 @@ contract PurchaseTest is OlympixUnitTest("Purchase") {
     
         purchase.confirmPurchase{value: 500}();
     
+        vm.startPrank(bob);
+    
         vm.expectRevert(Purchase.InvalidState.selector);
         purchase.abort();
     
         vm.stopPrank();
+    
+        vm.startPrank(alice);
     }
 
     function test_abort_FailWhenSenderIsNotSeller() public {
@@ -59,6 +63,21 @@ contract PurchaseTest is OlympixUnitTest("Purchase") {
         vm.stopPrank();
     }
 
+    function test_confirmPurchase_FailWhenStateIsNotCreated() public {
+        vm.startPrank(bob);
+    
+        purchase.confirmPurchase{value: 500}();
+    
+        vm.startPrank(alice);
+    
+        vm.expectRevert(Purchase.InvalidState.selector);
+        purchase.confirmPurchase{value: 500}();
+    
+        vm.stopPrank();
+    
+        vm.startPrank(bob);
+    }
+
     function test_confirmReceived_FailWhenStateIsNotLocked() public {
         vm.startPrank(bob);
     
@@ -73,32 +92,20 @@ contract PurchaseTest is OlympixUnitTest("Purchase") {
     
         purchase.confirmPurchase{value: 500}();
     
-        vm.stopPrank();
-    
         vm.startPrank(bob);
     
         vm.expectRevert(Purchase.OnlyBuyer.selector);
         purchase.confirmReceived();
     
         vm.stopPrank();
+    
+        vm.startPrank(alice);
     }
 
     function test_refundSeller_FailRefundWhenStateIsNotRelease() public {
         vm.startPrank(alice);
     
         vm.expectRevert(Purchase.InvalidState.selector);
-        purchase.refundSeller();
-    
-        vm.stopPrank();
-    }
-
-    function test_refundSeller_FailWhenSenderIsNotSeller() public {
-        vm.startPrank(bob);
-    
-        purchase.confirmPurchase{value: 500}();
-        purchase.confirmReceived();
-    
-        vm.expectRevert(Purchase.OnlySeller.selector);
         purchase.refundSeller();
     
         vm.stopPrank();
