@@ -110,4 +110,13 @@ contract PurchaseTest is OlympixUnitTest("Purchase") {
     
         vm.stopPrank();
     }
+
+    function test_refundSeller_FailWhenSenderIsNotSeller() public {
+        vm.startPrank(bob);
+    
+        vm.expectRevert(Purchase.OnlySeller.selector);
+        purchase.refundSeller();
+    
+        vm.stopPrank();
+    }
 }
