@@ -74,4 +74,26 @@ contract PurchaseTest is OlympixUnitTest("Purchase") {
     
         vm.stopPrank();
     }
+
+    function test_abort_FailWhenStateIsNotCreated() public {
+        vm.startPrank(alice);
+    
+        purchase.confirmPurchase{value: 500}();
+    
+        vm.expectRevert(Purchase.InvalidState.selector);
+        purchase.abort();
+    
+        vm.stopPrank();
+    }
+
+    function test_confirmPurchase_FailWhenStateIsNotCreated() public {
+        vm.startPrank(bob);
+    
+        purchase.confirmPurchase{value: 500}();
+    
+        vm.expectRevert(Purchase.InvalidState.selector);
+        purchase.confirmPurchase();
+    
+        vm.stopPrank();
+    }
 }
