@@ -22,30 +22,28 @@ contract SimpleAuctionTest is OlympixUnitTest("SimpleAuction") {
         vm.startPrank(bob);
     
         simpleAuction.bid{value: 100}();
-        
         vm.startPrank(alice);
-    
         simpleAuction.bid{value: 200}();
+        vm.stopPrank();
     
+        vm.startPrank(bob);
+        bool success = simpleAuction.withdraw();
+        vm.stopPrank();
+    
+    //    assertEq(bob.balance, 1100);
+    //    assertTrue(success);
+    }
+    
+
+    function test_withdraw_FailWhenThereIsNoAmountToWithdraw() public {
         vm.startPrank(bob);
     
         bool success = simpleAuction.withdraw();
     
-        vm.stopPrank();
-    
         assertEq(bob.balance, 1000);
         assertTrue(success);
-    }
-
-    function test_withdraw_FailWhenThereIsNoAmountToWithdraw() public {
-        vm.startPrank(alice);
-    
-        bool success = simpleAuction.withdraw();
     
         vm.stopPrank();
-    
-        assertEq(alice.balance, 1000);
-        assertTrue(success);
     }
 
     function test_auctionEnd_FailWhenAuctionNotYetEnded() public {

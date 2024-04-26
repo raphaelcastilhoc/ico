@@ -21,26 +21,14 @@ contract BankAccountTest is OlympixUnitTest("BankAccount") {
     }
 
     function test_withdraw_SuccessfulWithdraw() public {
-        vm.startPrank(alice);
+        vm.startPrank(bob);
     
-        bankAccount.deposit{value: 10 ether}();
-        bankAccount.withdraw(1 ether);
+        bankAccount.deposit{value: 100 ether}();
+        bankAccount.withdraw(70 ether);
     
-        vm.stopPrank();
-    
-    //    assertEq(bankAccount.getBalance(), 9 ether);
-    //    assertEq(alice.balance, 991 ether);
-    }
-    
-
-    function test_getBalance_SuccessfulGetBalance() public {
-        vm.startPrank(alice);
-    
-        bankAccount.deposit{value: 10 ether}();
-        uint256 aliceBalance = bankAccount.getBalance();
+        assertEq(bankAccount.getBalance(), 30 ether);
+        assertEq(bob.balance, 970 ether);
     
         vm.stopPrank();
-    
-        assertEq(aliceBalance, 10 ether);
     }
 }
