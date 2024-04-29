@@ -31,6 +31,18 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
         vm.stopPrank();
     }
 
+    function test_transfer_SuccessfulTransfer() public {
+        vm.startPrank(coinCreator);
+    
+        coin.transfer(alice, 70);
+    
+        assertEq(coin.balanceOf(coinCreator), 149930);
+        assertEq(coin.balanceOf(alice), 68);
+        assertEq(coin.balanceOf(treasury), 350002);
+    
+        vm.stopPrank();
+    }
+
     function test_transfer_FailWhenRecipientIsInvalid() public {
         vm.startPrank(alice);
     
@@ -40,30 +52,18 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
         vm.stopPrank();
     }
 
-    function test_transfer_SuccessfulTransfer() public {
-        vm.startPrank(coinCreator);
-    
-        coin.transfer(alice, 70);
-    
-        vm.stopPrank();
-    
+    function test_transfer_SuccessfulTransferWhenTaxIsDisabled() public {
         vm.startPrank(coinCreator);
     
         coin.toggleTax();
+        coin.transfer(alice, 70);
     
-        vm.stopPrank();
-    
-        vm.startPrank(alice);
-    
-        coin.transfer(bob, 1);
-    
-    //    assertEq(coin.balanceOf(alice), 69);
-    //    assertEq(coin.balanceOf(bob), 1);
-    //    assertEq(coin.balanceOf(treasury), 350);
+        assertEq(coin.balanceOf(coinCreator), 149930);
+        assertEq(coin.balanceOf(alice), 70);
+        assertEq(coin.balanceOf(treasury), 350000);
     
         vm.stopPrank();
     }
-    
 
     function test_transfer_FailWhenAmountIsTooHigh() public {
         vm.startPrank(coinCreator);
@@ -86,7 +86,7 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
     function test_anotherTransfer_SuccessfulTransfer() public {
         vm.startPrank(coinCreator);
     
-        coin.transfer(alice, 70);
+        coin.transfer(alice, 100);
     
         vm.stopPrank();
     
@@ -94,14 +94,14 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
     
         coin.anotherTransfer(bob, 1);
     
-    //    assertEq(coin.balanceOf(alice), 68);
-    //    assertEq(coin.balanceOf(bob), 2);
+    //    assertEq(coin.balanceOf(alice), 998);
+    //    assertEq(coin.balanceOf(bob), 1002);
     
         vm.stopPrank();
     }
     
 
-    function test_anotherTransfer_FailWhenRecipientIsInvalid() public {
+    function test_anotherTransfer_FailTransferWhenRecipientIsInvalid() public {
         vm.startPrank(alice);
     
         vm.expectRevert("Recipient must be a valid address");
