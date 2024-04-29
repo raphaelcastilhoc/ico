@@ -37,13 +37,13 @@ contract PurchaseTest is OlympixUnitTest("Purchase") {
         vm.stopPrank();
     }
 
-    function test_confirmPurchase_SuccessfulPurchaseConfirmation() public {
+    function test_confirmPurchase_SuccessfulPurchase() public {
         vm.startPrank(bob);
     
         purchase.confirmPurchase{value: 500}();
     
-        assertEq(purchase.buyer(), bob);
         assertEq(uint(purchase.state()), uint(Purchase.State.Locked));
+        assertEq(purchase.buyer(), bob);
     
         vm.stopPrank();
     }
