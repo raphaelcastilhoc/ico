@@ -22,7 +22,7 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
         vm.stopPrank();
     }
 
-    function test_transfer_FailTransferWhenAmountIsInvalid() public {
+    function test_transfer_FailWhenAmountIsInvalid() public {
         vm.startPrank(alice);
     
         vm.expectRevert("Amount must be greater than 0");
@@ -31,7 +31,7 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
         vm.stopPrank();
     }
 
-    function test_transfer_FailTransferWhenRecipientIsInvalid() public {
+    function test_transfer_FailWhenRecipientIsInvalid() public {
         vm.startPrank(alice);
     
         vm.expectRevert("Recipient must be a valid address");
@@ -40,10 +40,10 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
         vm.stopPrank();
     }
 
-    function test_transfer_SuccessfulTransferWhenTaxIsDisabled() public {
+    function test_transfer_SuccessfulTransfer() public {
         vm.startPrank(coinCreator);
     
-        coin.transfer(alice, 100);
+        coin.transfer(alice, 70);
     
         vm.stopPrank();
     
@@ -57,57 +57,24 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
     
         coin.transfer(bob, 1);
     
-    //    assertEq(coin.balanceOf(alice), 98);
-    //    assertEq(coin.balanceOf(bob), 2);
-    //    assertEq(coin.balanceOf(treasury), 350000);
+    //    assertEq(coin.balanceOf(alice), 69);
+    //    assertEq(coin.balanceOf(bob), 1);
+    //    assertEq(coin.balanceOf(treasury), 350);
     
         vm.stopPrank();
     }
     
 
-    function test_transfer_FailTransferWhenAmountIsTooHigh() public {
+    function test_transfer_FailWhenAmountIsTooHigh() public {
         vm.startPrank(coinCreator);
     
-        coin.transfer(alice, 100);
-    
-        vm.stopPrank();
-    
-        vm.startPrank(alice);
-    
         vm.expectRevert("Amount is too high");
-        coin.transfer(bob, 101);
+        coin.transfer(alice, 101);
     
         vm.stopPrank();
     }
 
     function test_anotherTransfer_FailTransferWhenValueIsInvalid() public {
-        vm.startPrank(alice);
-    
-        vm.expectRevert("Amount must be less than 0");
-        coin.anotherTransfer(bob, 100);
-    
-        vm.stopPrank();
-    }
-
-    function test_anotherTransfer_SuccessfulTransfer() public {
-        vm.startPrank(coinCreator);
-    
-        coin.transfer(alice, 100);
-    
-        vm.stopPrank();
-    
-        vm.startPrank(alice);
-    
-        coin.anotherTransfer(bob, 1);
-    
-    //    assertEq(coin.balanceOf(alice), 98);
-    //    assertEq(coin.balanceOf(bob), 1001);
-    
-        vm.stopPrank();
-    }
-    
-
-    function test_anotherTransfer_FailTransferWhenAmountIsInvalid() public {
         vm.startPrank(alice);
     
         vm.expectRevert("Amount must be greater than 0");
@@ -116,11 +83,38 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
         vm.stopPrank();
     }
 
-    function test_anotherTransfer_FailTransferWhenRecipientIsInvalid() public {
+    function test_anotherTransfer_SuccessfulTransfer() public {
+        vm.startPrank(coinCreator);
+    
+        coin.transfer(alice, 70);
+    
+        vm.stopPrank();
+    
+        vm.startPrank(alice);
+    
+        coin.anotherTransfer(bob, 1);
+    
+    //    assertEq(coin.balanceOf(alice), 68);
+    //    assertEq(coin.balanceOf(bob), 2);
+    
+        vm.stopPrank();
+    }
+    
+
+    function test_anotherTransfer_FailWhenRecipientIsInvalid() public {
         vm.startPrank(alice);
     
         vm.expectRevert("Recipient must be a valid address");
         coin.anotherTransfer(coinCreator, 1);
+    
+        vm.stopPrank();
+    }
+
+    function test_anotherTransfer_FailTransferWhenValueIsTooHigh() public {
+        vm.startPrank(alice);
+    
+        vm.expectRevert("Amount must be less than 0");
+        coin.anotherTransfer(bob, 100);
     
         vm.stopPrank();
     }
@@ -134,7 +128,7 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
         vm.stopPrank();
     }
 
-    function test_toggleTax_SuccessfulToggleWhenSenderIsOwner() public {
+    function test_toggleTax_SuccessfulToggle() public {
         vm.startPrank(coinCreator);
     
         coin.toggleTax();
