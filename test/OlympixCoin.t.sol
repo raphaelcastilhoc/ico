@@ -1,8 +1,8 @@
 //SPDX-License-Identifier: Unlicense
-pragma solidity 0.8.19;
+pragma solidity ^0.8.19;
 
 import "forge-std/Test.sol";
-import "contracts/OlympixCoin.sol";
+import "src/OlympixCoin.sol";
 import "./OlympixUnitTest.sol";
 
 contract OlympixCoinTest is OlympixUnitTest("OlympixCoin") {
