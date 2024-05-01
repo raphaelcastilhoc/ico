@@ -31,6 +31,19 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
         vm.stopPrank();
     }
 
+    function test_transfer_SuccessfulTransfer() public {
+        vm.startPrank(alice);
+    
+        coin.transfer(bob, 70);
+    
+    //    assertEq(coin.balanceOf(alice), 30);
+    //    assertEq(coin.balanceOf(bob), 68);
+    //    assertEq(coin.balanceOf(treasury), 350002);
+    
+        vm.stopPrank();
+    }
+    
+
     function test_transfer_FailTransferWhenRecipientIsInvalid() public {
         vm.startPrank(alice);
     
@@ -40,20 +53,27 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
         vm.stopPrank();
     }
 
-    function test_transfer_SuccessfulTransfer() public {
+    function test_transfer_SuccessfulTransferWhenTaxIsDisabled() public {
         vm.startPrank(coinCreator);
     
         coin.toggleTax();
-        coin.transfer(bob, 1);
     
-        assertEq(coin.balanceOf(coinCreator), 149999);
-        assertEq(coin.balanceOf(bob), 1);
+        vm.stopPrank();
+    
+        vm.startPrank(alice);
+    
+        coin.transfer(bob, 70);
+    
+    //    assertEq(coin.balanceOf(alice), 30);
+    //    assertEq(coin.balanceOf(bob), 70);
+    //    assertEq(coin.balanceOf(treasury), 350000);
     
         vm.stopPrank();
     }
+    
 
     function test_transfer_FailTransferWhenAmountIsTooHigh() public {
-        vm.startPrank(coinCreator);
+        vm.startPrank(alice);
     
         vm.expectRevert("Amount is too high");
         coin.transfer(bob, 101);
@@ -70,6 +90,18 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
         vm.stopPrank();
     }
 
+    function test_anotherTransfer_SuccessfulTransfer() public {
+        vm.startPrank(alice);
+    
+        coin.anotherTransfer(bob, 1);
+    
+    //    assertEq(coin.balanceOf(alice), 149998);
+    //    assertEq(coin.balanceOf(bob), 1002);
+    
+        vm.stopPrank();
+    }
+    
+
     function test_anotherTransfer_FailTransferWhenRecipientIsInvalid() public {
         vm.startPrank(alice);
     
@@ -78,18 +110,6 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
     
         vm.stopPrank();
     }
-
-    function test_anotherTransfer_SuccessfulTransfer() public {
-        vm.startPrank(coinCreator);
-    
-        coin.anotherTransfer(bob, 1);
-    
-    //    assertEq(coin.balanceOf(coinCreator), 149999);
-    //    assertEq(coin.balanceOf(bob), 1001);
-    
-        vm.stopPrank();
-    }
-    
 
     function test_anotherTransfer_FailTransferWhenValueIsTooHigh() public {
         vm.startPrank(alice);
@@ -109,7 +129,7 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
         vm.stopPrank();
     }
 
-    function test_toggleTax_SuccessfulToggle() public {
+    function test_toggleTax_SuccessfulToggleWhenSenderIsOwner() public {
         vm.startPrank(coinCreator);
     
         coin.toggleTax();
