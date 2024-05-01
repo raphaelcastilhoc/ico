@@ -20,6 +20,9 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
         vm.startPrank(coinCreator);
         coin = new SpaceCoin(treasury, coinCreator);
         vm.stopPrank();
+
+        deal(address(coin), alice, 1000);
+        deal(address(coin), bob, 1000);
     }
 
     function test_transfer_FailTransferWhenAmountIsInvalid() public {
@@ -36,8 +39,8 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
     
         coin.transfer(bob, 70);
     
-    //    assertEq(coin.balanceOf(alice), 30);
-    //    assertEq(coin.balanceOf(bob), 68);
+    //    assertEq(coin.balanceOf(alice), 928);
+    //    assertEq(coin.balanceOf(bob), 1070);
     //    assertEq(coin.balanceOf(treasury), 350002);
     
         vm.stopPrank();
@@ -64,13 +67,12 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
     
         coin.transfer(bob, 70);
     
-    //    assertEq(coin.balanceOf(alice), 30);
-    //    assertEq(coin.balanceOf(bob), 70);
-    //    assertEq(coin.balanceOf(treasury), 350000);
+        assertEq(coin.balanceOf(alice), 930);
+        assertEq(coin.balanceOf(bob), 1070);
+        assertEq(coin.balanceOf(treasury), 350000);
     
         vm.stopPrank();
     }
-    
 
     function test_transfer_FailTransferWhenAmountIsTooHigh() public {
         vm.startPrank(alice);
@@ -95,12 +97,11 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
     
         coin.anotherTransfer(bob, 1);
     
-    //    assertEq(coin.balanceOf(alice), 149998);
-    //    assertEq(coin.balanceOf(bob), 1002);
+        assertEq(coin.balanceOf(alice), 998);
+        assertEq(coin.balanceOf(bob), 1002);
     
         vm.stopPrank();
     }
-    
 
     function test_anotherTransfer_FailTransferWhenRecipientIsInvalid() public {
         vm.startPrank(alice);
