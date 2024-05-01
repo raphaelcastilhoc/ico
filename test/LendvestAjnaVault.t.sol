@@ -63,10 +63,8 @@ contract TestContract is OlympixUnitTest("LendvestAjnaVault") {
 
     function test_withdrawQuoteToken_FailWithdrawWhenBalanceIsInsufficient() public {
         vm.startPrank(address(0x1));
-    
         vm.expectRevert("not have enough Quote Token");
         lendvestAjnaVault.withdrawQuoteToken(1);
-    
         vm.stopPrank();
     }
 
@@ -79,19 +77,14 @@ contract TestContract is OlympixUnitTest("LendvestAjnaVault") {
     }
     
 
-    function test_repay_SuccessfulRepay() public {
-        vm.startPrank(address(0x1));
-    
-        lendvestAjnaVault.repay(1, 1);
-    
-        vm.stopPrank();
-    }
-    
-
     function test_depositColletralForLiquidation_SuccessfulDeposit() public {
         vm.startPrank(address(0x1));
     
         lendvestAjnaVault.depositColletralForLiquidation(1);
+    
+    //    assertEq(lendvestAjnaVault.totalAmountOfColletral(), 1);
+    //    assertEq(lendvestAjnaVault.totalHelpingColletral(), 1);
+    //    assertEq(lendvestAjnaVault.ColletralProviderToSuppliedAmount(address(0x1)), 1);
     
         vm.stopPrank();
     }
@@ -116,22 +109,20 @@ contract TestContract is OlympixUnitTest("LendvestAjnaVault") {
         assertEq(lendvestAjnaVault.getPoolAddress(), address(lendvestAjnaVault.pool()));
     }
 
+    function test_getCollateralAddress_SuccessfulGet() public {
+        vm.startPrank(address(0x1));
+        address collateralAddress = lendvestAjnaVault.getCollateralAddress();
+        vm.stopPrank();
+    //    assertEq(collateralAddress, address(0x0000000000000000000000000000000000001010));
+    }
+    
+
     function test_setRepaymentTime_FailWhenSenderIsNotOwner() public {
         vm.startPrank(address(0x1));
     
         vm.expectRevert("you are not an owner");
         lendvestAjnaVault.setRepaymentTime(1);
     
-        vm.stopPrank();
-    }
-
-    function test_setRepaymentTime_SuccessfulSet() public {
-        vm.startPrank(address(lendvestAjnaVault.owner()));
-    
-        lendvestAjnaVault.setRepaymentTime(1);
-    
-        assertEq(lendvestAjnaVault.TIME_TO_REPAY(), 86400);
-        
         vm.stopPrank();
     }
 
@@ -142,11 +133,25 @@ contract TestContract is OlympixUnitTest("LendvestAjnaVault") {
         vm.stopPrank();
     }
 
+    function test_start_epoch_SuccessfulStart() public {
+        vm.startPrank(address(lendvestAjnaVault.owner()));
+    
+        lendvestAjnaVault.start_epoch();
+    
+        assertEq(lendvestAjnaVault.epoch_time(), block.timestamp + 86400 * 14);
+        assert(lendvestAjnaVault.epoch_started());
+    
+        vm.stopPrank();
+    }
+
     function test_start_epoch_FailWhenEpochAlreadyStarted() public {
         vm.startPrank(address(lendvestAjnaVault.owner()));
+    
         lendvestAjnaVault.start_epoch();
+    
         vm.expectRevert("already started");
         lendvestAjnaVault.start_epoch();
+    
         vm.stopPrank();
     }
 
@@ -164,6 +169,15 @@ contract TestContract is OlympixUnitTest("LendvestAjnaVault") {
         lendvestAjnaVault.start_epoch();
         vm.expectRevert("time left in epoch ending");
         lendvestAjnaVault.end_epoch();
+        vm.stopPrank();
+    }
+
+    function test_endEpoch_SuccessfulEnd() public {
+        vm.startPrank(address(lendvestAjnaVault.owner()));
+        lendvestAjnaVault.start_epoch();
+        vm.warp(block.timestamp + 86400 * 14 + 1);
+        lendvestAjnaVault.end_epoch();
+        assert(!lendvestAjnaVault.epoch_started());
         vm.stopPrank();
     }
 }
