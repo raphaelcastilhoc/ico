@@ -22,13 +22,13 @@ contract BlindAuctionTest is OlympixUnitTest("BlindAuction") {
         vm.startPrank(alice);
     
         vm.warp(block.timestamp + 7 days);
-        vm.expectRevert(abi.encodeWithSelector(BlindAuction.TooLate.selector, block.timestamp));
-        blindAuction.bid(keccak256(abi.encodePacked(uint256(100), false, "")));
+        vm.expectRevert(abi.encodeWithSelector(BlindAuction.TooLate.selector, blindAuction.biddingEnd()));
+        blindAuction.bid(keccak256(abi.encodePacked(uint(100), false, keccak256("secret"))));
     
         vm.stopPrank();
     }
 
-    function test_reveal_FailWhenItIsTooEarlyToReveal() public {
+    function test_reveal_FailWhenItIsTooEarly() public {
         vm.startPrank(alice);
     
         vm.expectRevert(abi.encodeWithSelector(BlindAuction.TooEarly.selector, blindAuction.biddingEnd()));
@@ -43,6 +43,61 @@ contract BlindAuctionTest is OlympixUnitTest("BlindAuction") {
         vm.warp(block.timestamp + 7 days + 1 days);
         vm.expectRevert(abi.encodeWithSelector(BlindAuction.TooLate.selector, blindAuction.revealEnd()));
         blindAuction.reveal(new uint256[](0), new bool[](0), new bytes32[](0));
+    
+        vm.stopPrank();
+    }
+
+    function test_reveal_FailWhenValuesLengthIsDifferentFromBidsLength() public {
+        vm.startPrank(alice);
+    
+        blindAuction.bid{value: 100}(keccak256(abi.encodePacked(uint(100), false, keccak256("secret"))));
+    
+        vm.warp(block.timestamp + 7 days + 1);
+    
+        vm.expectRevert();
+        blindAuction.reveal(new uint256[](0), new bool[](0), new bytes32[](0));
+    
+        vm.stopPrank();
+    }
+
+    function test_reveal_SuccessfulReveal() public {
+        vm.startPrank(alice);
+    
+        blindAuction.bid{value: 100}(keccak256(abi.encodePacked(uint(100), false, keccak256("secret"))));
+    
+        vm.warp(block.timestamp + 7 days + 1);
+    
+        blindAuction.reveal(new uint256[](1), new bool[](1), new bytes32[](1));
+    
+        assertEq(alice.balance, 900);
+        assertEq(blindAuction.highestBidder(), address(0));
+        assertEq(blindAuction.highestBid(), 0);
+    
+        vm.stopPrank();
+    }
+
+    function test_reveal_FailWhenFakesLengthIsDifferentFromBidsLength() public {
+        vm.startPrank(alice);
+    
+        blindAuction.bid{value: 100}(keccak256(abi.encodePacked(uint(100), false, keccak256("secret"))));
+    
+        vm.warp(block.timestamp + 7 days + 1);
+    
+        vm.expectRevert();
+        blindAuction.reveal(new uint256[](1), new bool[](0), new bytes32[](1));
+    
+        vm.stopPrank();
+    }
+
+    function test_reveal_FailWhenSecretsLengthIsDifferentFromBidsLength() public {
+        vm.startPrank(alice);
+    
+        blindAuction.bid{value: 100}(keccak256(abi.encodePacked(uint(100), false, keccak256("secret"))));
+    
+        vm.warp(block.timestamp + 7 days + 1);
+    
+        vm.expectRevert();
+        blindAuction.reveal(new uint256[](1), new bool[](1), new bytes32[](0));
     
         vm.stopPrank();
     }
@@ -64,13 +119,17 @@ contract BlindAuctionTest is OlympixUnitTest("BlindAuction") {
         vm.stopPrank();
     }
 
-    function test_auctionEnd_SuccessfulAuctionEnd() public {
-        vm.startPrank(bob);
+    function test_auctionEnd_SuccessfulEnd() public {
+        vm.startPrank(alice);
     
-        vm.warp(block.timestamp + 8 days + 1);
+        vm.warp(block.timestamp + 1 weeks + 1 days + 1);
         blindAuction.auctionEnd();
     
     //    assertEq(beneficiary.balance, 1000);
+    //    assertEq(alice.balance, 1000);
+    //    assertEq(bob.balance, 1000);
+    //    assertEq(blindAuction.highestBidder(), address(0));
+    //    assertEq(blindAuction.highestBid(), 0);
     //    assertEq(blindAuction.ended(), true);
     
         vm.stopPrank();
@@ -78,9 +137,9 @@ contract BlindAuctionTest is OlympixUnitTest("BlindAuction") {
     
 
     function test_auctionEnd_FailWhenAuctionEndIsAlreadyCalled() public {
-        vm.startPrank(bob);
+        vm.startPrank(alice);
     
-        vm.warp(block.timestamp + 8 days + 1);
+        vm.warp(block.timestamp + 1 weeks + 1 days + 1);
         blindAuction.auctionEnd();
     
         vm.expectRevert(BlindAuction.AuctionEndAlreadyCalled.selector);

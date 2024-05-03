@@ -22,12 +22,15 @@ contract SimpleAuctionTest is OlympixUnitTest("SimpleAuction") {
         vm.startPrank(bob);
     
         simpleAuction.bid{value: 100}();
+    
         vm.startPrank(alice);
+    
         simpleAuction.bid{value: 200}();
-        vm.stopPrank();
     
         vm.startPrank(bob);
+    
         bool success = simpleAuction.withdraw();
+    
         vm.stopPrank();
     
     //    assertEq(bob.balance, 1100);
@@ -50,6 +53,21 @@ contract SimpleAuctionTest is OlympixUnitTest("SimpleAuction") {
         vm.startPrank(alice);
     
         vm.expectRevert(SimpleAuction.AuctionNotYetEnded.selector);
+        simpleAuction.auctionEnd();
+    
+        vm.stopPrank();
+    }
+
+    function test_auctionEnd_FailWhenAuctionEndAlreadyCalled() public {
+        vm.startPrank(bob);
+    
+        simpleAuction.bid{value: 100}();
+    
+        vm.warp(7 days + 1);
+    
+        simpleAuction.auctionEnd();
+    
+        vm.expectRevert(SimpleAuction.AuctionEndAlreadyCalled.selector);
         simpleAuction.auctionEnd();
     
         vm.stopPrank();
