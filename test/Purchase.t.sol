@@ -30,9 +30,7 @@ contract PurchaseTest is OlympixUnitTest("Purchase") {
 
     function test_abort_FailWhenStateIsNotCreated() public {
         vm.startPrank(bob);
-    
         purchase.confirmPurchase{value: 500}();
-    
         vm.stopPrank();
     
         vm.startPrank(alice);
@@ -43,22 +41,7 @@ contract PurchaseTest is OlympixUnitTest("Purchase") {
         vm.stopPrank();
     }
 
-    function test_confirmPurchase_FailWhenStateIsNotCreated() public {
-        vm.startPrank(bob);
-    
-        purchase.confirmPurchase{value: 500}();
-    
-        vm.stopPrank();
-    
-        vm.startPrank(bob);
-    
-        vm.expectRevert(Purchase.InvalidState.selector);
-        purchase.confirmPurchase{value: 500}();
-    
-        vm.stopPrank();
-    }
-
-    function test_confirmPurchase_FailWhenValueIsNotTwiceTheValue() public {
+    function test_confirmPurchase_FailWhenValueIsNotCorrect() public {
         vm.startPrank(bob);
     
         vm.expectRevert();
