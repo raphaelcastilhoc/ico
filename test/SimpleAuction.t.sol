@@ -18,39 +18,68 @@ contract SimpleAuctionTest is OlympixUnitTest("SimpleAuction") {
         vm.deal(bob, 1000);
     }
 
-    function test_withdraw_SuccessfulWithdraw() public {
-        vm.startPrank(bob);
+    function test_bid_FailWhenAuctionIsEnded() public {
+        vm.startPrank(alice);
+    
+        uint256 futureTimestamp = uint48(block.timestamp) + 8 days;
+        vm.warp(futureTimestamp);
+    
+        vm.expectRevert(SimpleAuction.AuctionAlreadyEnded.selector);
+        simpleAuction.bid{value: 100}();
+    
+        vm.stopPrank();
+    }
+
+    function test_bid_FailWhenBidIsNotHighEnough() public {
+        vm.startPrank(alice);
     
         simpleAuction.bid{value: 100}();
     
-        vm.startPrank(alice);
+        vm.startPrank(bob);
+    
+        vm.expectRevert(abi.encodeWithSelector(SimpleAuction.BidNotHighEnough.selector, 100));
+        simpleAuction.bid{value: 100}();
+    
+        vm.stopPrank();
+    
+        vm.stopPrank();
+    }
+
+    function test_withdraw_SuccessfulWithdraw() public {
+        vm.startPrank(bob);
     
         simpleAuction.bid{value: 200}();
     
+        vm.stopPrank();
+    
+        vm.startPrank(alice);
+    
+        simpleAuction.bid{value: 300}();
+    
+        vm.stopPrank();
+    
         vm.startPrank(bob);
     
-        bool success = simpleAuction.withdraw();
+        bool result = simpleAuction.withdraw();
     
         vm.stopPrank();
     
-    //    assertEq(bob.balance, 1100);
-    //    assertTrue(success);
+        assertEq(bob.balance, 1000);
+        assert(result);
     }
-    
 
-    function test_withdraw_FailWhenThereIsNoAmountToWithdraw() public {
+    function test_withdraw_SuccessfulWhenThereIsNothingToWithdraw() public {
         vm.startPrank(alice);
     
-        bool success = simpleAuction.withdraw();
-    
-        assertEq(alice.balance, 1000);
-        assertTrue(success);
+        bool result = simpleAuction.withdraw();
     
         vm.stopPrank();
+    
+        assert(result);
     }
 
-    function test_auctionEnd_FailWhenAuctionNotYetEnded() public {
-        vm.startPrank(alice);
+    function test_auctionEnd_FailWhenAuctionIsNotEnded() public {
+        vm.startPrank(beneficiary);
     
         vm.expectRevert(SimpleAuction.AuctionNotYetEnded.selector);
         simpleAuction.auctionEnd();
@@ -58,12 +87,11 @@ contract SimpleAuctionTest is OlympixUnitTest("SimpleAuction") {
         vm.stopPrank();
     }
 
-    function test_auctionEnd_FailWhenAuctionEndAlreadyCalled() public {
-        vm.startPrank(bob);
+    function test_auctionEnd_FailWhenAuctionIsAlreadyEnded() public {
+        vm.startPrank(beneficiary);
     
-        simpleAuction.bid{value: 100}();
-    
-        vm.warp(7 days + 1);
+        uint256 futureTimestamp = uint48(block.timestamp) + 8 days;
+        vm.warp(futureTimestamp);
     
         simpleAuction.auctionEnd();
     

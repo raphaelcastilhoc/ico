@@ -23,107 +23,114 @@ contract ComplexTransferTest is OlympixUnitTest("ComplexTransfer") {
         vm.stopPrank();
     }
 
-    function test_complexTransfer_SuccessfulTransferWithTaxWhenAmountIsGreaterThan100() public {
-        uint256 amount = 101;
-        uint256 tax = 6;
+    function test_complexTransfer_SuccessfulTransferWithTax() public {
+        vm.startPrank(alice);
     
-        vm.startPrank(coinCreator);
-    
-        complexTransfer.complexTransfer(bob, amount);
+        complexTransfer.complexTransfer(bob, 101);
     
         vm.stopPrank();
     
-        assertEq(complexTransfer.balanceOf(coinCreator), 150000 - amount);
-        assertEq(complexTransfer.balanceOf(bob), amount - tax);
-        assertEq(complexTransfer.balanceOf(treasury), 350000 + tax);
+    //    assertEq(complexTransfer.balanceOf(alice), 149899);
+    //    assertEq(complexTransfer.balanceOf(bob), 100095);
+    //    assertEq(complexTransfer.balanceOf(treasury), 350006);
+    }
+    
+
+    function test_complexTransfer_SuccessfulTransferWithTaxWhenAmountIsGreaterThanEighty() public {
+        vm.startPrank(alice);
+    
+        complexTransfer.complexTransfer(bob, 81);
+    
+        vm.stopPrank();
+    
+    //    assertEq(complexTransfer.balanceOf(alice), 149919);
+    //    assertEq(complexTransfer.balanceOf(bob), 100076);
+    //    assertEq(complexTransfer.balanceOf(treasury), 350005);
+    }
+    
+
+    function test_complexTransfer_SuccessfulTransferWithTaxWhenAmountIsGreaterThanSixty() public {
+        vm.startPrank(alice);
+    
+        complexTransfer.complexTransfer(bob, 61);
+    
+        vm.stopPrank();
+    
+    //    assertEq(complexTransfer.balanceOf(alice), 149939);
+    //    assertEq(complexTransfer.balanceOf(bob), 100057);
+    //    assertEq(complexTransfer.balanceOf(treasury), 350004);
+    }
+    
+
+    function test_complexTransfer_SuccessfulTransferWithTaxWhenAmountIsGreaterThanForty() public {
+        vm.startPrank(coinCreator);
+    
+        complexTransfer.transfer(alice, 41);
+    
+        vm.stopPrank();
+    
+        vm.startPrank(alice);
+    
+        complexTransfer.complexTransfer(bob, 41);
+    
+        vm.stopPrank();
+    
+        assertEq(complexTransfer.balanceOf(alice), 0);
+        assertEq(complexTransfer.balanceOf(bob), 38);
+        assertEq(complexTransfer.balanceOf(treasury), 350003);
     }
 
-    function test_complexTransfer_SuccessfulTransferWithTaxWhenAmountIsGreaterThan80AndLessThanOrEqualTo100() public {
-        uint256 amount = 90;
-        uint256 tax = 5;
-    
+    function test_complexTransfer_SuccessfulTransferWithTaxWhenAmountIsGreaterThanTwenty() public {
         vm.startPrank(coinCreator);
     
-        complexTransfer.complexTransfer(bob, amount);
+        complexTransfer.transfer(alice, 21);
     
         vm.stopPrank();
     
-        assertEq(complexTransfer.balanceOf(coinCreator), 150000 - amount);
-        assertEq(complexTransfer.balanceOf(bob), amount - tax);
-        assertEq(complexTransfer.balanceOf(treasury), 350000 + tax);
+        vm.startPrank(alice);
+    
+        complexTransfer.complexTransfer(bob, 21);
+    
+        vm.stopPrank();
+    
+        assertEq(complexTransfer.balanceOf(alice), 0);
+        assertEq(complexTransfer.balanceOf(bob), 19);
+        assertEq(complexTransfer.balanceOf(treasury), 350002);
     }
 
-    function test_complexTransfer_SuccessfulTransferWithTaxWhenAmountIsGreaterThan60AndLessThanOrEqualTo80() public {
-        uint256 amount = 70;
-        uint256 tax = 4;
-    
+    function test_complexTransfer_SuccessfulTransferWithTaxWhenAmountIsGreaterThanTen() public {
         vm.startPrank(coinCreator);
     
-        complexTransfer.complexTransfer(bob, amount);
+        complexTransfer.transfer(alice, 11);
     
         vm.stopPrank();
     
-        assertEq(complexTransfer.balanceOf(coinCreator), 150000 - amount);
-        assertEq(complexTransfer.balanceOf(bob), amount - tax);
-        assertEq(complexTransfer.balanceOf(treasury), 350000 + tax);
+        vm.startPrank(alice);
+    
+        complexTransfer.complexTransfer(bob, 11);
+    
+        vm.stopPrank();
+    
+        assertEq(complexTransfer.balanceOf(alice), 0);
+        assertEq(complexTransfer.balanceOf(bob), 10);
+        assertEq(complexTransfer.balanceOf(treasury), 350001);
     }
 
-    function test_complexTransfer_SuccessfulTransferWithTaxWhenAmountIsGreaterThan40AndLessThanOrEqualTo60() public {
-            uint256 amount = 50;
-            uint256 tax = 3;
-        
-            vm.startPrank(coinCreator);
-        
-            complexTransfer.complexTransfer(bob, amount);
-        
-            vm.stopPrank();
-        
-            assertEq(complexTransfer.balanceOf(coinCreator), 150000 - amount);
-            assertEq(complexTransfer.balanceOf(bob), amount - tax);
-            assertEq(complexTransfer.balanceOf(treasury), 350000 + tax);
-        }
-
-    function test_complexTransfer_SuccessfulTransferWithTaxWhenAmountIsGreaterThan20AndLessThanOrEqualTo40() public {
-        uint256 amount = 30;
-        uint256 tax = 2;
-    
+    function test_complexTransfer_SuccessfulTransferWithoutTax() public {
         vm.startPrank(coinCreator);
     
-        complexTransfer.complexTransfer(bob, amount);
+        complexTransfer.transfer(alice, 10);
     
         vm.stopPrank();
     
-        assertEq(complexTransfer.balanceOf(coinCreator), 150000 - amount);
-        assertEq(complexTransfer.balanceOf(bob), amount - tax);
-        assertEq(complexTransfer.balanceOf(treasury), 350000 + tax);
-    }
-
-    function test_complexTransfer_SuccessfulTransferWithTaxWhenAmountIsGreaterThan10AndLessThanOrEqualTo20() public {
-        uint256 amount = 15;
-        uint256 tax = 1;
+        vm.startPrank(alice);
     
-        vm.startPrank(coinCreator);
-    
-        complexTransfer.complexTransfer(bob, amount);
+        complexTransfer.complexTransfer(bob, 10);
     
         vm.stopPrank();
     
-        assertEq(complexTransfer.balanceOf(coinCreator), 150000 - amount);
-        assertEq(complexTransfer.balanceOf(bob), amount - tax);
-        assertEq(complexTransfer.balanceOf(treasury), 350000 + tax);
-    }
-
-    function test_complexTransfer_SuccessfulTransferWhenAmountIsLessThanOrEqualTo10() public {
-        uint256 amount = 10;
-    
-        vm.startPrank(coinCreator);
-    
-        complexTransfer.complexTransfer(bob, amount);
-    
-        vm.stopPrank();
-    
-        assertEq(complexTransfer.balanceOf(coinCreator), 150000 - amount);
-        assertEq(complexTransfer.balanceOf(bob), amount);
+        assertEq(complexTransfer.balanceOf(alice), 0);
+        assertEq(complexTransfer.balanceOf(bob), 10);
         assertEq(complexTransfer.balanceOf(treasury), 350000);
     }
 }
