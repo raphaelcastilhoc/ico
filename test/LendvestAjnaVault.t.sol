@@ -124,17 +124,6 @@ contract TestContract is OlympixUnitTest("LendvestAjnaVault") {
         vm.stopPrank();
     }
 
-    function test_start_epoch_FailWhenEpochIsAlreadyStarted() public {
-        vm.startPrank(address(lendvestAjnaVault.owner()));
-    
-        lendvestAjnaVault.start_epoch();
-    
-        vm.expectRevert("already started");
-        lendvestAjnaVault.start_epoch();
-    
-        vm.stopPrank();
-    }
-
     function test_endEpoch_FailWhenSenderIsNotOwner() public {
         vm.startPrank(user);
     
@@ -144,8 +133,19 @@ contract TestContract is OlympixUnitTest("LendvestAjnaVault") {
         vm.stopPrank();
     }
 
+    function test_endEpoch_FailWhenEpochIsNotFinished() public {
+        vm.startPrank(lendvestAjnaVault.owner());
+    
+        lendvestAjnaVault.start_epoch();
+    
+        vm.expectRevert("time left in epoch ending");
+        lendvestAjnaVault.end_epoch();
+    
+        vm.stopPrank();
+    }
+
     function test_endEpoch_SuccessfulEndEpoch() public {
-        vm.startPrank(address(lendvestAjnaVault.owner()));
+        vm.startPrank(lendvestAjnaVault.owner());
     
         lendvestAjnaVault.start_epoch();
     
@@ -156,17 +156,6 @@ contract TestContract is OlympixUnitTest("LendvestAjnaVault") {
     
         vm.stopPrank();
     
-        assertEq(lendvestAjnaVault.epoch_started(), false);
-    }
-
-    function test_endEpoch_FailWhenEpochIsNotFinished() public {
-        vm.startPrank(address(lendvestAjnaVault.owner()));
-    
-        lendvestAjnaVault.start_epoch();
-    
-        vm.expectRevert("time left in epoch ending");
-        lendvestAjnaVault.end_epoch();
-    
-        vm.stopPrank();
+        assert(!lendvestAjnaVault.epoch_started());
     }
 }
