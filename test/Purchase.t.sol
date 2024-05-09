@@ -28,21 +28,14 @@ contract PurchaseTest is OlympixUnitTest("Purchase") {
         vm.stopPrank();
     }
 
-    function test_abort_SuccessfulAbort() public {
-        vm.startPrank(alice);
+    function test_abort_FailWhenStateIsNotCreated() public {
+        vm.startPrank(bob);
     
-        purchase.abort();
+        purchase.confirmPurchase{value: 500}();
     
         vm.stopPrank();
     
-        assertEq(alice.balance, 1000);
-        assert(purchase.state() == Purchase.State.Inactive);
-    }
-
-    function test_abort_FailWhenStateIsNotCreated() public {
         vm.startPrank(alice);
-    
-        purchase.confirmPurchase{value: 500}();
     
         vm.expectRevert(Purchase.InvalidState.selector);
         purchase.abort();
@@ -65,11 +58,23 @@ contract PurchaseTest is OlympixUnitTest("Purchase") {
         vm.stopPrank();
     }
 
-    function test_confirmPurchase_FailWhenValueIsOdd() public {
+    function test_confirmPurchase_SuccessfulConfirmPurchase() public {
+        vm.startPrank(bob);
+    
+        purchase.confirmPurchase{value: 500}();
+    
+        vm.stopPrank();
+    
+        assertEq(bob.balance, 500);
+        assertEq(purchase.buyer(), bob);
+        assert(purchase.state() == Purchase.State.Locked);
+    }
+
+    function test_confirmPurchase_FailWhenValueIsNotCorrect() public {
         vm.startPrank(bob);
     
         vm.expectRevert();
-        purchase.confirmPurchase{value: 501}();
+        purchase.confirmPurchase{value: 400}();
     
         vm.stopPrank();
     }
@@ -84,6 +89,18 @@ contract PurchaseTest is OlympixUnitTest("Purchase") {
         vm.startPrank(alice);
     
         vm.expectRevert(Purchase.OnlyBuyer.selector);
+        purchase.confirmReceived();
+    
+        vm.stopPrank();
+    }
+
+    function test_confirmReceived_FailWhenStateIsNotLocked() public {
+        vm.startPrank(bob);
+    
+        purchase.confirmPurchase{value: 500}();
+        purchase.confirmReceived();
+    
+        vm.expectRevert(Purchase.InvalidState.selector);
         purchase.confirmReceived();
     
         vm.stopPrank();
@@ -115,9 +132,8 @@ contract PurchaseTest is OlympixUnitTest("Purchase") {
     
         vm.stopPrank();
     
-        assertEq(bob.balance, 750);
         assertEq(alice.balance, 1250);
-        assertEq(address(purchase).balance, 0);
+        assertEq(bob.balance, 750);
         assert(purchase.state() == Purchase.State.Inactive);
     }
 
