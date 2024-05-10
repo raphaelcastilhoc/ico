@@ -47,6 +47,49 @@ contract TestContract is OlympixUnitTest("LendvestAjnaVault") {
         deal(lendvestAjnaVault.weth(), user, 100 ether);
     }
 
+    function testDepositColletralForLiquidationSuccess() public {
+        //Start value?
+
+        //NEED TO MINT stakedETH or emulate wallet with tokens
+        //???
+
+        //User approves what token stakedETH?
+
+        deal(address(lendvestAjnaVault.getCollateralAddress()), msg.sender, 100 ether);
+        assertEq(ERC20(address(lendvestAjnaVault.getCollateralAddress())).balanceOf(msg.sender), 100 ether); // approving the Ajna pool to take the colletral token
+
+        deal(address(lendvestAjnaVault.getCollateralAddress()), address(this), 100 ether);
+        assertEq(ERC20(address(lendvestAjnaVault.getCollateralAddress())).balanceOf(address(this)), 100 ether); // approving the Ajna pool to take the colletral token
+        ERC20(lendvestAjnaVault.getCollateralAddress()).transfer(msg.sender, 10 ether); // approving the Ajna pool to take the quote (WETH) token
+
+        assertEq(ERC20(address(lendvestAjnaVault.getCollateralAddress())).balanceOf(address(this)), 90 ether); // approving the Ajna pool to take the colletral token
+        assertEq(ERC20(address(lendvestAjnaVault.getCollateralAddress())).balanceOf(msg.sender), 110 ether); // approving the Ajna pool to take the colletral token
+
+        ERC20(lendvestAjnaVault.getCollateralAddress()).approve(address(lendvestAjnaVault), 1); // approving the Ajna pool to take the colletral token
+       
+        assertEq(ERC20(lendvestAjnaVault.getCollateralAddress()).allowance(address(this),address(lendvestAjnaVault)) ,1);
+
+
+        lendvestAjnaVault.depositColletralForLiquidation(1);
+       
+        //End value?
+    }
+
+    function test_LendQuoteToken_SuccessfulLend() public {
+        vm.startPrank(user);
+    
+        deal(lendvestAjnaVault.weth(), user, 100 ether);
+    
+        ERC20(lendvestAjnaVault.weth()).approve(address(lendvestAjnaVault), 100 ether);
+    
+        lendvestAjnaVault.LendQuoteToken(1 ether);
+    
+        assertEq(lendvestAjnaVault.SupplierToAmount(user), 1 ether);
+        assertEq(lendvestAjnaVault.totalAmountOfQuoteToken(), 1 ether);
+    
+        vm.stopPrank();
+    }
+
     function test_withdrawQuoteToken_FailWithdrawWhenBalanceIsInsufficient() public {
         vm.startPrank(user);
     
@@ -56,7 +99,7 @@ contract TestContract is OlympixUnitTest("LendvestAjnaVault") {
         vm.stopPrank();
     }
 
-    function test_withdrawColletralofLiquidation_FailWithdrawWhenBalanceIsInsufficient() public {
+    function test_withdrawColletralofLiquidation_FailWhenBalanceIsInsufficient() public {
         vm.startPrank(user);
     
         vm.expectRevert("not have enough colletral");
@@ -67,19 +110,13 @@ contract TestContract is OlympixUnitTest("LendvestAjnaVault") {
 
     function test_quoteTokenAddress_SuccessfulGet() public {
         address quoteTokenAddress = lendvestAjnaVault.quoteTokenAddress();
-    //    assertEq(quoteTokenAddress, 0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619);
+    //    assertEq(quoteTokenAddress, address(0xEE516644509709A64906Bb1574930cdAE8659801));
     }
     
 
     function test_getPoolAddress_SuccessfulGet() public {
-        assertEq(lendvestAjnaVault.getPoolAddress(), address(0xEE516644509709A64906Bb1574930cdAE8659801));
+        assertEq(lendvestAjnaVault.getPoolAddress(), address(lendvestAjnaVault.pool()));
     }
-
-    function test_getCollateralAddress_SuccessfulGet() public {
-        address collateralAddress = lendvestAjnaVault.getCollateralAddress();
-    //    assertEq(collateralAddress, 0x4aA7660173EeD409996CB9DC9c1e7F1ea486cB2c);
-    }
-    
 
     function test_setRepaymentTime_FailWhenSenderIsNotOwner() public {
         vm.startPrank(user);
@@ -90,12 +127,16 @@ contract TestContract is OlympixUnitTest("LendvestAjnaVault") {
         vm.stopPrank();
     }
 
-    function test_balanceOfColletralNotUsed_SuccessfulGet() public {
+    function test_amountEarnedByLender_SuccessfulCalculation() public {
         vm.startPrank(user);
     
-        uint256 balance = lendvestAjnaVault.balanceOfColletralNotUsed(user);
+        deal(lendvestAjnaVault.weth(), user, 100 ether);
+        ERC20(lendvestAjnaVault.weth()).approve(address(lendvestAjnaVault), 100 ether);
+        lendvestAjnaVault.LendQuoteToken(1 ether);
     
-        assertEq(balance, 0);
+        uint256 amountEarned = lendvestAjnaVault.amountEarnedByLender(user);
+    
+        assertEq(amountEarned, 0);
     
         vm.stopPrank();
     }
