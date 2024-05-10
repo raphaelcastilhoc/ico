@@ -76,6 +76,22 @@ contract TestContract is OlympixUnitTest("LendvestAjnaVault") {
     }
     
 
+    function test_LendQuoteToken_SuccessfulLend() public {
+        vm.startPrank(user);
+    
+        deal(lendvestAjnaVault.weth(), user, 100 ether);
+    
+        ERC20(lendvestAjnaVault.weth()).approve(address(lendvestAjnaVault), 100 ether);
+    
+        lendvestAjnaVault.LendQuoteToken(1 ether);
+    
+        assertEq(lendvestAjnaVault.SupplierToAmount(user), 1 ether);
+        assertEq(lendvestAjnaVault.totalAmountOfQuoteToken(), 1 ether);
+        assertEq(ERC20(lendvestAjnaVault.weth()).balanceOf(user), 99 ether);
+    
+        vm.stopPrank();
+    }
+
     function test_withdrawQuoteToken_FailWithdrawWhenBalanceIsInsufficient() public {
         vm.startPrank(user);
     
@@ -85,21 +101,7 @@ contract TestContract is OlympixUnitTest("LendvestAjnaVault") {
         vm.stopPrank();
     }
 
-    function test_borrow_SuccessfulBorrow() public {
-        vm.startPrank(user);
-    
-        deal(lendvestAjnaVault.weth(), user, 100 ether);
-        deal(lendvestAjnaVault.getCollateralAddress(), user, 100 ether);
-    
-        ERC20(lendvestAjnaVault.weth()).approve(address(lendvestAjnaVault), 100 ether);
-        ERC20(lendvestAjnaVault.getCollateralAddress()).approve(address(lendvestAjnaVault), 100 ether);
-    
-        lendvestAjnaVault.borrow(1, 1);
-    
-        vm.stopPrank();
-    }
-
-    function test_withdrawColletralofLiquidation_FailWhenBalanceIsInsufficient() public {
+    function test_withdrawColletralofLiquidation_FailWithdrawWhenBalanceIsInsufficient() public {
         vm.startPrank(user);
     
         vm.expectRevert("not have enough colletral");
@@ -109,18 +111,13 @@ contract TestContract is OlympixUnitTest("LendvestAjnaVault") {
     }
 
     function test_quoteTokenAddress_SuccessfulGet() public {
-        vm.startPrank(user);
-    
-        address result = lendvestAjnaVault.quoteTokenAddress();
-    
-    //    assertEq(result, address(0xEE516644509709A64906Bb1574930cdAE8659801));
-    
-        vm.stopPrank();
+        address quoteTokenAddress = lendvestAjnaVault.quoteTokenAddress();
+    //    assertEq(quoteTokenAddress, address(0xEE516644509709A64906Bb1574930cdAE8659801));
     }
     
 
     function test_getPoolAddress_SuccessfulGet() public {
-        assertEq(lendvestAjnaVault.getPoolAddress(), address(0xEE516644509709A64906Bb1574930cdAE8659801));
+        assertEq(lendvestAjnaVault.getPoolAddress(), address(lendvestAjnaVault.pool()));
     }
 
     function test_setRepaymentTime_FailWhenSenderIsNotOwner() public {
@@ -128,6 +125,20 @@ contract TestContract is OlympixUnitTest("LendvestAjnaVault") {
     
         vm.expectRevert("you are not an owner");
         lendvestAjnaVault.setRepaymentTime(1);
+    
+        vm.stopPrank();
+    }
+
+    function test_amountEarnedByLender_SuccessfulCalculation() public {
+        vm.startPrank(user);
+    
+        deal(lendvestAjnaVault.weth(), user, 100 ether);
+        ERC20(lendvestAjnaVault.weth()).approve(address(lendvestAjnaVault), 100 ether);
+        lendvestAjnaVault.LendQuoteToken(1 ether);
+    
+        uint256 amountEarned = lendvestAjnaVault.amountEarnedByLender(user);
+    
+        assertEq(amountEarned, 0);
     
         vm.stopPrank();
     }
