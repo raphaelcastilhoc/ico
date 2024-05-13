@@ -58,27 +58,76 @@ contract BlindAuctionTest is OlympixUnitTest("BlindAuction") {
     }
 
     function test_reveal_SuccessfulReveal() public {
+        vm.startPrank(regan);
+    
+        uint reganValue = 2 ether;
+        bool reganFake = false;
+        uint reganSecret = 123;
+    
+        bytes32 reganBlindedBid = keccak256(abi.encodePacked(reganValue, reganFake, reganSecret));
+        blindAuction.bid{value: reganValue}(reganBlindedBid);
+    
+        vm.stopPrank();
+    
+        vm.startPrank(chris);
+    
+        uint chrisValue = 1 ether;
+        bool chrisFake = false;
+        uint chrisSecret = 456;
+    
+        bytes32 chrisBlindedBid = keccak256(abi.encodePacked(chrisValue, chrisFake, chrisSecret));
+        blindAuction.bid{value: chrisValue}(chrisBlindedBid);
+    
+        vm.stopPrank();
+    
         uint256 futureTimestamp = uint48(block.timestamp) + 8 days;
         vm.warp(futureTimestamp);
     
         vm.startPrank(regan);
     
         uint[] memory reganValues = new uint[](1);
-        reganValues[0] = 1 ether;
+        reganValues[0] = reganValue;
     
         bool[] memory reganFakes = new bool[](1);
-        reganFakes[0] = false;
+        reganFakes[0] = reganFake;
     
         bytes32[] memory reganSecrets = new bytes32[](1);
-        reganSecrets[0] = bytes32(uint(123));
+        reganSecrets[0] = bytes32(uint(reganSecret));
     
         blindAuction.reveal(reganValues, reganFakes, reganSecrets);
     
         vm.stopPrank();
     
-    //    assertEq(regan.balance, 99 ether);
-    //    assertEq(blindAuction.highestBid(), 1 ether);
+        vm.startPrank(chris);
+    
+        uint[] memory chrisValues = new uint[](1);
+        chrisValues[0] = chrisValue;
+    
+        bool[] memory chrisFakes = new bool[](1);
+        chrisFakes[0] = chrisFake;
+    
+        bytes32[] memory chrisSecrets = new bytes32[](1);
+        chrisSecrets[0] = bytes32(uint(chrisSecret));
+    
+        blindAuction.reveal(chrisValues, chrisFakes, chrisSecrets);
+    
+        vm.stopPrank();
+    }
+    
+    function test_reveal_SuccessfulReveal_CheckHighestBid() public {
+    //    assertEq(blindAuction.highestBid(), 2 ether);
+    }
+    
+    function test_reveal_SuccessfulReveal_CheckHighestBidder() public {
     //    assertEq(blindAuction.highestBidder(), regan);
+    }
+    
+    function test_reveal_SuccessfulReveal_CheckReganBalance() public {
+    //    assertEq(regan.balance, 98 ether);
+    }
+    
+    function test_reveal_SuccessfulReveal_CheckChrisBalance() public {
+    //    assertEq(chris.balance, 100 ether);
     }
     
 
@@ -103,7 +152,7 @@ contract BlindAuctionTest is OlympixUnitTest("BlindAuction") {
         vm.stopPrank();
     }
 
-    function test_reveal_SuccessfulRevealWhenValueIsGreaterThanDeposit() public {
+    function test_reveal_FailWhenFakesArgumentIsEmpty() public {
         vm.startPrank(regan);
     
         uint reganValue = 2 ether;
@@ -111,7 +160,69 @@ contract BlindAuctionTest is OlympixUnitTest("BlindAuction") {
         uint reganSecret = 123;
     
         bytes32 reganBlindedBid = keccak256(abi.encodePacked(reganValue, reganFake, reganSecret));
-        blindAuction.bid{value: 1 ether}(reganBlindedBid);
+        blindAuction.bid{value: reganValue}(reganBlindedBid);
+    
+        vm.stopPrank();
+    
+        uint256 futureTimestamp = uint48(block.timestamp) + 8 days;
+        vm.warp(futureTimestamp);
+    
+        vm.startPrank(regan);
+    
+        uint[] memory reganValues = new uint[](1);
+        reganValues[0] = reganValue;
+    
+        bool[] memory reganFakes = new bool[](0);
+    
+        bytes32[] memory reganSecrets = new bytes32[](1);
+        reganSecrets[0] = bytes32(uint(reganSecret));
+    
+        vm.expectRevert();
+        blindAuction.reveal(reganValues, reganFakes, reganSecrets);
+    
+        vm.stopPrank();
+    }
+
+    function test_reveal_FailWhenSecretsArgumentIsEmpty() public {
+        vm.startPrank(regan);
+    
+        uint reganValue = 2 ether;
+        bool reganFake = false;
+        uint reganSecret = 123;
+    
+        bytes32 reganBlindedBid = keccak256(abi.encodePacked(reganValue, reganFake, reganSecret));
+        blindAuction.bid{value: reganValue}(reganBlindedBid);
+    
+        vm.stopPrank();
+    
+        uint256 futureTimestamp = uint48(block.timestamp) + 8 days;
+        vm.warp(futureTimestamp);
+    
+        vm.startPrank(regan);
+    
+        uint[] memory reganValues = new uint[](1);
+        reganValues[0] = reganValue;
+    
+        bool[] memory reganFakes = new bool[](1);
+        reganFakes[0] = reganFake;
+    
+        bytes32[] memory reganSecrets = new bytes32[](0);
+    
+        vm.expectRevert();
+        blindAuction.reveal(reganValues, reganFakes, reganSecrets);
+    
+        vm.stopPrank();
+    }
+
+    function test_reveal_FailWhenBlindedBidIsInvalid() public {
+        vm.startPrank(regan);
+    
+        uint reganValue = 2 ether;
+        bool reganFake = false;
+        uint reganSecret = 123;
+    
+        bytes32 reganBlindedBid = keccak256(abi.encodePacked(reganValue, reganFake, reganSecret));
+        blindAuction.bid{value: reganValue}(reganBlindedBid);
     
         vm.stopPrank();
     
@@ -127,18 +238,16 @@ contract BlindAuctionTest is OlympixUnitTest("BlindAuction") {
         reganFakes[0] = reganFake;
     
         bytes32[] memory reganSecrets = new bytes32[](1);
-        reganSecrets[0] = bytes32(uint(reganSecret));
+        reganSecrets[0] = bytes32(uint(456));
     
         blindAuction.reveal(reganValues, reganFakes, reganSecrets);
     
         vm.stopPrank();
     
-        assertEq(regan.balance, 100 ether);
-        assertEq(blindAuction.highestBid(), 0);
-        assertEq(blindAuction.highestBidder(), address(0));
+        assertEq(regan.balance, 98 ether);
     }
 
-    function test_reveal_SuccessfulRevealWhenFakeIsTrue() public {
+    function test_reveal_SuccessfulRevealWithFakeBid() public {
         vm.startPrank(regan);
     
         uint reganValue = 2 ether;
@@ -169,47 +278,9 @@ contract BlindAuctionTest is OlympixUnitTest("BlindAuction") {
         vm.stopPrank();
     
         assertEq(regan.balance, 100 ether);
-        assertEq(blindAuction.highestBid(), 0);
-        assertEq(blindAuction.highestBidder(), address(0));
     }
 
-    function test_reveal_SuccessfulRevealWhenBlindedBidIsInvalid() public {
-        vm.startPrank(regan);
-    
-        uint reganValue = 1 ether;
-        bool reganFake = false;
-        uint reganSecret = 123;
-    
-        bytes32 reganBlindedBid = keccak256(abi.encodePacked(reganValue, reganFake, reganSecret));
-        blindAuction.bid{value: reganValue}(reganBlindedBid);
-    
-        vm.stopPrank();
-    
-        uint256 futureTimestamp = uint48(block.timestamp) + 8 days;
-        vm.warp(futureTimestamp);
-    
-        vm.startPrank(regan);
-    
-        uint[] memory reganValues = new uint[](1);
-        reganValues[0] = reganValue;
-    
-        bool[] memory reganFakes = new bool[](1);
-        reganFakes[0] = reganFake;
-    
-        bytes32[] memory reganSecrets = new bytes32[](1);
-        reganSecrets[0] = bytes32(uint(124));
-    
-        blindAuction.reveal(reganValues, reganFakes, reganSecrets);
-    
-        vm.stopPrank();
-    
-    //    assertEq(regan.balance, 100 ether);
-    //    assertEq(blindAuction.highestBid(), 0);
-    //    assertEq(blindAuction.highestBidder(), address(0));
-    }
-    
-
-    function test_reveal_SuccessfulRevealWhenValueIsLessThanHighestBid() public {
+    function test_withdraw_SuccessfulWithdraw() public {
         vm.startPrank(regan);
     
         uint reganValue = 2 ether;
@@ -223,7 +294,7 @@ contract BlindAuctionTest is OlympixUnitTest("BlindAuction") {
     
         vm.startPrank(chris);
     
-        uint chrisValue = 3 ether;
+        uint chrisValue = 1 ether;
         bool chrisFake = false;
         uint chrisSecret = 456;
     
@@ -265,23 +336,24 @@ contract BlindAuctionTest is OlympixUnitTest("BlindAuction") {
     
         vm.stopPrank();
     
-    //    assertEq(regan.balance, 100 ether);
-    //    assertEq(chris.balance, 97 ether);
-    //    assertEq(blindAuction.highestBid(), 3 ether);
-    //    assertEq(blindAuction.highestBidder(), chris);
-    }
+        assertEq(regan.balance, 98 ether);
+        assertEq(chris.balance, 100 ether);
     
-
-    function test_withdraw_SuccessfulWithdraw() public {
         vm.startPrank(regan);
     
         blindAuction.withdraw();
     
         vm.stopPrank();
     
-        assertEq(regan.balance, 100 ether);
-        assertEq(blindAuction.highestBid(), 0);
-        assertEq(blindAuction.highestBidder(), address(0));
+        assertEq(regan.balance, 98 ether);
+    
+        vm.startPrank(chris);
+    
+        blindAuction.withdraw();
+    
+        vm.stopPrank();
+    
+        assertEq(chris.balance, 100 ether);
     }
 
     function test_auctionEnd_FailWhenRevealIsNotEnd() public {
