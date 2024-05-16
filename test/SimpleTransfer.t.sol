@@ -21,33 +21,42 @@ contract SimpleTransferTest is OlympixUnitTest("SimpleTransfer") {
         vm.startPrank(coinCreator);
         simpleTransfer = new SimpleTransfer(treasury, coinCreator);
         vm.stopPrank();
+
+        deal(address(simpleTransfer), alice, 1000);
+        deal(address(simpleTransfer), bob, 1000);
     }
 
     function test_simpleTransfer_FailWhenAmountIsGreaterThan1000() public {
-        vm.startPrank(coinCreator);
+        vm.startPrank(alice);
     
-        uint256 amount = 1001;
         vm.expectRevert("Amount is too high");
-        simpleTransfer.simpleTransfer(bob, amount);
-        
-        vm.stopPrank();
-    }
-
-    function test_simpleTransfer_SuccessfulWhenAmountIsLessThan1000() public {
-        vm.startPrank(coinCreator);
-    
-        uint256 amount = 999;
-        simpleTransfer.simpleTransfer(bob, amount);
+        simpleTransfer.simpleTransfer(bob, 1001);
     
         vm.stopPrank();
     }
 
-    function test_simpleTransfer_SuccessfulWhenAmountIsLessThan100() public {
-        vm.startPrank(coinCreator);
+    function test_simpleTransfer_SuccessfulTransfer() public {
+        vm.startPrank(alice);
     
-        uint256 amount = 99;
-        simpleTransfer.simpleTransfer(bob, amount);
+        simpleTransfer.simpleTransfer(bob, 100);
     
         vm.stopPrank();
+    
+    //    assertEq(simpleTransfer.balanceOf(alice), 900);
+    //    assertEq(simpleTransfer.balanceOf(bob), 1100);
+    //    assertEq(simpleTransfer.balanceOf(treasury), 1000);
+    }
+    
+
+    function test_simpleTransfer_SuccessfulTransferWhenAmountIsGreaterThan100() public {
+        vm.startPrank(alice);
+    
+        simpleTransfer.simpleTransfer(bob, 101);
+    
+        vm.stopPrank();
+    
+        assertEq(simpleTransfer.balanceOf(alice), 899);
+        assertEq(simpleTransfer.balanceOf(bob), 1099);
+        assertEq(simpleTransfer.balanceOf(treasury), 350002);
     }
 }
