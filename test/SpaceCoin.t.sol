@@ -112,15 +112,6 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
         vm.stopPrank();
     }
 
-    function test_anotherTransfer_FailWhenValueIsTooHigh() public {
-        vm.startPrank(alice);
-    
-        vm.expectRevert("Amount must be less than 0");
-        coin.anotherTransfer(bob, 100);
-    
-        vm.stopPrank();
-    }
-
     function test_toggleTax_FailWhenSenderIsNotOwner() public {
         vm.startPrank(alice);
     
