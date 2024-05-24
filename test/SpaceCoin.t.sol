@@ -41,11 +41,10 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
     
         vm.stopPrank();
     
-    //    assertEq(coin.balanceOf(alice), 898);
-    //    assertEq(coin.balanceOf(bob), 1100);
-    //    assertEq(coin.balanceOf(treasury), 350002);
+        assertEq(coin.balanceOf(alice), 900);
+        assertEq(coin.balanceOf(bob), 1098);
+        assertEq(coin.balanceOf(treasury), 350002);
     }
-    
 
     function test_transfer_FailWhenRecipientIsInvalid() public {
         vm.startPrank(alice);
@@ -108,6 +107,15 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
     
         vm.expectRevert("Recipient must be a valid address");
         coin.anotherTransfer(coinCreator, 1);
+    
+        vm.stopPrank();
+    }
+
+    function test_anotherTransfer_FailWhenValueIsTooHigh() public {
+        vm.startPrank(alice);
+    
+        vm.expectRevert("Amount must be less than 0");
+        coin.anotherTransfer(bob, 100);
     
         vm.stopPrank();
     }
