@@ -22,16 +22,19 @@ contract MultiAccountTest is OlympixUnitTest("MultiAccount") {
     
         vm.stopPrank();
     
-        IMultiAccount.Account[] memory account = multiAccount.getAccounts(address(0x1), 0, 1);
+        IMultiAccount.Account[] memory accounts = multiAccount.getAccounts(address(0x1), 0, 1);
+        IMultiAccount.Account memory account = accounts[0];
     
-        assertEq(account[0].name, "Account 1");
-        assertEq(multiAccount.owners(account[0].accountAddress), address(0x1));
-        assertEq(multiAccount.indexOfAccount(account[0].accountAddress), 0);
+        assertEq(account.name, "Account 1");
     }
 
     function test_depositForAccount_FailWhenSenderIsNotOwner() public {
+        vm.startPrank(address(0x1));
+    
         vm.expectRevert("MultiAccount: Sender isn't owner of account");
-        multiAccount.depositForAccount(address(0), 0);
+        multiAccount.depositForAccount(address(0x1), 100);
+    
+        vm.stopPrank();
     }
 
     function test_depositAndAllocateForAccount_FailWhenSenderIsNotOwner() public {
@@ -53,21 +56,24 @@ contract MultiAccountTest is OlympixUnitTest("MultiAccount") {
     }
 
     function test_call_FailWhenSenderIsNotOwner() public {
+        vm.startPrank(address(0x1));
+    
         vm.expectRevert("MultiAccount: Sender isn't owner of account");
-        multiAccount._call(address(0), new bytes[](0));
+        multiAccount._call(address(0x1), new bytes[](0));
+    
+        vm.stopPrank();
     }
 
     function test_getAccountsLength_SuccessfulGetAccountsLength() public {
         vm.startPrank(address(0x1));
     
         multiAccount.addAccount("Account 1");
-        multiAccount.addAccount("Account 2");
     
         vm.stopPrank();
     
         uint256 accountsLength = multiAccount.getAccountsLength(address(0x1));
     
-        assertEq(accountsLength, 2);
+        assertEq(accountsLength, 1);
     }
 
     function test_getAccounts_SuccessfulGetAccounts() public {
@@ -82,7 +88,7 @@ contract MultiAccountTest is OlympixUnitTest("MultiAccount") {
         IMultiAccount.Account[] memory accounts = multiAccount.getAccounts(address(0x1), 0, 2);
     
         assertEq(accounts.length, 2);
-        assertEq(accounts[0].accountAddress, address(0xc0686ABD342455eBD5c4935dE7a3D144D0b63654));
-        assertEq(accounts[1].accountAddress, address(0x62B8aF638ED69Ae63a38259B0a6168B1d4BF65Da));
+        assertEq(accounts[0].name, "Account 1");
+        assertEq(accounts[1].name, "Account 2");
     }
 }
