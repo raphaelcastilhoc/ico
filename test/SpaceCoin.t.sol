@@ -1,10 +1,11 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity 0.8.19;
+
 import "forge-std/Test.sol";
 import "contracts/Ico.sol";
 import "./OlympixUnitTest.sol";
 
-contract SpaceCoinTest is OlympixUnitTest("SpaceCoin")  {
+contract SpaceCoinTest is OlympixUnitTest("SpaceCoin") {
     address alice = address(0x456);
     address bob = address(0x789);
     address treasury = address(0xabc);
@@ -19,5 +20,8 @@ contract SpaceCoinTest is OlympixUnitTest("SpaceCoin")  {
         vm.startPrank(coinCreator);
         coin = new SpaceCoin(treasury, coinCreator);
         vm.stopPrank();
+
+        deal(address(coin), alice, 1000);
+        deal(address(coin), bob, 1000);
     }
 }

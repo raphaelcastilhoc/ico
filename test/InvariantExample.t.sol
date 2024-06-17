@@ -1,31 +1,15 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity 0.8.19;
+
 import "forge-std/Test.sol";
+import "contracts/InvariantExample.sol";
+import "./OlympixInvariantTest.sol";
 
-contract ExampleContract {
-
-    uint256 public val1;
-    uint256 public val2;
-    uint256 public val3;
-
-    function addToA(uint256 amount) external {
-        val1 += amount;
-        val3 += amount;
-    }
-
-    function addToB(uint256 amount) external {
-        val2 += amount;
-        val3 += amount;
-    }
-
-}
-
-contract InvariantExample is Test {
-
-    ExampleContract foo;
+contract InvariantExampleTest is OlympixInvariantTest("InvariantExample", "InvariantExampleHandler") {
+    InvariantExample foo;
 
     function setUp() external {
-        foo = new ExampleContract();
+        foo = new InvariantExample();
     }
 
     function invariant_A() external {
@@ -35,5 +19,4 @@ contract InvariantExample is Test {
     function invariant_B() external {
         assertGe(foo.val1() + foo.val2(), foo.val1());
     }
-
 }

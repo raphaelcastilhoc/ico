@@ -5,7 +5,7 @@ import "forge-std/Test.sol";
 import "contracts/BankAccount.sol";
 import "./OlympixUnitTest.sol";
 
-contract BankAccountTest is Test {
+contract BankAccountTest is OlympixUnitTest("BankAccount") {
     address alice = address(0x3);
     address bob = address(0x4);
     address david = address(0x5);
@@ -13,9 +13,9 @@ contract BankAccountTest is Test {
     BankAccount bankAccount;
 
     function setUp() public {
-        vm.deal(alice, 1000);
-        vm.deal(bob, 1000);
-        vm.deal(david, 1000);
+        vm.deal(alice, 1000 ether);
+        vm.deal(bob, 1000 ether);
+        vm.deal(david, 1000 ether);
 
         bankAccount = new BankAccount();
     }

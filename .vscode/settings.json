@@ -1,3 +1,10 @@
 {
-    "security.olympix.project.includePath": "/contracts"
+    "security.olympix.project.includePath": "/contracts",
+    "security.olympix.detectors.defaultVisibility": true,
+    "security.olympix.detectors.eventsPriceChange": true,
+    "security.olympix.detectors.reentrancyEvents": true,
+    "security.olympix.detectors.noParameterValidationInConstructor": true,
+    "security.olympix.detectors.sameNamedContracts": true,
+    "security.olympix.detectors.shadowingReservedKeyword": true,
+    "security.olympix.project.analyzeWholeProject": true
 }
