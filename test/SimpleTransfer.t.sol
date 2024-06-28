@@ -28,14 +28,16 @@ contract SimpleTransferTest is OlympixUnitTest("SimpleTransfer") {
 
     function test_simpleTransfer_FailWhenAmountIsTooHigh() public {
         vm.startPrank(alice);
+        uint256 amount = 1001;
         vm.expectRevert("Amount is too high");
-        simpleTransfer.simpleTransfer(bob, 1001);
+        simpleTransfer.simpleTransfer(bob, amount);
         vm.stopPrank();
     }
 
     function test_simpleTransfer_SuccessfulTransfer() public {
         vm.startPrank(alice);
-        simpleTransfer.simpleTransfer(bob, 100);
+        uint256 amount = 100;
+        simpleTransfer.simpleTransfer(bob, amount);
         vm.stopPrank();
     
         assertEq(simpleTransfer.balanceOf(alice), 900);
@@ -44,7 +46,8 @@ contract SimpleTransferTest is OlympixUnitTest("SimpleTransfer") {
 
     function test_simpleTransfer_SuccessfulTransferWithTax() public {
         vm.startPrank(alice);
-        simpleTransfer.simpleTransfer(bob, 200);
+        uint256 amount = 200;
+        simpleTransfer.simpleTransfer(bob, amount);
         vm.stopPrank();
     
     //    assertEq(simpleTransfer.balanceOf(alice), 798);
