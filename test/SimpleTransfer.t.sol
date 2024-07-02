@@ -42,6 +42,7 @@ contract SimpleTransferTest is OlympixUnitTest("SimpleTransfer") {
     
         assertEq(simpleTransfer.balanceOf(alice), 900);
         assertEq(simpleTransfer.balanceOf(bob), 1100);
+        assertEq(simpleTransfer.balanceOf(treasury), 350000);
     }
 
     function test_simpleTransfer_SuccessfulTransferWithTax() public {
@@ -50,9 +51,8 @@ contract SimpleTransferTest is OlympixUnitTest("SimpleTransfer") {
         simpleTransfer.simpleTransfer(bob, amount);
         vm.stopPrank();
     
-    //    assertEq(simpleTransfer.balanceOf(alice), 798);
-    //    assertEq(simpleTransfer.balanceOf(bob), 1200);
-    //    assertEq(simpleTransfer.balanceOf(treasury), 350002);
+        assertEq(simpleTransfer.balanceOf(alice), 800);
+        assertEq(simpleTransfer.balanceOf(bob), 1198);
+        assertEq(simpleTransfer.balanceOf(treasury), 350002);
     }
-    
 }

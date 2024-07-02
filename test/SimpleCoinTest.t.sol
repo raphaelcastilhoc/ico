@@ -20,11 +20,20 @@ contract SimpleCoinTest is OlympixUnitTest("SimpleCoin") {
         deal(address(simpleCoin), bob, 1000);
     }
 
-    function test_transfer_FailWhenAmountIsInvalid() public {
+    function test_transfer_FailWhenAmountIsZero() public {
         vm.startPrank(alice);
     
         vm.expectRevert("Amount must be greater than 0");
         simpleCoin.transfer(bob, 0, 1);
+    
+        vm.stopPrank();
+    }
+
+    function test_transfer_FailWhenMaxTaxIsZero() public {
+        vm.startPrank(alice);
+    
+        vm.expectRevert("Max tax must be greater than 0");
+        simpleCoin.transfer(bob, 1, 0);
     
         vm.stopPrank();
     }
@@ -34,35 +43,26 @@ contract SimpleCoinTest is OlympixUnitTest("SimpleCoin") {
     
         simpleCoin.transfer(bob, 100, 1);
     
-        vm.stopPrank();
-    
         assertEq(simpleCoin.balanceOf(alice), 901);
         assertEq(simpleCoin.balanceOf(bob), 1099);
-    }
-
-    function test_transfer_FailWhenMaxTaxIsInvalid() public {
-        vm.startPrank(alice);
-    
-        vm.expectRevert("Max tax must be greater than 0");
-        simpleCoin.transfer(bob, 100, 0);
     
         vm.stopPrank();
     }
 
-    function test_transfer_FailWhenRecipientIsInvalid() public {
+    function test_transfer_FailWhenRecipientIsOwner() public {
         vm.startPrank(alice);
     
         vm.expectRevert("Recipient must be different from owner");
-        simpleCoin.transfer(owner, 100, 1);
+        simpleCoin.transfer(owner, 1, 1);
     
         vm.stopPrank();
     }
 
-    function test_transfer_FailWhenSenderIsInvalid() public {
+    function test_transfer_FailWhenSenderIsOwner() public {
         vm.startPrank(owner);
     
         vm.expectRevert("Sender must be different from owner");
-        simpleCoin.transfer(alice, 100, 1);
+        simpleCoin.transfer(alice, 1, 1);
     
         vm.stopPrank();
     }
