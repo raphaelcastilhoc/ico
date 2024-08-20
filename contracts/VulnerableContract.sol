@@ -12,14 +12,14 @@ contract KingOfTheEtherThrone {
     }
     Monarch public currentMonarch ;
 
-    // function claimThrone (string name) public {
-    //     if (currentMonarch.ethAddr != wizardAddress) {
-    //         currentMonarch.ethAddr.send(compensation);
-    //     }
+    function claimThrone (string name) public {
+         if (currentMonarch.ethAddr != wizardAddress) {
+             currentMonarch.ethAddr.send(compensation);
+         }
         
-    //     // assign the new king
-    //     currentMonarch = Monarch (
-    //         msg.sender, name,
-    //         valuePaid, block.timestamp);
-    // }
+         // assign the new king
+         currentMonarch = Monarch (
+             msg.sender, name,
+             valuePaid, block.timestamp);
+     }
  }
