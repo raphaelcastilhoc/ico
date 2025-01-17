@@ -30,4 +30,5 @@ contract ArcContractTest is Test {
         uint256 result = arcContract.check(99, true);
         assertEq(result, 3);
     }
+
 }
